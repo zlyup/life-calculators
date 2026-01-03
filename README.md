@@ -4,6 +4,8 @@
 
 一个完全在浏览器中运行、无需网络连接的实用计算工具集合。所有计算均在您的设备本地完成，保障数据100%私密安全。
 
+![https://laddzhao.github.io/life-calculators](https://github.com/laddzhao/life-calculators/blob/main/life-calculators.jpeg)  
+
 **在线体验**：[https://laddzhao.github.io/life-calculators/](https://laddzhao.github.io/life-calculators/)
 
 ## ✨ 功能特色
