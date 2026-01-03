@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通货膨胀计算 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/finance.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">通货膨胀计算</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/finance.html" class="nav-link active">理财金融</a>
+                        <a href="../../pages/shopping.html" class="nav-link">消费购物</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/finance.html" class="breadcrumb-link">理财金融</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">通货膨胀计算</span>
+                </nav>
+                
+                <!-- 计算器容器 -->
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">通货膨胀计算器</h1>
+                            <p class="calculator-description">
+                                计算通货膨胀对购买力的影响，规划未来的资金需求
+                            </p>
+                        </div>
+                        
+                        <!-- 计算类型选择 -->
+                        <div class="tabs" id="inflationTabs">
+                            <button class="tab active" data-type="future">未来价值</button>
+                            <button class="tab" data-type="present">现值计算</button>
+                            <button class="tab" data-type="real">实际收益率</button>
+                            <button class="tab" data-type="compare">购买力比较</button>
+                        </div>
+                        
+                        <!-- 未来价值计算 -->
+                        <div id="futureSection">
+                            <div class="input-group">
+                                <label class="input-label">当前金额 (元)</label>
+                                <input type="number" id="currentAmount" class="input-field" placeholder="例如：10000" value="10000">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">年通货膨胀率 (%)</label>
+                                <input type="number" id="futureInflationRate" class="input-field" placeholder="例如：3.0" value="3.0" step="0.1">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">年数</label>
+                                <input type="number" id="futureYears" class="input-field" placeholder="例如：10" value="10">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">是否考虑投资收益</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="investmentToggle">
+                                    <label for="investmentToggle" class="toggle-slider"></label>
+                                    <span class="toggle-label">考虑投资收益</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 投资收益选项 -->
+                            <div id="investmentOptions" style="display: none;">
+                                <div class="input-group">
+                                    <label class="input-label">年投资回报率 (%)</label>
+                                    <input type="number" id="investmentRate" class="input-field" placeholder="例如：5.0" value="5.0" step="0.1">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 现值计算 -->
+                        <div id="presentSection" style="display: none;">
+                            <div class="input-group">
+                                <label class="input-label">未来金额 (元)</label>
+                                <input type="number" id="futureAmount" class="input-field" placeholder="例如：20000" value="20000">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">年通货膨胀率 (%)</label>
+                                <input type="number" id="presentInflationRate" class="input-field" placeholder="例如：3.0" value="3.0" step="0.1">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">年数</label>
+                                <input type="number" id="presentYears" class="input-field" placeholder="例如：10" value="10">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">计算基准年份</label>
+                                <select id="baseYear" class="input-field">
+                                    <option value="past">过去某年的购买力</option>
+                                    <option value="future">未来某年的购买力</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 实际收益率计算 -->
+                        <div id="realSection" style="display: none;">
+                            <div class="input-group">
+                                <label class="input-label">名义收益率 (%)</label>
+                                <input type="number" id="nominalReturn" class="input-field" placeholder="例如：8.0" value="8.0" step="0.1">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">通货膨胀率 (%)</label>
+                                <input type="number" id="realInflationRate" class="input-field" placeholder="例如：3.0" value="3.0" step="0.1">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">税率 (%)</label>
+                                <input type="number" id="taxRate" class="input-field" placeholder="例如：20.0" value="20.0" step="0.1">
+                                <small class="input-hint">留空或0表示不考虑税收</small>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">投资期限 (年)</label>
+                                <input type="number" id="realYears" class="input-field" placeholder="例如：10" value="10">
+                            </div>
+                        </div>
+                        
+                        <!-- 购买力比较计算 -->
+                        <div id="compareSection" style="display: none;">
+                            <div class="input-group">
+                                <label class="input-label">商品/服务名称</label>
+                                <input type="text" id="itemName" class="input-field" placeholder="例如：一杯咖啡" value="一杯咖啡">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">当前价格 (元)</label>
+                                <input type="number" id="currentPrice" class="input-field" placeholder="例如：30" value="30">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">过去价格 (元)</label>
+                                <input type="number" id="pastPrice" class="input-field" placeholder="例如：20" value="20">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">时间跨度 (年)</label>
+                                <input type="number" id="compareYears" class="input-field" placeholder="例如：10" value="10">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">计算类型</label>
+                                <select id="compareType" class="input-field">
+                                    <option value="inflation">计算通货膨胀率</option>
+                                    <option value="future">计算未来价格</option>
+                                    <option value="past">计算过去价格</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 计算按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="calculateBtn">
+                            <i class="fas fa-calculator"></i> 计算通货膨胀
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection" style="display: none;">
+                            <h3 class="result-title"><i class="fas fa-chart-bar"></i> 计算结果</h3>
+                            
+                            <!-- 未来价值结果 -->
+                            <div id="futureResult" style="display: block;">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">当前金额</span>
+                                        <span class="result-value" id="currentValue">0.00 元</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">通货膨胀率</span>
+                                        <span class="result-value" id="inflationRateDisplay">0.00%</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">未来名义价值</span>
+                                        <span class="result-value" id="futureNominal">0.00 元</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">未来实际价值</span>
+                                        <span class="result-value" id="futureReal">0.00 元</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">购买力下降</span>
+                                        <span class="result-value" id="purchasingLoss">0.00%</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">同等购买力所需金额</span>
+                                        <span class="result-value" id="equalPurchasing">0.00 元</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 投资收益结果 -->
+                                <div id="investmentResult" style="display: none; margin-top: 1.5rem;">
+                                    <h4 class="result-title" style="font-size: 1rem;">投资调整后结果</h4>
+                                    <div class="result-grid">
+                                        <div class="result-item">
+                                            <span class="result-label">投资回报率</span>
+                                            <span class="result-value" id="investmentRateDisplay">0.00%</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-label">名义投资总额</span>
+                                            <span class="result-value" id="investmentNominal">0.00 元</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-label">实际投资总额</span>
+                                            <span class="result-value" id="investmentReal">0.00 元</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-label">实际收益率</span>
+                                            <span class="result-value" id="realReturn">0.00%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 通货膨胀影响图表 -->
+                                <div style="margin-top: 1.5rem;">
+                                    <h4 class="result-title" style="font-size: 1rem;">通货膨胀影响趋势</h4>
+                                    <div class="chart-container">
+                                        <canvas id="futureChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 现值结果 -->
+                            <div id="presentResult" style="display: none;">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">未来金额</span>
+                                        <span class="result-value" id="futureValue">0.00 元</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">通货膨胀率</span>
+                                        <span class="result-value" id="presentInflationRateDisplay">0.00%</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">当前购买力价值</span>
+                                        <span class="result-value" id="presentValue">0.00 元</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">货币贬值程度</span>
+                                        <span class="result-value" id="moneyDepreciation">0.00%</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">过去同等购买力</span>
+                                        <span class="result-value" id="pastPurchasing">0.00 元</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 购买力比较 -->
+                                <div style="margin-top: 1.5rem;">
+                                    <h4 class="result-title" style="font-size: 1rem;">购买力变化示例</h4>
+                                    <div class="purchasing-examples">
+                                        <div class="purchasing-example">
+                                            <div class="purchasing-icon">
+                                                <i class="fas fa-home"></i>
+                                            </div>
+                                            <div class="purchasing-content">
+                                                <h5>住房</h5>
+                                                <p>当前价值100万元，<span id="houseFuture">10年后</span>需</p>
+                                                <div class="purchasing-result" id="houseValue">0.00 元</div>
+                                            </div>
+                                        </div>
+                                        <div class="purchasing-example">
+                                            <div class="purchasing-icon">
+                                                <i class="fas fa-car"></i>
+                                            </div>
+                                            <div class="purchasing-content">
+                                                <h5>汽车</h5>
+                                                <p>当前价值20万元，<span id="carFuture">10年后</span>需</p>
+                                                <div class="purchasing-result" id="carValue">0.00 元</div>
+                                            </div>
+                                        </div>
+                                        <div class="purchasing-example">
+                                            <div class="purchasing-icon">
+                                                <i class="fas fa-utensils"></i>
+                                            </div>
+                                            <div class="purchasing-content">
+                                                <h5>餐饮</h5>
+                                                <p>当前每月3000元，<span id="foodFuture">10年后</span>需</p>
+                                                <div class="purchasing-result" id="foodValue">0.00 元</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 实际收益率结果 -->
+                            <div id="realResult" style="display: none;">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">名义收益率</span>
+                                        <span class="result-value" id="nominalReturnDisplay">0.00%</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">通货膨胀率</span>
+                                        <span class="result-value" id="realInflationRateDisplay">0.00%</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">税后名义收益</span>
+                                        <span class="result-value" id="afterTaxReturn">0.00%</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">实际收益率</span>
+                                        <span class="result-value" id="actualRealReturn">0.00%</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">购买力增长</span>
+                                        <span class="result-value" id="purchasingGrowth">0.00%</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 投资效果对比 -->
+                                <div style="margin-top: 1.5rem;">
+                                    <h4 class="result-title" style="font-size: 1rem;">投资效果对比</h4>
+                                    <div class="investment-comparison">
+                                        <div class="comparison-item">
+                                            <div class="comparison-title">银行存款 (2%)</div>
+                                            <div class="comparison-value" id="bankReturn">-1.0% 实际收益</div>
+                                        </div>
+                                        <div class="comparison-item">
+                                            <div class="comparison-title">国债 (3%)</div>
+                                            <div class="comparison-value" id="bondReturn">0.0% 实际收益</div>
+                                        </div>
+                                        <div class="comparison-item">
+                                            <div class="comparison-title">股票基金 (8%)</div>
+                                            <div class="comparison-value" id="stockReturn">5.0% 实际收益</div>
+                                        </div>
+                                        <div class="comparison-item">
+                                            <div class="comparison-title">您的投资</div>
+                                            <div class="comparison-value" id="yourReturn">0.0% 实际收益</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 实际收益图表 -->
+                                <div style="margin-top: 1.5rem;">
+                                    <h4 class="result-title" style="font-size: 1rem;">实际收益变化趋势</h4>
+                                    <div class="chart-container">
+                                        <canvas id="realChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 购买力比较结果 -->
+                            <div id="compareResult" style="display: none;">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label" id="compareItemName">商品/服务</span>
+                                        <span class="result-value" id="compareItem">一杯咖啡</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">年通货膨胀率</span>
+                                        <span class="result-value" id="compareInflationRate">0.00%</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">总价格上涨</span>
+                                        <span class="result-value" id="totalPriceIncrease">0.00%</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">年均价格上涨</span>
+                                        <span class="result-value" id="annualPriceIncrease">0.00%</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">购买力下降</span>
+                                        <span class="result-value" id="comparePurchasingLoss">0.00%</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 价格历史对比 -->
+                                <div style="margin-top: 1.5rem;">
+                                    <h4 class="result-title" style="font-size: 1rem;">价格变化历史</h4>
+                                    <div style="overflow-x: auto;">
+                                        <table class="price-history-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>年份</th>
+                                                    <th>价格 (元)</th>
+                                                    <th>较当前变化</th>
+                                                    <th>购买力相当于</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="priceHistory">
+                                                <!-- 价格历史将通过JS动态生成 -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 通货膨胀知识 -->
+                    <div class="alert alert-info mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-lightbulb mr-3"></i>
+                            <div>
+                                <strong>通货膨胀要点：</strong> 
+                                <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                                    <li><strong>复利效应</strong>：通货膨胀具有复利效应，长期影响巨大</li>
+                                    <li><strong>实际收益率</strong>：投资时应关注扣除通胀后的实际收益率</li>
+                                    <li><strong>购买力保护</strong>：投资收益率应至少跑赢通货膨胀率</li>
+                                    <li><strong>历史参考</strong>：中国近年平均通胀率约2-3%，高通胀时期可达5%以上</li>
+                                    <li><strong>72法则</strong>：用72除以通胀率，可估算购买力减半所需年限</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <a href="../../index.html" class="footer-logo">
+                        <i class="fas fa-calculator"></i>
+                        <span>生活计算宝典</span>
+                    </a>
+                    <p class="footer-description">
+                        一站式离线计算工具集合，为您的生活带来便利。
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">理财工具</h4>
+                    <a href="inflation.html" class="footer-link">通货膨胀计算</a>
+                    <a href="savings-plan.html" class="footer-link">储蓄计划</a>
+                    <a href="pension.html" class="footer-link">养老金计算</a>
+                    <a href="roi.html" class="footer-link">投资回报率</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">快速链接</h4>
+                    <a href="../../pages/finance.html" class="footer-link">返回理财金融</a>
+                    <a href="../../pages/tools.html" class="footer-link">所有工具</a>
+                    <a href="https://github.com/laddzhao/life-calculators" target="_blank" class="footer-link">GitHub项目</a>
+                    <a href="../../404.html" class="footer-link">404页面</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">其他工具</h4>
+                    <a href="../home/utility-bill.html" class="footer-link">水电费计算</a>
+                    <a href="../shopping/discount.html" class="footer-link">折扣计算器</a>
+                    <a href="../health/bmi.html" class="footer-link">BMI计算</a>
+                    <a href="../professional/tax.html" class="footer-link">个税计算器</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 生活计算宝典 · 通货膨胀计算</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- 移动端底部导航 -->
+    <nav class="mobile-bottom-nav">
+        <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">首页</span>
+        </a>
+        <a href="../../pages/shopping.html" class="nav-item">
+            <i class="fas fa-shopping-cart nav-icon"></i>
+            <span class="nav-label">购物</span>
+        </a>
+        <a href="../../pages/finance.html" class="nav-item active">
+            <i class="fas fa-chart-line nav-icon"></i>
+            <span class="nav-label">理财</span>
+        </a>
+        <a href="../../pages/tools.html" class="nav-item">
+            <i class="fas fa-th nav-icon"></i>
+            <span class="nav-label">全部</span>
+        </a>
+        <a href="#" class="nav-item" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-h nav-icon"></i>
+            <span class="nav-label">更多</span>
+        </a>
+    </nav>
+
+    <script>
+        // 标签页切换
+        document.querySelectorAll('#inflationTabs .tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active类
+                document.querySelectorAll('#inflationTabs .tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // 添加active类到当前标签
+                this.classList.add('active');
+                
+                const type = this.dataset.type;
+                
+                // 显示对应的内容区域
+                document.querySelectorAll('[id$="Section"]').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                document.getElementById(type + 'Section').style.display = 'block';
+                
+                // 显示对应的结果区域
+                document.querySelectorAll('[id$="Result"]').forEach(result => {
+                    result.style.display = 'none';
+                });
+                
+                // 显示结果区域
+                document.getElementById('resultSection').style.display = 'block';
+                
+                // 重新计算
+                setTimeout(() => {
+                    document.getElementById('calculateBtn').click();
+                }, 100);
+            });
+        });
+        
+        // 投资收益切换
+        document.getElementById('investmentToggle').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('investmentOptions').style.display = 'block';
+            } else {
+                document.getElementById('investmentOptions').style.display = 'none';
+            }
+        });
+        
+        // 计算通货膨胀
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            const activeTab = document.querySelector('#inflationTabs .tab.active').dataset.type;
+            
+            if (activeTab === 'future') {
+                calculateFutureValue();
+            } else if (activeTab === 'present') {
+                calculatePresentValue();
+            } else if (activeTab === 'real') {
+                calculateRealReturn();
+            } else if (activeTab === 'compare') {
+                comparePurchasingPower();
+            }
+            
+            // 显示结果区域
+            document.getElementById('resultSection').style.display = 'block';
+        });
+        
+        // 计算未来价值
+        function calculateFutureValue() {
+            // 获取输入值
+            const currentAmount = parseFloat(document.getElementById('currentAmount').value) || 0;
+            const inflationRate = parseFloat(document.getElementById('futureInflationRate').value) || 0;
+            const years = parseFloat(document.getElementById('futureYears').value) || 0;
+            const considerInvestment = document.getElementById('investmentToggle').checked;
+            const investmentRate = considerInvestment ? 
+                parseFloat(document.getElementById('investmentRate').value) || 0 : 0;
+            
+            // 未来名义价值（考虑通胀）
+            const futureNominal = currentAmount * Math.pow(1 + inflationRate/100, years);
+            
+            // 未来实际价值（与当前购买力相同）
+            const futureReal = currentAmount;
+            
+            // 购买力下降百分比
+            const purchasingLoss = (1 - currentAmount / futureNominal) * 100;
+            
+            // 同等购买力所需金额
+            const equalPurchasing = futureNominal;
+            
+            // 显示结果
+            document.getElementById('currentValue').textContent = 
+                currentAmount.toFixed(2) + ' 元';
+            document.getElementById('inflationRateDisplay').textContent = 
+                inflationRate.toFixed(2) + '%';
+            document.getElementById('futureNominal').textContent = 
+                futureNominal.toFixed(2) + ' 元';
+            document.getElementById('futureReal').textContent = 
+                futureReal.toFixed(2) + ' 元';
+            document.getElementById('purchasingLoss').textContent = 
+                purchasingLoss.toFixed(2) + '%';
+            document.getElementById('equalPurchasing').textContent = 
+                equalPurchasing.toFixed(2) + ' 元';
+            
+            // 投资收益结果
+            if (considerInvestment && investmentRate > 0) {
+                document.getElementById('investmentResult').style.display = 'block';
+                
+                // 投资后的名义总额
+                const investmentNominal = currentAmount * Math.pow(1 + investmentRate/100, years);
+                
+                // 实际总额（扣除通胀）
+                const investmentReal = investmentNominal / Math.pow(1 + inflationRate/100, years);
+                
+                // 实际收益率
+                const realReturn = ((Math.pow(1 + investmentRate/100, years) / 
+                                   Math.pow(1 + inflationRate/100, years) - 1) * 100) / years;
+                
+                document.getElementById('investmentRateDisplay').textContent = 
+                    investmentRate.toFixed(2) + '%';
+                document.getElementById('investmentNominal').textContent = 
+                    investmentNominal.toFixed(2) + ' 元';
+                document.getElementById('investmentReal').textContent = 
+                    investmentReal.toFixed(2) + ' 元';
+                document.getElementById('realReturn').textContent = 
+                    realReturn.toFixed(2) + '%';
+            } else {
+                document.getElementById('investmentResult').style.display = 'none';
+            }
+            
+            // 显示未来价值结果区域
+            document.getElementById('futureResult').style.display = 'block';
+            document.getElementById('presentResult').style.display = 'none';
+            document.getElementById('realResult').style.display = 'none';
+            document.getElementById('compareResult').style.display = 'none';
+            
+            // 绘制图表
+            drawFutureChart(currentAmount, inflationRate, years, considerInvestment, investmentRate);
+        }
+        
+        // 计算现值
+        function calculatePresentValue() {
+            // 获取输入值
+            const futureAmount = parseFloat(document.getElementById('futureAmount').value) || 0;
+            const inflationRate = parseFloat(document.getElementById('presentInflationRate').value) || 0;
+            const years = parseFloat(document.getElementById('presentYears').value) || 0;
+            const baseYear = document.getElementById('baseYear').value;
+            
+            // 当前购买力价值
+            const presentValue = futureAmount / Math.pow(1 + inflationRate/100, years);
+            
+            // 货币贬值程度
+            const moneyDepreciation = (1 - presentValue / futureAmount) * 100;
+            
+            // 过去同等购买力
+            const pastPurchasing = futureAmount * Math.pow(1 + inflationRate/100, years);
+            
+            // 显示结果
+            document.getElementById('futureValue').textContent = 
+                futureAmount.toFixed(2) + ' 元';
+            document.getElementById('presentInflationRateDisplay').textContent = 
+                inflationRate.toFixed(2) + '%';
+            document.getElementById('presentValue').textContent = 
+                presentValue.toFixed(2) + ' 元';
+            document.getElementById('moneyDepreciation').textContent = 
+                moneyDepreciation.toFixed(2) + '%';
+            
+            if (baseYear === 'past') {
+                document.getElementById('pastPurchasing').textContent = 
+                    pastPurchasing.toFixed(2) + ' 元';
+            } else {
+                document.getElementById('pastPurchasing').textContent = presentValue.toFixed(2) + ' 元';
+            }
+            
+            // 更新购买力示例
+            const houseCurrent = 1000000; // 100万
+            const carCurrent = 200000;    // 20万
+            const foodCurrent = 3000;     // 3000元/月
+            
+            document.getElementById('houseFuture').textContent = years + '年后';
+            document.getElementById('carFuture').textContent = years + '年后';
+            document.getElementById('foodFuture').textContent = years + '年后';
+            
+            document.getElementById('houseValue').textContent = 
+                (houseCurrent * Math.pow(1 + inflationRate/100, years)).toFixed(2) + ' 元';
+            document.getElementById('carValue').textContent = 
+                (carCurrent * Math.pow(1 + inflationRate/100, years)).toFixed(2) + ' 元';
+            document.getElementById('foodValue').textContent = 
+                (foodCurrent * Math.pow(1 + inflationRate/100, years)).toFixed(2) + ' 元/月';
+            
+            // 显示现值结果区域
+            document.getElementById('futureResult').style.display = 'none';
+            document.getElementById('presentResult').style.display = 'block';
+            document.getElementById('realResult').style.display = 'none';
+            document.getElementById('compareResult').style.display = 'none';
+        }
+        
+        // 计算实际收益率
+        function calculateRealReturn() {
+            // 获取输入值
+            const nominalReturn = parseFloat(document.getElementById('nominalReturn').value) || 0;
+            const inflationRate = parseFloat(document.getElementById('realInflationRate').value) || 0;
+            const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+            const years = parseFloat(document.getElementById('realYears').value) || 1;
+            
+            // 税后名义收益
+            const afterTaxReturn = nominalReturn * (1 - taxRate/100);
+            
+            // 实际收益率（近似公式）
+            const realReturn = ((1 + afterTaxReturn/100) / (1 + inflationRate/100) - 1) * 100;
+            
+            // 购买力增长（复利计算）
+            const purchasingGrowth = Math.pow(1 + realReturn/100, years) - 1;
+            
+            // 显示结果
+            document.getElementById('nominalReturnDisplay').textContent = 
+                nominalReturn.toFixed(2) + '%';
+            document.getElementById('realInflationRateDisplay').textContent = 
+                inflationRate.toFixed(2) + '%';
+            document.getElementById('afterTaxReturn').textContent = 
+                afterTaxReturn.toFixed(2) + '%';
+            document.getElementById('actualRealReturn').textContent = 
+                realReturn.toFixed(2) + '%';
+            document.getElementById('purchasingGrowth').textContent = 
+                (purchasingGrowth * 100).toFixed(2) + '%';
+            
+            // 更新投资对比
+            document.getElementById('bankReturn').textContent = 
+                ((2 * (1 - 0.2) - inflationRate)).toFixed(1) + '% 实际收益'; // 假设20%利息税
+            document.getElementById('bondReturn').textContent = 
+                ((3 - inflationRate)).toFixed(1) + '% 实际收益'; // 国债通常免税
+            document.getElementById('stockReturn').textContent = 
+                ((8 * (1 - 0.1) - inflationRate)).toFixed(1) + '% 实际收益'; // 假设10%资本利得税
+            document.getElementById('yourReturn').textContent = 
+                realReturn.toFixed(1) + '% 实际收益';
+            
+            // 显示实际收益率结果区域
+            document.getElementById('futureResult').style.display = 'none';
+            document.getElementById('presentResult').style.display = 'none';
+            document.getElementById('realResult').style.display = 'block';
+            document.getElementById('compareResult').style.display = 'none';
+            
+            // 绘制图表
+            drawRealChart(nominalReturn, inflationRate, taxRate, years);
+        }
+        
+        // 比较购买力
+        function comparePurchasingPower() {
+            // 获取输入值
+            const itemName = document.getElementById('itemName').value;
+            const currentPrice = parseFloat(document.getElementById('currentPrice').value) || 0;
+            const pastPrice = parseFloat(document.getElementById('pastPrice').value) || 0;
+            const years = parseFloat(document.getElementById('compareYears').value) || 0;
+            const compareType = document.getElementById('compareType').value;
+            
+            let inflationRate = 0;
+            let futurePrice = 0;
+            let calculatedPastPrice = 0;
+            
+            if (compareType === 'inflation') {
+                // 计算通货膨胀率
+                if (pastPrice > 0 && years > 0) {
+                    inflationRate = (Math.pow(currentPrice / pastPrice, 1 / years) - 1) * 100;
+                }
+                futurePrice = currentPrice * Math.pow(1 + inflationRate/100, 10); // 10年后价格
+                calculatedPastPrice = pastPrice;
+            } else if (compareType === 'future') {
+                // 计算未来价格，需要先知道通胀率
+                // 假设使用当前价格和过去价格计算通胀率
+                if (pastPrice > 0 && years > 0) {
+                    inflationRate = (Math.pow(currentPrice / pastPrice, 1 / years) - 1) * 100;
+                } else {
+                    inflationRate = 3; // 默认3%
+                }
+                futurePrice = currentPrice * Math.pow(1 + inflationRate/100, 10); // 10年后价格
+                calculatedPastPrice = currentPrice / Math.pow(1 + inflationRate/100, years);
+            } else {
+                // 计算过去价格，需要先知道通胀率
+                inflationRate = 3; // 默认3%
+                calculatedPastPrice = currentPrice / Math.pow(1 + inflationRate/100, years);
+                futurePrice = currentPrice * Math.pow(1 + inflationRate/100, 10); // 10年后价格
+            }
+            
+            // 总价格上涨
+            const totalPriceIncrease = ((currentPrice / calculatedPastPrice) - 1) * 100;
+            
+            // 年均价格上涨
+            const annualPriceIncrease = inflationRate;
+            
+            // 购买力下降
+            const purchasingLoss = (1 - calculatedPastPrice / currentPrice) * 100;
+            
+            // 显示结果
+            document.getElementById('compareItemName').textContent = '商品/服务';
+            document.getElementById('compareItem').textContent = itemName;
+            document.getElementById('compareInflationRate').textContent = 
+                inflationRate.toFixed(2) + '%';
+            document.getElementById('totalPriceIncrease').textContent = 
+                totalPriceIncrease.toFixed(2) + '%';
+            document.getElementById('annualPriceIncrease').textContent = 
+                annualPriceIncrease.toFixed(2) + '%';
+            document.getElementById('comparePurchasingLoss').textContent = 
+                purchasingLoss.toFixed(2) + '%';
+            
+            // 生成价格历史
+            generatePriceHistory(currentPrice, inflationRate, years);
+            
+            // 显示购买力比较结果区域
+            document.getElementById('futureResult').style.display = 'none';
+            document.getElementById('presentResult').style.display = 'none';
+            document.getElementById('realResult').style.display = 'none';
+            document.getElementById('compareResult').style.display = 'block';
+        }
+        
+        // 生成价格历史
+        function generatePriceHistory(currentPrice, inflationRate, years) {
+            const historyBody = document.getElementById('priceHistory');
+            historyBody.innerHTML = '';
+            
+            // 显示过去10年到现在，以及未来5年
+            const totalYears = Math.min(15, years + 5);
+            
+            for (let i = -Math.min(10, years); i <= Math.min(5, totalYears - years); i++) {
+                const yearOffset = i;
+                const price = currentPrice / Math.pow(1 + inflationRate/100, -yearOffset);
+                const changeFromCurrent = (price / currentPrice - 1) * 100;
+                const purchasingPower = 100 / (1 + changeFromCurrent/100);
+                
+                let yearLabel = '';
+                if (yearOffset < 0) {
+                    yearLabel = Math.abs(yearOffset) + '年前';
+                } else if (yearOffset === 0) {
+                    yearLabel = '现在';
+                } else {
+                    yearLabel = yearOffset + '年后';
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${yearLabel}</td>
+                    <td>${price.toFixed(2)}</td>
+                    <td>${changeFromCurrent >= 0 ? '+' : ''}${changeFromCurrent.toFixed(1)}%</td>
+                    <td>${purchasingPower.toFixed(1)}%</td>
+                `;
+                historyBody.appendChild(row);
+            }
+        }
+        
+        // 绘制未来价值图表
+        function drawFutureChart(currentAmount, inflationRate, years, considerInvestment, investmentRate) {
+            const ctx = document.getElementById('futureChart').getContext('2d');
+            
+            // 生成数据
+            const labels = [];
+            const nominalData = [];
+            const realData = [];
+            const investmentData = [];
+            
+            for (let i = 0; i <= years; i++) {
+                labels.push(`第${i}年`);
+                
+                // 名义价值
+                const nominalValue = currentAmount * Math.pow(1 + inflationRate/100, i);
+                nominalData.push(nominalValue);
+                
+                // 实际价值（不变）
+                realData.push(currentAmount);
+                
+                // 投资价值
+                if (considerInvestment && investmentRate > 0) {
+                    const investmentValue = currentAmount * Math.pow(1 + investmentRate/100, i);
+                    investmentData.push(investmentValue);
+                }
+            }
+            
+            // 如果已有图表实例，销毁它
+            if (window.futureChartInstance) {
+                window.futureChartInstance.destroy();
+            }
+            
+            // 创建数据集
+            const datasets = [
+                {
+                    label: '名义价值',
+                    data: nominalData,
+                    borderColor: '#ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: '实际价值',
+                    data: realData,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }
+            ];
+            
+            // 如果有投资数据，添加到数据集
+            if (considerInvestment && investmentRate > 0 && investmentData.length > 0) {
+                datasets.push({
+                    label: '投资价值',
+                    data: investmentData,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                });
+            }
+            
+            // 创建新图表
+            window.futureChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw.toFixed(2)}元`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    if (value >= 10000) {
+                                        return (value/10000).toFixed(1) + '万元';
+                                    }
+                                    return value.toLocaleString() + '元';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 绘制实际收益图表
+        function drawRealChart(nominalReturn, inflationRate, taxRate, years) {
+            const ctx = document.getElementById('realChart').getContext('2d');
+            
+            // 生成数据
+            const labels = [];
+            const nominalData = [];
+            const realData = [];
+            const afterTaxData = [];
+            
+            const afterTaxReturn = nominalReturn * (1 - taxRate/100);
+            
+            for (let i = 0; i <= years; i++) {
+                labels.push(`第${i}年`);
+                
+                // 名义价值增长
+                const nominalValue = Math.pow(1 + nominalReturn/100, i) * 100;
+                nominalData.push(nominalValue);
+                
+                // 税后名义价值
+                const afterTaxValue = Math.pow(1 + afterTaxReturn/100, i) * 100;
+                afterTaxData.push(afterTaxValue);
+                
+                // 实际价值（扣除通胀）
+                const realValue = Math.pow(1 + afterTaxReturn/100, i) / Math.pow(1 + inflationRate/100, i) * 100;
+                realData.push(realValue);
+            }
+            
+            // 如果已有图表实例，销毁它
+            if (window.realChartInstance) {
+                window.realChartInstance.destroy();
+            }
+            
+            // 创建新图表
+            window.realChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '名义收益',
+                            data: nominalData,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: '税后名义',
+                            data: afterTaxData,
+                            borderColor: '#8b5cf6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: '实际收益',
+                            data: realData,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw.toFixed(1)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toFixed(0);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            
+            // 检查本地存储的主题设置
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+            
+            // 切换主题函数
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // 更新图标
+                if (themeBtn) {
+                    const icon = themeBtn.querySelector('i');
+                    icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                }
+            }
+            
+            // 添加事件监听
+            if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            
+            // 页面加载时自动计算一次
+            document.getElementById('calculateBtn').click();
+        });
+    </script>
+    
+    <style>
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border: none;
+            background: none;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        
+        .tab:hover {
+            color: var(--primary);
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .toggle-switch input[type="checkbox"] {
+            display: none;
+        }
+        
+        .toggle-slider {
+            position: relative;
+            display: inline-block;
+            width: 3rem;
+            height: 1.5rem;
+            background-color: var(--gray-300);
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: background-color var(--transition);
+        }
+        
+        .toggle-slider::before {
+            content: "";
+            position: absolute;
+            width: 1.25rem;
+            height: 1.25rem;
+            left: 0.125rem;
+            top: 0.125rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform var(--transition);
+        }
+        
+        .toggle-switch input[type="checkbox"]:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+        
+        .toggle-switch input[type="checkbox"]:checked + .toggle-slider::before {
+            transform: translateX(1.5rem);
+        }
+        
+        .toggle-label {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .input-hint {
+            display: block;
+            margin-top: 0.25rem;
+            color: var(--text-tertiary);
+            font-size: 0.75rem;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 200px;
+            margin-top: 0.5rem;
+        }
+        
+        .purchasing-examples {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        @media (min-width: 768px) {
+            .purchasing-examples {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .purchasing-example {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .purchasing-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: var(--radius);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .purchasing-content {
+            flex: 1;
+        }
+        
+        .purchasing-content h5 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+        
+        .purchasing-content p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .purchasing-result {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.125rem;
+        }
+        
+        .investment-comparison {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+        
+        @media (min-width: 768px) {
+            .investment-comparison {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .comparison-item {
+            text-align: center;
+            padding: 1rem;
+            border-radius: var(--radius);
+            background-color: var(--gray-50);
+            border: 1px solid var(--border-light);
+        }
+        
+        .comparison-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+        
+        .comparison-value {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+        
+        .price-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+        
+        .price-history-table th,
+        .price-history-table td {
+            padding: 0.5rem;
+            text-align: right;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .price-history-table th {
+            font-weight: 600;
+            color: var(--text-primary);
+            background-color: var(--gray-50);
+        }
+        
+        .price-history-table th:first-child,
+        .price-history-table td:first-child {
+            text-align: left;
+        }
+        
+        .price-history-table tr:hover {
+            background-color: var(--gray-50);
+        }
+        
+        @media (max-width: 640px) {
+            .tabs {
+                font-size: 0.875rem;
+            }
+            
+            .tab {
+                padding: 0.5rem 1rem;
+            }
+            
+            .chart-container {
+                height: 150px;
+            }
+            
+            .price-history-table {
+                font-size: 0.75rem;
+            }
+            
+            .price-history-table th,
+            .price-history-table td {
+                padding: 0.25rem;
+            }
+        }
+    </style>
+</body>
+</html>
