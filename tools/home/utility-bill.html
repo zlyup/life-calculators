@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水电费计算器 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/home.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">水电费计算</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/home.html" class="nav-link">居家生活</a>
+                        <a href="../../pages/finance.html" class="nav-link">理财金融</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/home.html" class="breadcrumb-link">居家生活</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">水电费计算</span>
+                </nav>
+                
+                <!-- 计算器容器 -->
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">水电费计算器</h1>
+                            <p class="calculator-description">
+                                计算家庭水电燃气费用，支持阶梯电价和分时计价模式。
+                            </p>
+                        </div>
+                        
+                        <!-- 计算类型选择 -->
+                        <div class="input-group">
+                            <label class="input-label">计算类型</label>
+                            <select id="calcType" class="input-field">
+                                <option value="electricity">电费计算</option>
+                                <option value="water">水费计算</option>
+                                <option value="gas">燃气费计算</option>
+                            </select>
+                        </div>
+                        
+                        <!-- 电费计算区域 -->
+                        <div id="electricitySection">
+                            <div class="input-group">
+                                <label class="input-label">本月电表读数 (kWh)</label>
+                                <input type="number" id="currentReading" class="input-field" placeholder="例如：350.5" step="0.1">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">上月电表读数 (kWh)</label>
+                                <input type="number" id="lastReading" class="input-field" placeholder="例如：280.2" step="0.1">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">计价方式</label>
+                                <select id="electricityType" class="input-field">
+                                    <option value="tiered">阶梯电价</option>
+                                    <option value="time">分时计价</option>
+                                    <option value="fixed">固定单价</option>
+                                </select>
+                            </div>
+                            
+                            <!-- 阶梯电价选项 -->
+                            <div id="tieredOptions" class="input-group">
+                                <label class="input-label">阶梯电价设置</label>
+                                <div class="tier-row">
+                                    <div class="tier-input">
+                                        <small>第一阶梯 (0-240kWh):</small>
+                                        <input type="number" id="tier1Price" class="input-field" placeholder="单价" value="0.4883" step="0.0001">
+                                    </div>
+                                    <div class="tier-input">
+                                        <small>第二阶梯 (241-400kWh):</small>
+                                        <input type="number" id="tier2Price" class="input-field" placeholder="单价" value="0.5383" step="0.0001">
+                                    </div>
+                                    <div class="tier-input">
+                                        <small>第三阶梯 (400+kWh):</small>
+                                        <input type="number" id="tier3Price" class="input-field" placeholder="单价" value="0.7883" step="0.0001">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 分时计价选项 -->
+                            <div id="timeOptions" class="input-group" style="display: none;">
+                                <label class="input-label">分时计价设置</label>
+                                <div class="input-row">
+                                    <div class="input-group">
+                                        <small>峰时单价 (8:00-22:00):</small>
+                                        <input type="number" id="peakPrice" class="input-field" placeholder="单价" value="0.568" step="0.0001">
+                                    </div>
+                                    <div class="input-group">
+                                        <small>谷时单价 (22:00-8:00):</small>
+                                        <input type="number" id="valleyPrice" class="input-field" placeholder="单价" value="0.288" step="0.0001">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label">峰时用电比例 (%)</label>
+                                    <input type="number" id="peakRatio" class="input-field" placeholder="例如：70" value="70" min="0" max="100">
+                                </div>
+                            </div>
+                            
+                            <!-- 固定单价选项 -->
+                            <div id="fixedOptions" class="input-group" style="display: none;">
+                                <div class="input-group">
+                                    <label class="input-label">固定单价 (元/kWh)</label>
+                                    <input type="number" id="fixedPrice" class="input-field" placeholder="例如：0.5" value="0.5" step="0.0001">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 水费计算区域 -->
+                        <div id="waterSection" style="display: none;">
+                            <div class="input-group">
+                                <label class="input-label">本月水表读数 (吨)</label>
+                                <input type="number" id="waterCurrent" class="input-field" placeholder="例如：45.2" step="0.1">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">上月水表读数 (吨)</label>
+                                <input type="number" id="waterLast" class="input-field" placeholder="例如：38.5" step="0.1">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">水费单价 (元/吨)</label>
+                                <input type="number" id="waterPrice" class="input-field" placeholder="例如：3.5" value="3.5" step="0.01">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">污水处理费 (元/吨)</label>
+                                <input type="number" id="sewageFee" class="input-field" placeholder="例如：1.2" value="1.2" step="0.01">
+                            </div>
+                        </div>
+                        
+                        <!-- 燃气费计算区域 -->
+                        <div id="gasSection" style="display: none;">
+                            <div class="input-group">
+                                <label class="input-label">本月燃气表读数 (m³)</label>
+                                <input type="number" id="gasCurrent" class="input-field" placeholder="例如：125.3" step="0.1">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">上月燃气表读数 (m³)</label>
+                                <input type="number" id="gasLast" class="input-field" placeholder="例如：98.7" step="0.1">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">燃气费单价 (元/m³)</label>
+                                <input type="number" id="gasPrice" class="input-field" placeholder="例如：2.8" value="2.8" step="0.01">
+                            </div>
+                        </div>
+                        
+                        <!-- 计算按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="calculateBtn">
+                            <i class="fas fa-calculator"></i> 计算费用
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection" style="display: none;">
+                            <h3 class="result-title"><i class="fas fa-chart-bar"></i> 计算结果</h3>
+                            <div class="result-grid">
+                                <div class="result-item">
+                                    <span class="result-label">本月用量</span>
+                                    <span class="result-value" id="usageAmount">0</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">基本费用</span>
+                                    <span class="result-value" id="baseCost">0.00 元</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">附加费用</span>
+                                    <span class="result-value" id="additionalCost">0.00 元</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">总费用</span>
+                                    <span class="result-value" id="totalCost">0.00 元</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 阶梯电价明细 -->
+                            <div id="tierDetails" style="display: none; margin-top: 1.5rem;">
+                                <h4 class="result-title" style="font-size: 1rem;">阶梯电价明细</h4>
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">第一阶梯用量</span>
+                                        <span class="result-value" id="tier1Usage">0 kWh</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">第一阶梯费用</span>
+                                        <span class="result-value" id="tier1Cost">0.00 元</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">第二阶梯用量</span>
+                                        <span class="result-value" id="tier2Usage">0 kWh</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">第二阶梯费用</span>
+                                        <span class="result-value" id="tier2Cost">0.00 元</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">第三阶梯用量</span>
+                                        <span class="result-value" id="tier3Usage">0 kWh</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">第三阶梯费用</span>
+                                        <span class="result-value" id="tier3Cost">0.00 元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 分时计价明细 -->
+                            <div id="timeDetails" style="display: none; margin-top: 1.5rem;">
+                                <h4 class="result-title" style="font-size: 1rem;">分时计价明细</h4>
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">峰时用量</span>
+                                        <span class="result-value" id="peakUsage">0 kWh</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">峰时费用</span>
+                                        <span class="result-value" id="peakCost">0.00 元</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">谷时用量</span>
+                                        <span class="result-value" id="valleyUsage">0 kWh</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">谷时费用</span>
+                                        <span class="result-value" id="valleyCost">0.00 元</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 使用说明 -->
+                    <div class="alert alert-info mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-lightbulb mr-3"></i>
+                            <div>
+                                <strong>使用说明：</strong> 
+                                <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                                    <li>输入本月和上月的电表/水表/燃气表读数，自动计算本月用量</li>
+                                    <li>阶梯电价：按照用电量分段计费，用量越多单价越高</li>
+                                    <li>分时计价：峰时（白天）单价高，谷时（夜间）单价低</li>
+                                    <li>水费计算包含基本水费和污水处理费</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <a href="../../index.html" class="footer-logo">
+                        <i class="fas fa-calculator"></i>
+                        <span>生活计算宝典</span>
+                    </a>
+                    <p class="footer-description">
+                        一站式离线计算工具集合，为您的生活带来便利。
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">居家工具</h4>
+                    <a href="utility-bill.html" class="footer-link">水电费计算</a>
+                    <a href="area-volume.html" class="footer-link">面积体积计算</a>
+                    <a href="paint-calc.html" class="footer-link">涂料用量计算</a>
+                    <a href="cooking-convert.html" class="footer-link">食材换算</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">快速链接</h4>
+                    <a href="../../pages/home.html" class="footer-link">返回居家生活</a>
+                    <a href="../../pages/tools.html" class="footer-link">所有工具</a>
+                    <a href="https://github.com/laddzhao/life-calculators" target="_blank" class="footer-link">GitHub项目</a>
+                    <a href="../../404.html" class="footer-link">404页面</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">其他工具</h4>
+                    <a href="../shopping/discount.html" class="footer-link">折扣计算器</a>
+                    <a href="../finance/interest.html" class="footer-link">利息计算器</a>
+                    <a href="../health/bmi.html" class="footer-link">BMI计算</a>
+                    <a href="../professional/mortgage.html" class="footer-link">房贷计算器</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 生活计算宝典 · 水电费计算器</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 移动端底部导航 -->
+    <nav class="mobile-bottom-nav">
+        <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">首页</span>
+        </a>
+        <a href="../../pages/shopping.html" class="nav-item">
+            <i class="fas fa-shopping-cart nav-icon"></i>
+            <span class="nav-label">购物</span>
+        </a>
+        <a href="../../pages/home.html" class="nav-item active">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">居家</span>
+        </a>
+        <a href="../../pages/tools.html" class="nav-item">
+            <i class="fas fa-th nav-icon"></i>
+            <span class="nav-label">全部</span>
+        </a>
+        <a href="#" class="nav-item" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-h nav-icon"></i>
+            <span class="nav-label">更多</span>
+        </a>
+    </nav>
+
+    <script src="../../calculator.js"></script>
+    <script>
+        // 切换计算类型
+        document.getElementById('calcType').addEventListener('change', function() {
+            const type = this.value;
+            
+            // 隐藏所有区域
+            document.getElementById('electricitySection').style.display = 'none';
+            document.getElementById('waterSection').style.display = 'none';
+            document.getElementById('gasSection').style.display = 'none';
+            
+            // 显示选择的区域
+            document.getElementById(type + 'Section').style.display = 'block';
+            
+            // 隐藏结果区域
+            document.getElementById('resultSection').style.display = 'none';
+        });
+        
+        // 切换电费计价方式
+        document.getElementById('electricityType').addEventListener('change', function() {
+            const type = this.value;
+            
+            // 隐藏所有选项
+            document.getElementById('tieredOptions').style.display = 'none';
+            document.getElementById('timeOptions').style.display = 'none';
+            document.getElementById('fixedOptions').style.display = 'none';
+            
+            // 显示选择的选项
+            document.getElementById(type + 'Options').style.display = 'block';
+        });
+        
+        // 计算水电费
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            const type = document.getElementById('calcType').value;
+            let usage = 0, baseCost = 0, additionalCost = 0, totalCost = 0;
+            
+            if (type === 'electricity') {
+                // 电费计算
+                const current = parseFloat(document.getElementById('currentReading').value) || 0;
+                const last = parseFloat(document.getElementById('lastReading').value) || 0;
+                const electricityType = document.getElementById('electricityType').value;
+                
+                usage = current - last;
+                if (usage < 0) usage = 0;
+                
+                if (electricityType === 'tiered') {
+                    // 阶梯电价计算
+                    const tier1Price = parseFloat(document.getElementById('tier1Price').value) || 0.4883;
+                    const tier2Price = parseFloat(document.getElementById('tier2Price').value) || 0.5383;
+                    const tier3Price = parseFloat(document.getElementById('tier3Price').value) || 0.7883;
+                    
+                    let tier1Usage = 0, tier2Usage = 0, tier3Usage = 0;
+                    let tier1Cost = 0, tier2Cost = 0, tier3Cost = 0;
+                    
+                    if (usage <= 240) {
+                        tier1Usage = usage;
+                        tier1Cost = tier1Usage * tier1Price;
+                    } else if (usage <= 400) {
+                        tier1Usage = 240;
+                        tier2Usage = usage - 240;
+                        tier1Cost = tier1Usage * tier1Price;
+                        tier2Cost = tier2Usage * tier2Price;
+                    } else {
+                        tier1Usage = 240;
+                        tier2Usage = 160;
+                        tier3Usage = usage - 400;
+                        tier1Cost = tier1Usage * tier1Price;
+                        tier2Cost = tier2Usage * tier2Price;
+                        tier3Cost = tier3Usage * tier3Price;
+                    }
+                    
+                    baseCost = tier1Cost + tier2Cost + tier3Cost;
+                    
+                    // 显示阶梯明细
+                    document.getElementById('tierDetails').style.display = 'block';
+                    document.getElementById('timeDetails').style.display = 'none';
+                    
+                    document.getElementById('tier1Usage').textContent = tier1Usage.toFixed(1) + ' kWh';
+                    document.getElementById('tier1Cost').textContent = tier1Cost.toFixed(2) + ' 元';
+                    document.getElementById('tier2Usage').textContent = tier2Usage.toFixed(1) + ' kWh';
+                    document.getElementById('tier2Cost').textContent = tier2Cost.toFixed(2) + ' 元';
+                    document.getElementById('tier3Usage').textContent = tier3Usage.toFixed(1) + ' kWh';
+                    document.getElementById('tier3Cost').textContent = tier3Cost.toFixed(2) + ' 元';
+                    
+                } else if (electricityType === 'time') {
+                    // 分时计价计算
+                    const peakPrice = parseFloat(document.getElementById('peakPrice').value) || 0.568;
+                    const valleyPrice = parseFloat(document.getElementById('valleyPrice').value) || 0.288;
+                    const peakRatio = parseFloat(document.getElementById('peakRatio').value) || 70;
+                    
+                    const peakUsage = usage * (peakRatio / 100);
+                    const valleyUsage = usage * ((100 - peakRatio) / 100);
+                    const peakCost = peakUsage * peakPrice;
+                    const valleyCost = valleyUsage * valleyPrice;
+                    
+                    baseCost = peakCost + valleyCost;
+                    
+                    // 显示分时明细
+                    document.getElementById('tierDetails').style.display = 'none';
+                    document.getElementById('timeDetails').style.display = 'block';
+                    
+                    document.getElementById('peakUsage').textContent = peakUsage.toFixed(1) + ' kWh';
+                    document.getElementById('peakCost').textContent = peakCost.toFixed(2) + ' 元';
+                    document.getElementById('valleyUsage').textContent = valleyUsage.toFixed(1) + ' kWh';
+                    document.getElementById('valleyCost').textContent = valleyCost.toFixed(2) + ' 元';
+                    
+                } else {
+                    // 固定单价计算
+                    const fixedPrice = parseFloat(document.getElementById('fixedPrice').value) || 0.5;
+                    baseCost = usage * fixedPrice;
+                    
+                    // 隐藏明细
+                    document.getElementById('tierDetails').style.display = 'none';
+                    document.getElementById('timeDetails').style.display = 'none';
+                }
+                
+                // 附加费用（如基本电费、基金等）
+                additionalCost = usage * 0.02; // 假设2%的附加费
+                
+            } else if (type === 'water') {
+                // 水费计算
+                const current = parseFloat(document.getElementById('waterCurrent').value) || 0;
+                const last = parseFloat(document.getElementById('waterLast').value) || 0;
+                const waterPrice = parseFloat(document.getElementById('waterPrice').value) || 3.5;
+                const sewageFee = parseFloat(document.getElementById('sewageFee').value) || 1.2;
+                
+                usage = current - last;
+                if (usage < 0) usage = 0;
+                
+                baseCost = usage * waterPrice;
+                additionalCost = usage * sewageFee;
+                
+                // 隐藏明细
+                document.getElementById('tierDetails').style.display = 'none';
+                document.getElementById('timeDetails').style.display = 'none';
+                
+            } else if (type === 'gas') {
+                // 燃气费计算
+                const current = parseFloat(document.getElementById('gasCurrent').value) || 0;
+                const last = parseFloat(document.getElementById('gasLast').value) || 0;
+                const gasPrice = parseFloat(document.getElementById('gasPrice').value) || 2.8;
+                
+                usage = current - last;
+                if (usage < 0) usage = 0;
+                
+                baseCost = usage * gasPrice;
+                additionalCost = 0; // 燃气一般没有附加费
+                
+                // 隐藏明细
+                document.getElementById('tierDetails').style.display = 'none';
+                document.getElementById('timeDetails').style.display = 'none';
+            }
+            
+            totalCost = baseCost + additionalCost;
+            
+            // 显示结果
+            document.getElementById('resultSection').style.display = 'block';
+            
+            // 更新结果
+            let unit = '';
+            if (type === 'electricity') unit = ' kWh';
+            else if (type === 'water') unit = ' 吨';
+            else if (type === 'gas') unit = ' m³';
+            
+            document.getElementById('usageAmount').textContent = usage.toFixed(1) + unit;
+            document.getElementById('baseCost').textContent = baseCost.toFixed(2) + ' 元';
+            document.getElementById('additionalCost').textContent = additionalCost.toFixed(2) + ' 元';
+            document.getElementById('totalCost').textContent = totalCost.toFixed(2) + ' 元';
+        });
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            
+            // 检查本地存储的主题设置
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+            
+            // 切换主题函数
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // 更新图标
+                if (themeBtn) {
+                    const icon = themeBtn.querySelector('i');
+                    icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                }
+            }
+            
+            // 添加事件监听
+            if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            
+            // 设置默认值
+            document.getElementById('currentReading').value = '350.5';
+            document.getElementById('lastReading').value = '280.2';
+            document.getElementById('waterCurrent').value = '45.2';
+            document.getElementById('waterLast').value = '38.5';
+            document.getElementById('gasCurrent').value = '125.3';
+            document.getElementById('gasLast').value = '98.7';
+        });
+    </script>
+    
+    <style>
+        .tier-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+        
+        @media (min-width: 640px) {
+            .tier-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .tier-input {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .tier-input small {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .input-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</body>
+</html>
