@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面未找到 - 生活计算器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="error-container">
+        <h1>404</h1>
+        <h2>页面未找到</h2>
+        <p>抱歉，您访问的页面不存在或制作中。</p>
+        <a href="index.html" class="home-btn">返回首页</a>
+        <div class="suggestions">
+            <p>推荐工具：</p>
+            <a href="pages/shopping.html">💰 消费购物计算</a>
+            <a href="pages/health.html">💪 健康运动计算</a>
+            <a href="pages/finance.html">📊 理财金融计算</a>
+        </div>
+    </div>
+
+    <style>
+        .error-container {
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .error-container h1 {
+            font-size: 6rem;
+            color: #4361ee;
+            margin-bottom: 0;
+            line-height: 1;
+        }
+        
+        .error-container h2 {
+            font-size: 2rem;
+            color: #334155;
+            margin: 1rem 0;
+        }
+        
+        .error-container p {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .home-btn {
+            background: #4361ee;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        
+        .home-btn:hover {
+            background: #3a0ca3;
+            transform: translateY(-2px);
+        }
+        
+        .suggestions {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 2rem;
+            width: 100%;
+        }
+        
+        .suggestions p {
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 1rem;
+        }
+        
+        .suggestions a {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #4361ee;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 0.3rem;
+            transition: all 0.2s;
+        }
+        
+        .suggestions a:hover {
+            background: #e0e7ff;
+        }
+    </style>
+</body>
+</html>
