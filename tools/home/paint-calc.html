@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>涂料用量计算器 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/home.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">涂料用量计算</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/home.html" class="nav-link">居家生活</a>
+                        <a href="../../pages/finance.html" class="nav-link">理财金融</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/home.html" class="breadcrumb-link">居家生活</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">涂料用量计算</span>
+                </nav>
+                
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">涂料用量计算器</h1>
+                            <p class="calculator-description">
+                                根据房间尺寸和涂料类型，计算粉刷所需的涂料用量。
+                            </p>
+                        </div>
+                        
+                        <!-- 房间尺寸输入 -->
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label class="input-label">房间长度 (m)</label>
+                                <input type="number" id="roomLength" class="input-field" placeholder="例如：4.5" min="0.1" step="0.1" value="4.5">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">房间宽度 (m)</label>
+                                <input type="number" id="roomWidth" class="input-field" placeholder="例如：3.2" min="0.1" step="0.1" value="3.2">
+                            </div>
+                        </div>
+                        
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label class="input-label">房间高度 (m)</label>
+                                <input type="number" id="roomHeight" class="input-field" placeholder="例如：2.8" min="0.1" step="0.1" value="2.8">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">涂刷次数</label>
+                                <select id="coats" class="input-field">
+                                    <option value="1">1遍</option>
+                                    <option value="2" selected>2遍</option>
+                                    <option value="3">3遍</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 门窗扣除 -->
+                        <div class="input-group">
+                            <label class="input-label">需要扣除的门窗面积</label>
+                            <div class="subtract-options">
+                                <div class="subtract-option">
+                                    <div class="subtract-input">
+                                        <small>门数量:</small>
+                                        <input type="number" id="doorCount" class="input-field" placeholder="0" min="0" value="1">
+                                    </div>
+                                    <div class="subtract-input">
+                                        <small>标准门面积 (m²):</small>
+                                        <input type="number" id="doorArea" class="input-field" placeholder="1.8" step="0.1" value="1.8" disabled>
+                                    </div>
+                                </div>
+                                <div class="subtract-option">
+                                    <div class="subtract-input">
+                                        <small>窗数量:</small>
+                                        <input type="number" id="windowCount" class="input-field" placeholder="0" min="0" value="2">
+                                    </div>
+                                    <div class="subtract-input">
+                                        <small>标准窗面积 (m²):</small>
+                                        <input type="number" id="windowArea" class="input-field" placeholder="1.5" step="0.1" value="1.5" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 涂料选择 -->
+                        <div class="input-group">
+                            <label class="input-label">涂料类型</label>
+                            <select id="paintType" class="input-field">
+                                <option value="latex">乳胶漆 (墙面漆)</option>
+                                <option value="oil">油性漆 (木器漆)</option>
+                                <option value="waterproof">防水涂料</option>
+                                <option value="exterior">外墙涂料</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label class="input-label">涂料覆盖率 (m²/L)</label>
+                                <input type="number" id="coverage" class="input-field" placeholder="例如：12" min="1" step="0.1" value="12">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">涂料包装规格 (L)</label>
+                                <select id="paintSize" class="input-field">
+                                    <option value="1">1升装</option>
+                                    <option value="5" selected>5升装</option>
+                                    <option value="10">10升装</option>
+                                    <option value="18">18升装</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 计算按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="calculateBtn">
+                            <i class="fas fa-calculator"></i> 计算涂料用量
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection">
+                            <h3 class="result-title"><i class="fas fa-paint-roller"></i> 计算结果</h3>
+                            <div class="result-grid">
+                                <div class="result-item">
+                                    <span class="result-label">墙面总面积</span>
+                                    <span class="result-value" id="totalArea">0.00 m²</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">需涂刷面积</span>
+                                    <span class="result-value" id="paintArea">0.00 m²</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">所需涂料量</span>
+                                    <span class="result-value" id="paintVolume">0.00 L</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">需购买桶数</span>
+                                    <span class="result-value" id="paintCans">0 桶</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 涂料推荐 -->
+                            <div class="paint-recommendation" id="paintRecommendation" style="margin-top: 1.5rem; display: none;">
+                                <h4 class="result-title" style="font-size: 1rem;">涂料购买建议</h4>
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">推荐购买</span>
+                                        <span class="result-value" id="recommendedBuy">0 L</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">预算费用</span>
+                                        <span class="result-value" id="estimatedCost">0 元</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">实际用量</span>
+                                        <span class="result-value" id="actualUsage">0 L</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">余量预估</span>
+                                        <span class="result-value" id="remainingPaint">0 L</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 使用说明 -->
+                    <div class="alert alert-info mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-lightbulb mr-3"></i>
+                            <div>
+                                <strong>使用说明：</strong> 
+                                <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                                    <li><strong>房间尺寸</strong>: 输入房间的长、宽、高（单位：米）</li>
+                                    <li><strong>涂刷次数</strong>: 通常墙面需要涂刷2遍，深色漆可能需要3遍</li>
+                                    <li><strong>门窗扣除</strong>: 输入门和窗的数量，系统会自动扣除标准面积</li>
+                                    <li><strong>涂料类型</strong>: 选择您要使用的涂料类型，系统会自动调整覆盖率</li>
+                                    <li><strong>涂料覆盖率</strong>: 表示每升涂料可以涂刷的面积（平方米）</li>
+                                    <li><strong>计算结果</strong>: 系统会计算所需涂料总量和需要购买的桶数</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 涂料参考信息 -->
+                    <div class="reference-card mt-6">
+                        <h3 class="result-title"><i class="fas fa-info-circle"></i> 涂料参考信息</h3>
+                        <div class="result-grid mt-4">
+                            <div class="result-item">
+                                <span class="result-label">乳胶漆</span>
+                                <span class="result-value">覆盖率: 10-14 m²/L</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">油性漆</span>
+                                <span class="result-value">覆盖率: 8-12 m²/L</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">防水涂料</span>
+                                <span class="result-value">覆盖率: 1-2 m²/L</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">标准门面积</span>
+                                <span class="result-value">约 1.8 m² (0.9m×2m)</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">标准窗面积</span>
+                                <span class="result-value">约 1.5 m² (1.5m×1m)</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">常见包装</span>
+                                <span class="result-value">1L, 5L, 10L, 18L</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <a href="../../index.html" class="footer-logo">
+                        <i class="fas fa-calculator"></i>
+                        <span>生活计算宝典</span>
+                    </a>
+                    <p class="footer-description">
+                        一站式离线计算工具集合，为您的生活带来便利。
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">居家工具</h4>
+                    <a href="utility-bill.html" class="footer-link">水电费计算</a>
+                    <a href="area-volume.html" class="footer-link">面积体积计算</a>
+                    <a href="paint-calc.html" class="footer-link active">涂料用量计算</a>
+                    <a href="cooking-convert.html" class="footer-link">食材换算</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">快速链接</h4>
+                    <a href="../../pages/home.html" class="footer-link">返回居家生活</a>
+                    <a href="../../pages/tools.html" class="footer-link">所有工具</a>
+                    <a href="https://github.com/laddzhao/life-calculators" target="_blank" class="footer-link">GitHub项目</a>
+                    <a href="../../404.html" class="footer-link">404页面</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">其他工具</h4>
+                    <a href="../shopping/discount.html" class="footer-link">折扣计算器</a>
+                    <a href="../finance/interest.html" class="footer-link">利息计算器</a>
+                    <a href="../health/bmi.html" class="footer-link">BMI计算</a>
+                    <a href="../professional/mortgage.html" class="footer-link">房贷计算器</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 生活计算宝典 · 涂料用量计算器</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 移动端底部导航 -->
+    <nav class="mobile-bottom-nav">
+        <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">首页</span>
+        </a>
+        <a href="../../pages/shopping.html" class="nav-item">
+            <i class="fas fa-shopping-cart nav-icon"></i>
+            <span class="nav-label">购物</span>
+        </a>
+        <a href="../../pages/home.html" class="nav-item active">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">居家</span>
+        </a>
+        <a href="../../pages/tools.html" class="nav-item">
+            <i class="fas fa-th nav-icon"></i>
+            <span class="nav-label">全部</span>
+        </a>
+        <a href="#" class="nav-item" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-h nav-icon"></i>
+            <span class="nav-label">更多</span>
+        </a>
+    </nav>
+
+    <script src="../../calculator.js"></script>
+    <script>
+        // 涂料类型配置
+        const paintConfigs = {
+            latex: {
+                name: '乳胶漆',
+                coverage: 12,
+                pricePerLiter: 50,
+                description: '水性涂料，适用于室内墙面和天花板'
+            },
+            oil: {
+                name: '油性漆',
+                coverage: 10,
+                pricePerLiter: 80,
+                description: '溶剂型涂料，适用于木器、金属表面'
+            },
+            waterproof: {
+                name: '防水涂料',
+                coverage: 2,
+                pricePerLiter: 120,
+                description: '高密度涂料，适用于卫生间、厨房等潮湿环境'
+            },
+            exterior: {
+                name: '外墙涂料',
+                coverage: 8,
+                pricePerLiter: 60,
+                description: '耐候型涂料，适用于室外墙面'
+            }
+        };
+        
+        // 涂料包装规格
+        const paintSizes = {
+            1: { name: '1升装', volume: 1 },
+            5: { name: '5升装', volume: 5 },
+            10: { name: '10升装', volume: 10 },
+            18: { name: '18升装', volume: 18 }
+        };
+        
+        // 初始化函数
+        function init() {
+            // 计算按钮
+            document.getElementById('calculateBtn').addEventListener('click', calculate);
+            
+            // 涂料类型变化时更新覆盖率
+            document.getElementById('paintType').addEventListener('change', function() {
+                const type = this.value;
+                const coverage = paintConfigs[type].coverage;
+                document.getElementById('coverage').value = coverage;
+                calculate();
+            });
+            
+            // 输入变化时实时计算
+            document.querySelectorAll('input, select').forEach(element => {
+                element.addEventListener('input', calculate);
+                element.addEventListener('change', calculate);
+            });
+            
+            // 主题切换
+            initTheme();
+            
+            // 初始计算
+            calculate();
+        }
+        
+        // 计算涂料用量
+        function calculate() {
+            // 获取输入值
+            const length = parseFloat(document.getElementById('roomLength').value) || 0;
+            const width = parseFloat(document.getElementById('roomWidth').value) || 0;
+            const height = parseFloat(document.getElementById('roomHeight').value) || 0;
+            const coats = parseInt(document.getElementById('coats').value) || 1;
+            
+            const doorCount = parseInt(document.getElementById('doorCount').value) || 0;
+            const doorArea = parseFloat(document.getElementById('doorArea').value) || 0;
+            const windowCount = parseInt(document.getElementById('windowCount').value) || 0;
+            const windowArea = parseFloat(document.getElementById('windowArea').value) || 0;
+            
+            const paintType = document.getElementById('paintType').value;
+            let coverage = parseFloat(document.getElementById('coverage').value) || 1;
+            const paintSize = parseInt(document.getElementById('paintSize').value) || 5;
+            
+            // 计算墙面总面积（墙壁 + 天花板）
+            // 墙壁面积 = 2 * (长 + 宽) * 高
+            const wallArea = 2 * (length + width) * height;
+            // 天花板面积 = 长 * 宽
+            const ceilingArea = length * width;
+            // 总面积
+            let totalArea = wallArea + ceilingArea;
+            
+            // 扣除门窗面积
+            const doorTotalArea = doorCount * doorArea;
+            const windowTotalArea = windowCount * windowArea;
+            const subtractArea = doorTotalArea + windowTotalArea;
+            
+            // 实际需要涂刷的面积
+            let paintArea = totalArea - subtractArea;
+            if (paintArea < 0) paintArea = 0;
+            
+            // 计算所需涂料量（考虑涂刷遍数）
+            // 所需涂料量 = (涂刷面积 * 涂刷遍数) / 覆盖率
+            const paintVolume = (paintArea * coats) / coverage;
+            
+            // 计算需要购买的桶数（向上取整）
+            const canVolume = paintSizes[paintSize].volume;
+            const paintCans = Math.ceil(paintVolume / canVolume);
+            
+            // 计算推荐购买量（多买10%作为备用）
+            const recommendedVolume = paintVolume * 1.1;
+            const recommendedCans = Math.ceil(recommendedVolume / canVolume);
+            const recommendedBuy = recommendedCans * canVolume;
+            
+            // 计算预算费用
+            const pricePerLiter = paintConfigs[paintType].pricePerLiter;
+            const estimatedCost = Math.round(recommendedBuy * pricePerLiter);
+            
+            // 计算实际用量和余量
+            const actualUsage = paintVolume;
+            const remainingPaint = recommendedBuy - actualUsage;
+            
+            // 显示结果
+            displayResults({
+                totalArea: totalArea.toFixed(2),
+                paintArea: paintArea.toFixed(2),
+                paintVolume: paintVolume.toFixed(2),
+                paintCans: paintCans,
+                recommendedBuy: recommendedBuy.toFixed(1),
+                estimatedCost: estimatedCost,
+                actualUsage: actualUsage.toFixed(2),
+                remainingPaint: remainingPaint.toFixed(2),
+                doorTotalArea: doorTotalArea,
+                windowTotalArea: windowTotalArea
+            });
+        }
+        
+        // 显示计算结果
+        function displayResults(results) {
+            // 更新结果区域
+            document.getElementById('totalArea').textContent = `${results.totalArea} m²`;
+            document.getElementById('paintArea').textContent = `${results.paintArea} m²`;
+            document.getElementById('paintVolume').textContent = `${results.paintVolume} L`;
+            document.getElementById('paintCans').textContent = `${results.paintCans} 桶`;
+            
+            // 更新涂料购买建议
+            document.getElementById('recommendedBuy').textContent = `${results.recommendedBuy} L`;
+            document.getElementById('estimatedCost').textContent = `${results.estimatedCost} 元`;
+            document.getElementById('actualUsage').textContent = `${results.actualUsage} L`;
+            document.getElementById('remainingPaint').textContent = `${results.remainingPaint} L`;
+            
+            // 显示涂料购买建议区域
+            document.getElementById('paintRecommendation').style.display = 'block';
+            
+            // 如果有门窗扣除，显示提示
+            if (results.doorTotalArea > 0 || results.windowTotalArea > 0) {
+                let subtractInfo = '';
+                if (results.doorTotalArea > 0) {
+                    subtractInfo += `门: ${results.doorTotalArea.toFixed(1)} m²`;
+                }
+                if (results.windowTotalArea > 0) {
+                    if (subtractInfo) subtractInfo += ', ';
+                    subtractInfo += `窗: ${results.windowTotalArea.toFixed(1)} m²`;
+                }
+                
+                // 在总面积后面添加扣除信息
+                const totalAreaElement = document.getElementById('totalArea');
+                totalAreaElement.innerHTML = `${results.totalArea} m² <small style="color: var(--text-tertiary); font-size: 0.8em;">(扣除: ${subtractInfo})</small>`;
+            }
+        }
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            
+            // 检查本地存储的主题设置
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+            
+            // 切换主题函数
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // 更新图标
+                if (themeBtn) {
+                    const icon = themeBtn.querySelector('i');
+                    icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                }
+            }
+            
+            // 添加事件监听
+            if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+    
+    <style>
+        .subtract-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .subtract-options {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+        
+        .subtract-option {
+            flex: 1;
+        }
+        
+        .subtract-input {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0.75rem;
+        }
+        
+        .subtract-input:last-child {
+            margin-bottom: 0;
+        }
+        
+        .subtract-input small {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .subtract-input .input-field {
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .reference-card {
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+        }
+        
+        .paint-recommendation {
+            padding: 1rem;
+            border-radius: var(--radius);
+            background-color: var(--primary-light);
+            border: 1px solid var(--primary);
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .input-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</body>
+</html>
