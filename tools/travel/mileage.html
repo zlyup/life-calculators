@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>里程油耗计算 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/travel.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">里程油耗计算</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/travel.html" class="nav-link active">旅行出行</a>
+                        <a href="../../pages/finance.html" class="nav-link">理财金融</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/travel.html" class="breadcrumb-link">旅行出行</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">里程油耗计算</span>
+                </nav>
+                
+                <!-- 计算器容器 -->
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">里程油耗计算</h1>
+                            <p class="calculator-description">
+                                专业精准的汽车油耗与里程计算工具，支持三种计算模式。
+                            </p>
+                        </div>
+                        
+                        <!-- 计算模式选择 -->
+                        <div class="tabs" id="calcModeTabs">
+                            <button class="tab active" data-mode="distance">计算里程</button>
+                            <button class="tab" data-mode="consumption">计算油耗</button>
+                            <button class="tab" data-mode="cost">计算油费</button>
+                        </div>
+                        
+                        <!-- 基础信息 -->
+                        <div class="input-group">
+                            <label class="input-label">油价 (元/升)</label>
+                            <input type="number" id="fuelPrice" class="input-field" placeholder="例如：8.5" value="8.5" step="0.01" min="0.01">
+                        </div>
+                        
+                        <!-- 计算里程模式 -->
+                        <div id="distanceMode" class="mode-content active">
+                            <div class="input-group">
+                                <label class="input-label">用油量 (升)</label>
+                                <input type="number" id="fuelAmountDistance" class="input-field" placeholder="例如：50" value="50" step="0.1" min="0.1">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">车辆油耗 (升/百公里)</label>
+                                <input type="number" id="fuelConsumptionDistance" class="input-field" placeholder="例如：8.5" value="8.5" step="0.1" min="0.1">
+                            </div>
+                        </div>
+                        
+                        <!-- 计算油耗模式 -->
+                        <div id="consumptionMode" class="mode-content">
+                            <div class="input-group">
+                                <label class="input-label">行驶距离 (公里)</label>
+                                <input type="number" id="travelDistanceConsumption" class="input-field" placeholder="例如：500" value="500" step="0.1" min="0.1">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">用油量 (升)</label>
+                                <input type="number" id="fuelAmountConsumption" class="input-field" placeholder="例如：42.5" value="42.5" step="0.1" min="0.1">
+                            </div>
+                        </div>
+                        
+                        <!-- 计算油费模式 -->
+                        <div id="costMode" class="mode-content">
+                            <div class="input-group">
+                                <label class="input-label">行驶距离 (公里)</label>
+                                <input type="number" id="travelDistanceCost" class="input-field" placeholder="例如：1000" value="1000" step="0.1" min="0.1">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">车辆油耗 (升/百公里)</label>
+                                <input type="number" id="fuelConsumptionCost" class="input-field" placeholder="例如：8.5" value="8.5" step="0.1" min="0.1">
+                            </div>
+                        </div>
+                        
+                        <!-- 计算按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="calculateBtn">
+                            <i class="fas fa-gas-pump"></i> 计算
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection" style="display: none;">
+                            <h3 class="result-title"><i class="fas fa-chart-line"></i> 计算结果</h3>
+                            
+                            <!-- 里程计算结果 -->
+                            <div id="distanceResult">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">用油量</span>
+                                        <span class="result-value" id="resultFuelAmountDistance">0.00 升</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">车辆油耗</span>
+                                        <span class="result-value" id="resultFuelConsumptionDistance">0.00 升/百公里</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">可行驶距离</span>
+                                        <span class="result-value" id="resultTravelDistance">0.00 公里</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">行驶天数</span>
+                                        <span class="result-value" id="resultTravelDays">0 天</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">总油费</span>
+                                        <span class="result-value" id="resultTotalCostDistance">0.00 元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 油耗计算结果 -->
+                            <div id="consumptionResult" style="display: none;">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">行驶距离</span>
+                                        <span class="result-value" id="resultTravelDistanceConsumption">0.00 公里</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">用油量</span>
+                                        <span class="result-value" id="resultFuelAmountConsumption">0.00 升</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">百公里油耗</span>
+                                        <span class="result-value" id="resultFuelConsumption">0.00 升/百公里</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">每公里油耗</span>
+                                        <span class="result-value" id="resultFuelPerKm">0.00 升/公里</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">总油费</span>
+                                        <span class="result-value" id="resultTotalCostConsumption">0.00 元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 油费计算结果 -->
+                            <div id="costResult" style="display: none;">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">行驶距离</span>
+                                        <span class="result-value" id="resultTravelDistanceCost">0.00 公里</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">车辆油耗</span>
+                                        <span class="result-value" id="resultFuelConsumptionCost">0.00 升/百公里</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">总用油量</span>
+                                        <span class="result-value" id="resultTotalFuel">0.00 升</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">油价</span>
+                                        <span class="result-value" id="resultFuelPrice">0.00 元/升</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">总油费</span>
+                                        <span class="result-value" id="resultTotalCost">0.00 元</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">每公里成本</span>
+                                        <span class="result-value" id="resultCostPerKm">0.00 元/公里</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 专业建议 -->
+                            <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                                <h4 class="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                                    <i class="fas fa-lightbulb text-yellow-500 mr-1"></i> 专业建议
+                                </h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400" id="expertSuggestion">
+                                    计算结果将显示在这里...
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 油耗等级参考 -->
+                    <div class="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-gray-200">
+                            <i class="fas fa-chart-bar text-blue-500 mr-2"></i> 油耗等级参考
+                        </h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">低油耗</span>
+                                <span class="text-sm font-semibold">≤ 6.0 L/100km</span>
+                                <span class="px-2 py-1 text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 rounded">优秀</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">中等油耗</span>
+                                <span class="text-sm font-semibold">6.1 - 9.0 L/100km</span>
+                                <span class="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 rounded">良好</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">较高油耗</span>
+                                <span class="text-sm font-semibold">9.1 - 12.0 L/100km</span>
+                                <span class="px-2 py-1 text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-300 rounded">中等</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">高油耗</span>
+                                <span class="text-sm font-semibold">> 12.0 L/100km</span>
+                                <span class="px-2 py-1 text-xs bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-300 rounded">较高</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 计算公式说明 -->
+                    <div class="alert alert-info mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-calculator mr-3"></i>
+                            <div>
+                                <strong>计算公式说明：</strong> 
+                                <ul class="mt-2 space-y-1 pl-5 list-disc">
+                                    <li><strong>计算里程：</strong> 可行驶距离 = 用油量 ÷ 车辆油耗 × 100</li>
+                                    <li><strong>计算油耗：</strong> 百公里油耗 = 用油量 ÷ 行驶距离 × 100</li>
+                                    <li><strong>计算油费：</strong> 总油费 = (行驶距离 ÷ 100) × 车辆油耗 × 油价</li>
+                                    <li>所有计算均采用精确的数学公式，保留两位小数。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <a href="../../index.html" class="footer-logo">
+                        <i class="fas fa-calculator"></i>
+                        <span>生活计算宝典</span>
+                    </a>
+                    <p class="footer-description">
+                        一站式离线计算工具集合，为您的生活带来便利。
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">旅行工具</h4>
+                    <a href="travel-time.html" class="footer-link">旅行时间计算</a>
+                    <a href="travel-budget.html" class="footer-link">旅行预算规划</a>
+                    <a href="timezone.html" class="footer-link">时区转换计算</a>
+                    <a href="luggage.html" class="footer-link">行李重量计算</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">快速链接</h4>
+                    <a href="../../pages/travel.html" class="footer-link">返回旅行出行</a>
+                    <a href="../../pages/tools.html" class="footer-link">所有工具</a>
+                    <a href="https://github.com/laddzhao/life-calculators" target="_blank" class="footer-link">GitHub项目</a>
+                    <a href="../../404.html" class="footer-link">404页面</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">其他工具</h4>
+                    <a href="../shopping/discount.html" class="footer-link">折扣计算器</a>
+                    <a href="../finance/currency.html" class="footer-link">汇率换算</a>
+                    <a href="../health/bmi.html" class="footer-link">BMI计算</a>
+                    <a href="../professional/mortgage.html" class="footer-link">房贷计算器</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 生活计算宝典 · 里程油耗计算</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 移动端底部导航 -->
+    <nav class="mobile-bottom-nav">
+        <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">首页</span>
+        </a>
+        <a href="../../pages/travel.html" class="nav-item active">
+            <i class="fas fa-plane nav-icon"></i>
+            <span class="nav-label">旅行</span>
+        </a>
+        <a href="../../pages/finance.html" class="nav-item">
+            <i class="fas fa-chart-line nav-icon"></i>
+            <span class="nav-label">理财</span>
+        </a>
+        <a href="../../pages/tools.html" class="nav-item">
+            <i class="fas fa-th nav-icon"></i>
+            <span class="nav-label">全部</span>
+        </a>
+        <a href="#" class="nav-item" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-h nav-icon"></i>
+            <span class="nav-label">更多</span>
+        </a>
+    </nav>
+
+    <script>
+        // 计算模式切换
+        document.querySelectorAll('#calcModeTabs .tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active类
+                document.querySelectorAll('#calcModeTabs .tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                document.querySelectorAll('.mode-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // 添加active类到当前标签
+                this.classList.add('active');
+                
+                const mode = this.dataset.mode;
+                
+                // 显示对应的内容区域
+                document.getElementById(mode + 'Mode').classList.add('active');
+                
+                // 显示对应的结果区域
+                document.getElementById('distanceResult').style.display = mode === 'distance' ? 'block' : 'none';
+                document.getElementById('consumptionResult').style.display = mode === 'consumption' ? 'block' : 'none';
+                document.getElementById('costResult').style.display = mode === 'cost' ? 'block' : 'none';
+                
+                // 重新计算
+                setTimeout(() => {
+                    calculateMileage();
+                }, 100);
+            });
+        });
+        
+        // 输入框变化时自动计算
+        document.querySelectorAll('#fuelPrice, #fuelAmountDistance, #fuelConsumptionDistance, #travelDistanceConsumption, #fuelAmountConsumption, #travelDistanceCost, #fuelConsumptionCost').forEach(input => {
+            input.addEventListener('input', calculateMileage);
+        });
+        
+        // 计算里程油耗
+        function calculateMileage() {
+            const activeMode = document.querySelector('#calcModeTabs .tab.active').dataset.mode;
+            const fuelPrice = parseFloat(document.getElementById('fuelPrice').value) || 0;
+            
+            if (activeMode === 'distance') {
+                calculateDistance(fuelPrice);
+            } else if (activeMode === 'consumption') {
+                calculateConsumption(fuelPrice);
+            } else if (activeMode === 'cost') {
+                calculateCost(fuelPrice);
+            }
+            
+            // 显示结果区域
+            document.getElementById('resultSection').style.display = 'block';
+        }
+        
+        // 计算里程
+        function calculateDistance(fuelPrice) {
+            const fuelAmount = parseFloat(document.getElementById('fuelAmountDistance').value) || 0;
+            const fuelConsumption = parseFloat(document.getElementById('fuelConsumptionDistance').value) || 0;
+            
+            if (fuelAmount <= 0 || fuelConsumption <= 0) {
+                showError();
+                return;
+            }
+            
+            // 专业计算公式：可行驶距离 = 用油量 ÷ 油耗 × 100
+            const travelDistance = (fuelAmount / fuelConsumption) * 100;
+            const totalCost = fuelAmount * fuelPrice;
+            const travelDays = Math.floor(travelDistance / 500); // 假设每天行驶500公里
+            
+            // 显示结果
+            document.getElementById('resultFuelAmountDistance').textContent = fuelAmount.toFixed(2) + ' 升';
+            document.getElementById('resultFuelConsumptionDistance').textContent = fuelConsumption.toFixed(2) + ' 升/百公里';
+            document.getElementById('resultTravelDistance').textContent = travelDistance.toFixed(2) + ' 公里';
+            document.getElementById('resultTravelDays').textContent = travelDays + ' 天';
+            document.getElementById('resultTotalCostDistance').textContent = totalCost.toFixed(2) + ' 元';
+            
+            // 专业建议
+            let suggestion = '';
+            if (fuelConsumption <= 6.0) {
+                suggestion = '您的车辆油耗表现优秀，适合长途旅行。';
+            } else if (fuelConsumption <= 9.0) {
+                suggestion = '您的车辆油耗表现良好，长途旅行经济性不错。';
+            } else if (fuelConsumption <= 12.0) {
+                suggestion = '您的车辆油耗中等，建议规划好加油站位置。';
+            } else {
+                suggestion = '您的车辆油耗较高，长途旅行需考虑加油成本。';
+            }
+            
+            suggestion += ` 使用 ${fuelAmount} 升油可以行驶约 ${travelDistance.toFixed(0)} 公里。`;
+            document.getElementById('expertSuggestion').textContent = suggestion;
+        }
+        
+        // 计算油耗
+        function calculateConsumption(fuelPrice) {
+            const travelDistance = parseFloat(document.getElementById('travelDistanceConsumption').value) || 0;
+            const fuelAmount = parseFloat(document.getElementById('fuelAmountConsumption').value) || 0;
+            
+            if (travelDistance <= 0 || fuelAmount <= 0) {
+                showError();
+                return;
+            }
+            
+            // 专业计算公式：百公里油耗 = 用油量 ÷ 行驶距离 × 100
+            const fuelConsumption = (fuelAmount / travelDistance) * 100;
+            const fuelPerKm = fuelConsumption / 100;
+            const totalCost = fuelAmount * fuelPrice;
+            
+            // 显示结果
+            document.getElementById('resultTravelDistanceConsumption').textContent = travelDistance.toFixed(2) + ' 公里';
+            document.getElementById('resultFuelAmountConsumption').textContent = fuelAmount.toFixed(2) + ' 升';
+            document.getElementById('resultFuelConsumption').textContent = fuelConsumption.toFixed(2) + ' 升/百公里';
+            document.getElementById('resultFuelPerKm').textContent = fuelPerKm.toFixed(4) + ' 升/公里';
+            document.getElementById('resultTotalCostConsumption').textContent = totalCost.toFixed(2) + ' 元';
+            
+            // 专业建议
+            let suggestion = '';
+            if (fuelConsumption <= 6.0) {
+                suggestion = '油耗表现优秀，达到节能汽车标准。';
+            } else if (fuelConsumption <= 9.0) {
+                suggestion = '油耗表现良好，属于经济型车辆。';
+            } else if (fuelConsumption <= 12.0) {
+                suggestion = '油耗处于中等水平，建议检查车辆状态。';
+            } else {
+                suggestion = '油耗偏高，建议检查轮胎气压、发动机状态等。';
+            }
+            
+            suggestion += ` 每公里油耗约为 ${fuelPerKm.toFixed(3)} 升。`;
+            document.getElementById('expertSuggestion').textContent = suggestion;
+        }
+        
+        // 计算油费
+        function calculateCost(fuelPrice) {
+            const travelDistance = parseFloat(document.getElementById('travelDistanceCost').value) || 0;
+            const fuelConsumption = parseFloat(document.getElementById('fuelConsumptionCost').value) || 0;
+            
+            if (travelDistance <= 0 || fuelConsumption <= 0) {
+                showError();
+                return;
+            }
+            
+            // 专业计算公式：总油费 = (行驶距离 ÷ 100) × 车辆油耗 × 油价
+            const totalFuel = (travelDistance / 100) * fuelConsumption;
+            const totalCost = totalFuel * fuelPrice;
+            const costPerKm = totalCost / travelDistance;
+            
+            // 显示结果
+            document.getElementById('resultTravelDistanceCost').textContent = travelDistance.toFixed(2) + ' 公里';
+            document.getElementById('resultFuelConsumptionCost').textContent = fuelConsumption.toFixed(2) + ' 升/百公里';
+            document.getElementById('resultTotalFuel').textContent = totalFuel.toFixed(2) + ' 升';
+            document.getElementById('resultFuelPrice').textContent = fuelPrice.toFixed(2) + ' 元/升';
+            document.getElementById('resultTotalCost').textContent = totalCost.toFixed(2) + ' 元';
+            document.getElementById('resultCostPerKm').textContent = costPerKm.toFixed(2) + ' 元/公里';
+            
+            // 专业建议
+            let suggestion = '';
+            const dailyDistance = 300; // 假设每天行驶300公里
+            
+            if (costPerKm <= 0.5) {
+                suggestion = '行驶成本很低，非常适合长途旅行。';
+            } else if (costPerKm <= 0.8) {
+                suggestion = '行驶成本合理，长途旅行经济性不错。';
+            } else if (costPerKm <= 1.2) {
+                suggestion = '行驶成本中等，建议合理安排行程。';
+            } else {
+                suggestion = '行驶成本较高，建议考虑更经济的交通方式。';
+            }
+            
+            suggestion += ` 按每天行驶 ${dailyDistance} 公里计算，每天油费约 ${(costPerKm * dailyDistance).toFixed(0)} 元。`;
+            document.getElementById('expertSuggestion').textContent = suggestion;
+        }
+        
+        // 显示错误
+        function showError() {
+            document.getElementById('expertSuggestion').textContent = '请输入有效的数值进行计算。';
+        }
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            
+            // 检查本地存储的主题设置
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+            
+            // 切换主题函数
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // 更新图标
+                if (themeBtn) {
+                    const icon = themeBtn.querySelector('i');
+                    icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                }
+            }
+            
+            // 添加事件监听
+            if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            
+            // 页面加载时自动计算一次
+            calculateMileage();
+            
+            // 移动端菜单
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            if (menuBtn) {
+                menuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('移动端菜单功能需要完整的菜单HTML结构');
+                });
+            }
+        });
+    </script>
+    
+    <style>
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border: none;
+            background: none;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        
+        .tab:hover {
+            color: var(--primary);
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .mode-content {
+            display: none;
+        }
+        
+        .mode-content.active {
+            display: block;
+        }
+        
+        @media (max-width: 640px) {
+            .tabs {
+                font-size: 0.875rem;
+            }
+            
+            .tab {
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</body>
+</html>

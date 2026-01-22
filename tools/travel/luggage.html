@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行李重量计算 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/travel.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">行李重量计算</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/travel.html" class="nav-link active">旅行出行</a>
+                        <a href="../../pages/finance.html" class="nav-link">理财金融</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/travel.html" class="breadcrumb-link">旅行出行</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">行李重量计算</span>
+                </nav>
+                
+                <!-- 计算器容器 -->
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">行李重量计算</h1>
+                            <p class="calculator-description">
+                                智能计算行李重量，避免超重费用，合理打包旅行物品。
+                            </p>
+                        </div>
+                        
+                        <!-- 行李类型选择 -->
+                        <div class="tabs" id="luggageTypeTabs">
+                            <button class="tab active" data-type="single">单件行李</button>
+                            <button class="tab" data-type="multiple">多件行李</button>
+                            <button class="tab" data-type="airline">航空公司规则</button>
+                        </div>
+                        
+                        <!-- 单件行李部分 -->
+                        <div id="singleSection" class="luggage-section active">
+                            <div class="input-group">
+                                <label class="input-label">行李重量 (公斤)</label>
+                                <input type="number" id="singleWeight" class="input-field" placeholder="例如：23" value="23" step="0.1" min="0">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">行李尺寸 (厘米)</label>
+                                <div class="flex space-x-2">
+                                    <input type="number" id="luggageLength" class="input-field flex-1" placeholder="长" value="55" step="1" min="1">
+                                    <input type="number" id="luggageWidth" class="input-field flex-1" placeholder="宽" value="40" step="1" min="1">
+                                    <input type="number" id="luggageHeight" class="input-field flex-1" placeholder="高" value="20" step="1" min="1">
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">航空公司</label>
+                                <select id="airlineSelect" class="input-field">
+                                    <option value="economy">经济舱标准</option>
+                                    <option value="china_southern">中国南方航空</option>
+                                    <option value="air_china">中国国际航空</option>
+                                    <option value="china_eastern">中国东方航空</option>
+                                    <option value="united">美国联合航空</option>
+                                    <option value="delta">达美航空</option>
+                                    <option value="emirates">阿联酋航空</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 多件行李部分 -->
+                        <div id="multipleSection" class="luggage-section">
+                            <div class="luggage-list" id="luggageList">
+                                <!-- 行李列表将动态生成 -->
+                                <div class="luggage-item" data-index="0">
+                                    <div class="luggage-item-header">
+                                        <span>行李 #1</span>
+                                        <button type="button" class="remove-luggage" data-index="0">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    <div class="luggage-item-body">
+                                        <div class="input-group">
+                                            <label class="input-label">重量 (公斤)</label>
+                                            <input type="number" class="luggage-weight" data-index="0" placeholder="例如：15" value="15" step="0.1" min="0">
+                                        </div>
+                                        <div class="input-group">
+                                            <label class="input-label">类型</label>
+                                            <select class="luggage-category" data-index="0">
+                                                <option value="checked">托运行李</option>
+                                                <option value="carryon">手提行李</option>
+                                                <option value="personal">个人物品</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="button" class="btn btn-outline btn-block" id="addLuggageBtn">
+                                <i class="fas fa-plus"></i> 添加行李
+                            </button>
+                        </div>
+                        
+                        <!-- 航空公司规则部分 -->
+                        <div id="airlineSection" class="luggage-section">
+                            <div class="input-group">
+                                <label class="input-label">选择航空公司</label>
+                                <select id="airlineCompare" class="input-field">
+                                    <option value="china_southern">中国南方航空</option>
+                                    <option value="air_china">中国国际航空</option>
+                                    <option value="china_eastern">中国东方航空</option>
+                                    <option value="united">美国联合航空</option>
+                                    <option value="delta">达美航空</option>
+                                    <option value="american">美国航空</option>
+                                    <option value="emirates">阿联酋航空</option>
+                                    <option value="singapore">新加坡航空</option>
+                                </select>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">舱位等级</label>
+                                <select id="cabinClass" class="input-field">
+                                    <option value="economy">经济舱</option>
+                                    <option value="premium">超级经济舱</option>
+                                    <option value="business">商务舱</option>
+                                    <option value="first">头等舱</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 计算按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="calculateBtn">
+                            <i class="fas fa-weight"></i> 计算行李
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection" style="display: none;">
+                            <h3 class="result-title"><i class="fas fa-suitcase"></i> 行李计算结果</h3>
+                            
+                            <!-- 单件行李结果 -->
+                            <div id="singleResult" class="luggage-result">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">行李重量</span>
+                                        <span class="result-value" id="singleResultWeight">0.0 公斤</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">行李尺寸</span>
+                                        <span class="result-value" id="singleResultSize">0×0×0 厘米</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">航空公司限制</span>
+                                        <span class="result-value" id="airlineLimit">23 公斤</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">是否超重</span>
+                                        <span class="result-value" id="weightStatus">未超重</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">超重金额</span>
+                                        <span class="result-value" id="overweightFee">0 元</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">剩余重量</span>
+                                        <span class="result-value" id="remainingWeight">0.0 公斤</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 建议 -->
+                                <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                                    <h4 class="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-lightbulb text-yellow-500 mr-1"></i> 打包建议
+                                    </h4>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400 space-y-1" id="packingSuggestions">
+                                        <!-- 建议将动态生成 -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 多件行李结果 -->
+                            <div id="multipleResult" class="luggage-result" style="display: none;">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">总行李数</span>
+                                        <span class="result-value" id="totalLuggageCount">0 件</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">总重量</span>
+                                        <span class="result-value" id="totalLuggageWeight">0.0 公斤</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">托运行李</span>
+                                        <span class="result-value" id="checkedLuggageCount">0 件</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">手提行李</span>
+                                        <span class="result-value" id="carryonLuggageCount">0 件</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">总超重费</span>
+                                        <span class="result-value" id="totalOverweightFee">0 元</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">建议</span>
+                                        <span class="result-value" id="multipleSuggestion">合理</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 行李明细 -->
+                                <div class="mt-4">
+                                    <h4 class="result-title" style="font-size: 1rem;">
+                                        <i class="fas fa-list"></i> 行李明细
+                                    </h4>
+                                    <div class="luggage-details" id="luggageDetails">
+                                        <!-- 行李明细将动态生成 -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 航空公司规则结果 -->
+                            <div id="airlineResult" class="luggage-result" style="display: none;">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">航空公司</span>
+                                        <span class="result-value" id="airlineName">--</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">舱位</span>
+                                        <span class="result-value" id="cabinName">经济舱</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">免费托运行李</span>
+                                        <span class="result-value" id="freeChecked">1×23公斤</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">手提行李</span>
+                                        <span class="result-value" id="carryonAllowance">1×7公斤</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">超重费</span>
+                                        <span class="result-value" id="airlineFee">每公斤100元</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">最大尺寸</span>
+                                        <span class="result-value" id="maxSize">158厘米</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 特别说明 -->
+                                <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                                    <h4 class="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                                        <i class="fas fa-info-circle text-blue-500 mr-1"></i> 特别说明
+                                    </h4>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400" id="airlineNotes">
+                                        <!-- 航空公司说明将动态生成 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 行李重量参考 -->
+                    <div class="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-gray-200">
+                            <i class="fas fa-balance-scale text-blue-500 mr-2"></i> 常见物品重量参考
+                        </h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm">笔记本电脑</span>
+                                <span class="text-sm font-semibold">1.5-2.5 公斤</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm">智能手机</span>
+                                <span class="text-sm font-semibold">0.2-0.3 公斤</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm">单反相机</span>
+                                <span class="text-sm font-semibold">0.8-1.2 公斤</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm">夏季衣物 (7天)</span>
+                                <span class="text-sm font-semibold">3-5 公斤</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm">冬季衣物 (7天)</span>
+                                <span class="text-sm font-semibold">6-10 公斤</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm">洗漱用品</span>
+                                <span class="text-sm font-semibold">1-2 公斤</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 行李打包技巧 -->
+                    <div class="alert alert-info mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-suitcase mr-3"></i>
+                            <div>
+                                <strong>行李打包技巧：</strong> 
+                                <ul class="mt-2 space-y-1 pl-5 list-disc">
+                                    <li>使用真空压缩袋减少衣物体积</li>
+                                    <li>重物放在行李箱底部靠近轮子处</li>
+                                    <li>易碎物品用衣物包裹后放在中间</li>
+                                    <li>鞋子用浴帽或塑料袋包好放在箱子边缘</li>
+                                    <li>液体物品放在密封袋中防止泄漏</li>
+                                    <li>重要文件和贵重物品随身携带</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <a href="../../index.html" class="footer-logo">
+                        <i class="fas fa-calculator"></i>
+                        <span>生活计算宝典</span>
+                    </a>
+                    <p class="footer-description">
+                        一站式离线计算工具集合，为您的生活带来便利。
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">旅行工具</h4>
+                    <a href="mileage.html" class="footer-link">里程油耗计算</a>
+                    <a href="travel-time.html" class="footer-link">旅行时间计算</a>
+                    <a href="travel-budget.html" class="footer-link">旅行预算规划</a>
+                    <a href="timezone.html" class="footer-link">时区转换计算</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">快速链接</h4>
+                    <a href="../../pages/travel.html" class="footer-link">返回旅行出行</a>
+                    <a href="../../pages/tools.html" class="footer-link">所有工具</a>
+                    <a href="https://github.com/laddzhao/life-calculators" target="_blank" class="footer-link">GitHub项目</a>
+                    <a href="../../404.html" class="footer-link">404页面</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">其他工具</h4>
+                    <a href="../shopping/discount.html" class="footer-link">折扣计算器</a>
+                    <a href="../finance/currency.html" class="footer-link">汇率换算</a>
+                    <a href="../health/bmi.html" class="footer-link">BMI计算</a>
+                    <a href="../professional/mortgage.html" class="footer-link">房贷计算器</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 生活计算宝典 · 行李重量计算</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 移动端底部导航 -->
+    <nav class="mobile-bottom-nav">
+        <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">首页</span>
+        </a>
+        <a href="../../pages/travel.html" class="nav-item active">
+            <i class="fas fa-plane nav-icon"></i>
+            <span class="nav-label">旅行</span>
+        </a>
+        <a href="../../pages/finance.html" class="nav-item">
+            <i class="fas fa-chart-line nav-icon"></i>
+            <span class="nav-label">理财</span>
+        </a>
+        <a href="../../pages/tools.html" class="nav-item">
+            <i class="fas fa-th nav-icon"></i>
+            <span class="nav-label">全部</span>
+        </a>
+        <a href="#" class="nav-item" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-h nav-icon"></i>
+            <span class="nav-label">更多</span>
+        </a>
+    </nav>
+
+    <script>
+        // 航空公司数据
+        const airlines = {
+            economy: { name: "经济舱标准", checked: "1×23公斤", carryon: "1×7公斤", fee: "每公斤100元", maxSize: "158厘米" },
+            china_southern: { name: "中国南方航空", checked: "1×23公斤", carryon: "1×7公斤", fee: "每公斤150元", maxSize: "158厘米" },
+            air_china: { name: "中国国际航空", checked: "1×23公斤", carryon: "1×5公斤", fee: "每公斤120元", maxSize: "158厘米" },
+            china_eastern: { name: "中国东方航空", checked: "1×23公斤", carryon: "1×10公斤", fee: "每公斤130元", maxSize: "158厘米" },
+            united: { name: "美国联合航空", checked: "1×23公斤", carryon: "1×9公斤", fee: "每公斤200元", maxSize: "157厘米" },
+            delta: { name: "达美航空", checked: "1×23公斤", carryon: "1×9公斤", fee: "每公斤180元", maxSize: "157厘米" },
+            emirates: { name: "阿联酋航空", checked: "2×32公斤", carryon: "1×7公斤", fee: "每公斤250元", maxSize: "150厘米" }
+        };
+        
+        // 舱位行李限额
+        const cabinAllowances = {
+            economy: { checked: "1×23公斤", carryon: "1×7公斤" },
+            premium: { checked: "2×23公斤", carryon: "1×9公斤" },
+            business: { checked: "2×32公斤", carryon: "1×9公斤" },
+            first: { checked: "3×32公斤", carryon: "1×10公斤" }
+        };
+        
+        // 标签页切换
+        document.querySelectorAll('#luggageTypeTabs .tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active类
+                document.querySelectorAll('#luggageTypeTabs .tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                document.querySelectorAll('.luggage-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // 添加active类到当前标签
+                this.classList.add('active');
+                
+                const type = this.dataset.type;
+                
+                // 显示对应的内容区域
+                document.getElementById(type + 'Section').classList.add('active');
+                
+                // 显示对应的结果区域
+                document.getElementById('singleResult').style.display = type === 'single' ? 'block' : 'none';
+                document.getElementById('multipleResult').style.display = type === 'multiple' ? 'block' : 'none';
+                document.getElementById('airlineResult').style.display = type === 'airline' ? 'block' : 'none';
+                
+                // 重新计算
+                setTimeout(() => {
+                    calculateLuggage();
+                }, 100);
+            });
+        });
+        
+        // 添加行李按钮
+        let luggageCount = 1;
+        document.getElementById('addLuggageBtn').addEventListener('click', function() {
+            luggageCount++;
+            
+            const luggageList = document.getElementById('luggageList');
+            const newLuggage = document.createElement('div');
+            newLuggage.className = 'luggage-item';
+            newLuggage.dataset.index = luggageCount - 1;
+            newLuggage.innerHTML = `
+                <div class="luggage-item-header">
+                    <span>行李 #${luggageCount}</span>
+                    <button type="button" class="remove-luggage" data-index="${luggageCount - 1}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="luggage-item-body">
+                    <div class="input-group">
+                        <label class="input-label">重量 (公斤)</label>
+                        <input type="number" class="luggage-weight" data-index="${luggageCount - 1}" placeholder="例如：15" value="15" step="0.1" min="0">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">类型</label>
+                        <select class="luggage-category" data-index="${luggageCount - 1}">
+                            <option value="checked">托运行李</option>
+                            <option value="carryon">手提行李</option>
+                            <option value="personal">个人物品</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            
+            luggageList.appendChild(newLuggage);
+            
+            // 添加事件监听
+            const weightInput = newLuggage.querySelector('.luggage-weight');
+            const categorySelect = newLuggage.querySelector('.luggage-category');
+            
+            weightInput.addEventListener('input', calculateLuggage);
+            categorySelect.addEventListener('change', calculateLuggage);
+            
+            // 添加删除按钮事件
+            const removeBtn = newLuggage.querySelector('.remove-luggage');
+            removeBtn.addEventListener('click', function() {
+                const index = this.dataset.index;
+                removeLuggage(index);
+            });
+            
+            // 重新计算
+            calculateLuggage();
+        });
+        
+        // 删除行李
+        function removeLuggage(index) {
+            const luggageItem = document.querySelector(`.luggage-item[data-index="${index}"]`);
+            if (luggageItem) {
+                luggageItem.remove();
+                
+                // 重新编号剩余的行李
+                const remainingItems = document.querySelectorAll('.luggage-item');
+                remainingItems.forEach((item, i) => {
+                    item.dataset.index = i;
+                    item.querySelector('.luggage-item-header span').textContent = `行李 #${i + 1}`;
+                    item.querySelector('.luggage-weight').dataset.index = i;
+                    item.querySelector('.luggage-category').dataset.index = i;
+                    item.querySelector('.remove-luggage').dataset.index = i;
+                });
+                
+                luggageCount = remainingItems.length;
+                
+                // 重新计算
+                calculateLuggage();
+            }
+        }
+        
+        // 输入框变化时自动计算
+        document.querySelectorAll('#singleWeight, #luggageLength, #luggageWidth, #luggageHeight, #airlineSelect, #airlineCompare, #cabinClass').forEach(input => {
+            input.addEventListener('input', calculateLuggage);
+        });
+        
+        // 为第一个行李的输入框添加事件
+        document.querySelector('.luggage-weight[data-index="0"]').addEventListener('input', calculateLuggage);
+        document.querySelector('.luggage-category[data-index="0"]').addEventListener('change', calculateLuggage);
+        
+        // 计算行李
+        function calculateLuggage() {
+            const activeType = document.querySelector('#luggageTypeTabs .tab.active').dataset.type;
+            
+            if (activeType === 'single') {
+                calculateSingleLuggage();
+            } else if (activeType === 'multiple') {
+                calculateMultipleLuggage();
+            } else if (activeType === 'airline') {
+                calculateAirlineRules();
+            }
+            
+            // 显示结果区域
+            document.getElementById('resultSection').style.display = 'block';
+        }
+        
+        // 计算单件行李
+        function calculateSingleLuggage() {
+            const weight = parseFloat(document.getElementById('singleWeight').value) || 0;
+            const length = parseFloat(document.getElementById('luggageLength').value) || 0;
+            const width = parseFloat(document.getElementById('luggageWidth').value) || 0;
+            const height = parseFloat(document.getElementById('luggageHeight').value) || 0;
+            const airline = document.getElementById('airlineSelect').value;
+            
+            // 获取航空公司限制
+            const airlineInfo = airlines[airline] || airlines.economy;
+            const limit = 23; // 标准经济舱限制
+            
+            // 计算尺寸
+            const totalSize = length + width + height;
+            const sizeLimit = 158; // 标准尺寸限制
+            
+            // 判断是否超重
+            const isOverweight = weight > limit;
+            const isOversize = totalSize > sizeLimit;
+            const overweight = Math.max(0, weight - limit);
+            
+            // 计算超重费（每公斤100元）
+            const feePerKg = 100;
+            const overweightFee = overweight * feePerKg;
+            const remainingWeight = Math.max(0, limit - weight);
+            
+            // 显示结果
+            document.getElementById('singleResultWeight').textContent = weight.toFixed(1) + ' 公斤';
+            document.getElementById('singleResultSize').textContent = `${length}×${width}×${height} 厘米`;
+            document.getElementById('airlineLimit').textContent = limit + ' 公斤';
+            document.getElementById('remainingWeight').textContent = remainingWeight.toFixed(1) + ' 公斤';
+            document.getElementById('overweightFee').textContent = overweightFee.toFixed(0) + ' 元';
+            
+            // 状态显示
+            let status = '未超重';
+            let statusColor = 'var(--success)';
+            
+            if (isOverweight && isOversize) {
+                status = '超重且超大';
+                statusColor = 'var(--danger)';
+            } else if (isOverweight) {
+                status = '超重';
+                statusColor = 'var(--danger)';
+            } else if (isOversize) {
+                status = '超大';
+                statusColor = 'var(--warning)';
+            }
+            
+            document.getElementById('weightStatus').textContent = status;
+            document.getElementById('weightStatus').style.color = statusColor;
+            
+            // 生成打包建议
+            generatePackingSuggestions(weight, limit, totalSize, sizeLimit);
+        }
+        
+        // 计算多件行李
+        function calculateMultipleLuggage() {
+            const luggageItems = document.querySelectorAll('.luggage-item');
+            let totalWeight = 0;
+            let checkedCount = 0;
+            let carryonCount = 0;
+            let personalCount = 0;
+            let overweightFee = 0;
+            
+            const luggageDetails = document.getElementById('luggageDetails');
+            luggageDetails.innerHTML = '';
+            
+            // 检查每件行李
+            luggageItems.forEach(item => {
+                const index = item.dataset.index;
+                const weight = parseFloat(item.querySelector('.luggage-weight').value) || 0;
+                const category = item.querySelector('.luggage-category').value;
+                
+                totalWeight += weight;
+                
+                // 分类统计
+                if (category === 'checked') {
+                    checkedCount++;
+                    // 托运行李超重检查
+                    if (weight > 23) {
+                        overweightFee += (weight - 23) * 100;
+                    }
+                } else if (category === 'carryon') {
+                    carryonCount++;
+                    // 手提行李超重检查
+                    if (weight > 7) {
+                        overweightFee += (weight - 7) * 50;
+                    }
+                } else {
+                    personalCount++;
+                }
+                
+                // 添加到明细
+                const detailDiv = document.createElement('div');
+                detailDiv.className = 'luggage-detail-item';
+                
+                let categoryText = category === 'checked' ? '托运行李' : 
+                                 category === 'carryon' ? '手提行李' : '个人物品';
+                
+                let status = '';
+                let statusColor = '';
+                
+                if (category === 'checked' && weight > 23) {
+                    status = '超重';
+                    statusColor = 'var(--danger)';
+                } else if (category === 'carryon' && weight > 7) {
+                    status = '超重';
+                    statusColor = 'var(--danger)';
+                } else {
+                    status = '正常';
+                    statusColor = 'var(--success)';
+                }
+                
+                detailDiv.innerHTML = `
+                    <div class="luggage-detail-info">
+                        <span>行李 #${parseInt(index) + 1}</span>
+                        <span style="color: ${statusColor}">${status}</span>
+                    </div>
+                    <div class="luggage-detail-data">
+                        <span>${categoryText}</span>
+                        <span>${weight.toFixed(1)} 公斤</span>
+                    </div>
+                `;
+                
+                luggageDetails.appendChild(detailDiv);
+            });
+            
+            // 显示结果
+            document.getElementById('totalLuggageCount').textContent = luggageItems.length + ' 件';
+            document.getElementById('totalLuggageWeight').textContent = totalWeight.toFixed(1) + ' 公斤';
+            document.getElementById('checkedLuggageCount').textContent = checkedCount + ' 件';
+            document.getElementById('carryonLuggageCount').textContent = carryonCount + ' 件';
+            document.getElementById('totalOverweightFee').textContent = overweightFee.toFixed(0) + ' 元';
+            
+            // 建议
+            let suggestion = '行李配置合理';
+            if (checkedCount > 2) {
+                suggestion = '托运行李过多，考虑合并';
+            } else if (carryonCount > 1) {
+                suggestion = '手提行李过多，部分托运';
+            } else if (overweightFee > 0) {
+                suggestion = '有超重行李，建议减轻';
+            }
+            
+            document.getElementById('multipleSuggestion').textContent = suggestion;
+        }
+        
+        // 计算航空公司规则
+        function calculateAirlineRules() {
+            const airlineCode = document.getElementById('airlineCompare').value;
+            const cabin = document.getElementById('cabinClass').value;
+            
+            // 获取航空公司信息
+            const airlineInfo = airlines[airlineCode] || airlines.economy;
+            const cabinInfo = cabinAllowances[cabin] || cabinAllowances.economy;
+            
+            // 显示结果
+            document.getElementById('airlineName').textContent = airlineInfo.name;
+            document.getElementById('cabinName').textContent = 
+                cabin === 'economy' ? '经济舱' :
+                cabin === 'premium' ? '超级经济舱' :
+                cabin === 'business' ? '商务舱' : '头等舱';
+            
+            document.getElementById('freeChecked').textContent = cabinInfo.checked;
+            document.getElementById('carryonAllowance').textContent = cabinInfo.carryon;
+            document.getElementById('airlineFee').textContent = airlineInfo.fee;
+            document.getElementById('maxSize').textContent = airlineInfo.maxSize;
+            
+            // 航空公司特别说明
+            let notes = '';
+            if (airlineCode === 'emirates') {
+                notes = '阿联酋航空提供较宽松的行李限额，头等舱和商务舱乘客可享受更多免费行李额。';
+            } else if (airlineCode === 'united' || airlineCode === 'delta') {
+                notes = '美联航和达美航空对国际航班有特殊行李规定，建议提前确认。';
+            } else if (airlineCode === 'china_southern') {
+                notes = '南方航空对金卡会员提供额外行李额，具体请查询会员权益。';
+            } else {
+                notes = '建议出行前确认航空公司最新行李政策，可能会有变动。';
+            }
+            
+            document.getElementById('airlineNotes').textContent = notes;
+        }
+        
+        // 生成打包建议
+        function generatePackingSuggestions(weight, limit, size, sizeLimit) {
+            const suggestions = document.getElementById('packingSuggestions');
+            suggestions.innerHTML = '';
+            
+            let suggestionsList = [];
+            
+            if (weight > limit) {
+                suggestionsList.push(`<span class="font-medium">行李超重${(weight - limit).toFixed(1)}公斤，建议减少物品</span>`);
+                suggestionsList.push('考虑将重物放入手提行李');
+                suggestionsList.push('减少书籍、电子产品等重物');
+            } else if (weight < limit * 0.7) {
+                suggestionsList.push('行李重量适中，有充足余量');
+            } else {
+                suggestionsList.push('行李重量接近限制，注意不要增加');
+            }
+            
+            if (size > sizeLimit) {
+                suggestionsList.push(`<span class="font-medium">行李尺寸过大，建议使用更小行李箱</span>`);
+            } else if (size > sizeLimit * 0.9) {
+                suggestionsList.push('行李尺寸接近限制，注意不要挤压变形');
+            }
+            
+            // 通用建议
+            suggestionsList.push('使用真空压缩袋可减少衣物体积');
+            suggestionsList.push('液体物品不超过100ml并放入透明袋');
+            suggestionsList.push('重要证件和贵重物品随身携带');
+            
+            // 添加到页面
+            suggestionsList.forEach(suggestion => {
+                const div = document.createElement('div');
+                div.className = 'flex items-start';
+                div.innerHTML = `
+                    <i class="fas fa-check text-green-500 mt-0.5 mr-2 text-xs"></i>
+                    <span>${suggestion}</span>
+                `;
+                suggestions.appendChild(div);
+            });
+        }
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            
+            // 检查本地存储的主题设置
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+            
+            // 切换主题函数
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // 更新图标
+                if (themeBtn) {
+                    const icon = themeBtn.querySelector('i');
+                    icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                }
+            }
+            
+            // 添加事件监听
+            if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            
+            // 页面加载时自动计算一次
+            calculateLuggage();
+            
+            // 移动端菜单
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            if (menuBtn) {
+                menuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('移动端菜单功能需要完整的菜单HTML结构');
+                });
+            }
+        });
+    </script>
+    
+    <style>
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border: none;
+            background: none;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        
+        .tab:hover {
+            color: var(--primary);
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .luggage-section {
+            display: none;
+        }
+        
+        .luggage-section.active {
+            display: block;
+        }
+        
+        .luggage-list {
+            margin-bottom: 1rem;
+        }
+        
+        .luggage-item {
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        
+        .luggage-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .luggage-item-header span {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .remove-luggage {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: var(--radius-sm);
+        }
+        
+        .remove-luggage:hover {
+            background: var(--danger-light);
+        }
+        
+        .luggage-item-body {
+            padding: 1rem;
+        }
+        
+        .luggage-details {
+            margin-top: 0.5rem;
+        }
+        
+        .luggage-detail-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-light);
+        }
+        
+        .luggage-detail-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .luggage-detail-data {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 640px) {
+            .tabs {
+                font-size: 0.875rem;
+            }
+            
+            .tab {
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</body>
+</html>

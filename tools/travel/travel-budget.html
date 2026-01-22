@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅行预算规划 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/travel.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">旅行预算规划</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/travel.html" class="nav-link active">旅行出行</a>
+                        <a href="../../pages/finance.html" class="nav-link">理财金融</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/travel.html" class="breadcrumb-link">旅行出行</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">旅行预算规划</span>
+                </nav>
+                
+                <!-- 计算器容器 -->
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">旅行预算规划</h1>
+                            <p class="calculator-description">
+                                全面规划旅行预算，合理分配各项费用，控制旅行开支。
+                            </p>
+                        </div>
+                        
+                        <!-- 旅行基本信息 -->
+                        <div class="input-group">
+                            <label class="input-label">旅行天数</label>
+                            <input type="number" id="travelDays" class="input-field" placeholder="例如：7" value="7" step="1" min="1">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">旅行人数</label>
+                            <input type="number" id="travelPersons" class="input-field" placeholder="例如：2" value="2" step="1" min="1">
+                        </div>
+                        
+                        <!-- 预算项目 -->
+                        <div class="budget-categories">
+                            <h3 class="section-subtitle mb-3">
+                                <i class="fas fa-list"></i> 预算项目
+                            </h3>
+                            
+                            <!-- 交通费用 -->
+                            <div class="category-section">
+                                <div class="category-header">
+                                    <h4 class="category-title">
+                                        <i class="fas fa-plane"></i> 交通费用
+                                    </h4>
+                                    <div class="category-total" id="transportTotal">0 元</div>
+                                </div>
+                                
+                                <div class="category-items">
+                                    <div class="budget-item">
+                                        <label class="budget-label">往返机票/车票</label>
+                                        <input type="number" id="flightTicket" class="budget-input" placeholder="例如：2000" value="2000" min="0">
+                                        <span class="budget-unit">元</span>
+                                    </div>
+                                    <div class="budget-item">
+                                        <label class="budget-label">市内交通</label>
+                                        <input type="number" id="localTransport" class="budget-input" placeholder="例如：500" value="500" min="0">
+                                        <span class="budget-unit">元/天</span>
+                                    </div>
+                                    <div class="budget-item">
+                                        <label class="budget-label">租车费用</label>
+                                        <input type="number" id="carRental" class="budget-input" placeholder="例如：0" value="0" min="0">
+                                        <span class="budget-unit">元/天</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 住宿费用 -->
+                            <div class="category-section">
+                                <div class="category-header">
+                                    <h4 class="category-title">
+                                        <i class="fas fa-hotel"></i> 住宿费用
+                                    </h4>
+                                    <div class="category-total" id="accommodationTotal">0 元</div>
+                                </div>
+                                
+                                <div class="category-items">
+                                    <div class="budget-item">
+                                        <label class="budget-label">酒店/民宿</label>
+                                        <input type="number" id="hotel" class="budget-input" placeholder="例如：300" value="300" min="0">
+                                        <span class="budget-unit">元/天</span>
+                                    </div>
+                                    <div class="budget-item">
+                                        <label class="budget-label">其他住宿费用</label>
+                                        <input type="number" id="otherAccommodation" class="budget-input" placeholder="例如：0" value="0" min="0">
+                                        <span class="budget-unit">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 餐饮费用 -->
+                            <div class="category-section">
+                                <div class="category-header">
+                                    <h4 class="category-title">
+                                        <i class="fas fa-utensils"></i> 餐饮费用
+                                    </h4>
+                                    <div class="category-total" id="foodTotal">0 元</div>
+                                </div>
+                                
+                                <div class="category-items">
+                                    <div class="budget-item">
+                                        <label class="budget-label">早餐</label>
+                                        <input type="number" id="breakfast" class="budget-input" placeholder="例如：30" value="30" min="0">
+                                        <span class="budget-unit">元/人/天</span>
+                                    </div>
+                                    <div class="budget-item">
+                                        <label class="budget-label">午餐</label>
+                                        <input type="number" id="lunch" class="budget-input" placeholder="例如：50" value="50" min="0">
+                                        <span class="budget-unit">元/人/天</span>
+                                    </div>
+                                    <div class="budget-item">
+                                        <label class="budget-label">晚餐</label>
+                                        <input type="number" id="dinner" class="budget-input" placeholder="例如：70" value="70" min="0">
+                                        <span class="budget-unit">元/人/天</span>
+                                    </div>
+                                    <div class="budget-item">
+                                        <label class="budget-label">零食饮料</label>
+                                        <input type="number" id="snacks" class="budget-input" placeholder="例如：30" value="30" min="0">
+                                        <span class="budget-unit">元/人/天</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 活动费用 -->
+                            <div class="category-section">
+                                <div class="category-header">
+                                    <h4 class="category-title">
+                                        <i class="fas fa-ticket-alt"></i> 活动费用
+                                    </h4>
+                                    <div class="category-total" id="activitiesTotal">0 元</div>
+                                </div>
+                                
+                                <div class="category-items">
+                                    <div class="budget-item">
+                                        <label class="budget-label">景点门票</label>
+                                        <input type="number" id="tickets" class="budget-input" placeholder="例如：100" value="100" min="0">
+                                        <span class="budget-unit">元/人/天</span>
+                                    </div>
+                                    <div class="budget-item">
+                                        <label class="budget-label">娱乐活动</label>
+                                        <input type="number" id="entertainment" class="budget-input" placeholder="例如：50" value="50" min="0">
+                                        <span class="budget-unit">元/人/天</span>
+                                    </div>
+                                    <div class="budget-item">
+                                        <label class="budget-label">购物预算</label>
+                                        <input type="number" id="shopping" class="budget-input" placeholder="例如：200" value="200" min="0">
+                                        <span class="budget-unit">元/人</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 其他费用 -->
+                            <div class="category-section">
+                                <div class="category-header">
+                                    <h4 class="category-title">
+                                        <i class="fas fa-miscellaneous"></i> 其他费用
+                                    </h4>
+                                    <div class="category-total" id="otherTotal">0 元</div>
+                                </div>
+                                
+                                <div class="category-items">
+                                    <div class="budget-item">
+                                        <label class="budget-label">旅游保险</label>
+                                        <input type="number" id="insurance" class="budget-input" placeholder="例如：100" value="100" min="0">
+                                        <span class="budget-unit">元/人</span>
+                                    </div>
+                                    <div class="budget-item">
+                                        <label class="budget-label">签证费用</label>
+                                        <input type="number" id="visa" class="budget-input" placeholder="例如：0" value="0" min="0">
+                                        <span class="budget-unit">元/人</span>
+                                    </div>
+                                    <div class="budget-item">
+                                        <label class="budget-label">应急备用金</label>
+                                        <input type="number" id="emergency" class="budget-input" placeholder="例如：500" value="500" min="0">
+                                        <span class="budget-unit">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 计算按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="calculateBtn">
+                            <i class="fas fa-calculator"></i> 计算总预算
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection" style="display: none;">
+                            <h3 class="result-title"><i class="fas fa-chart-pie"></i> 预算规划结果</h3>
+                            
+                            <!-- 总预算摘要 -->
+                            <div class="summary-grid">
+                                <div class="summary-item total">
+                                    <span class="summary-label">总预算</span>
+                                    <span class="summary-value" id="totalBudget">0 元</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">每人预算</span>
+                                    <span class="summary-value" id="perPersonBudget">0 元</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">每日预算</span>
+                                    <span class="summary-value" id="perDayBudget">0 元</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">每人每日</span>
+                                    <span class="summary-value" id="perPersonPerDayBudget">0 元</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 预算分布饼图 -->
+                            <div class="mt-6">
+                                <h4 class="result-title" style="font-size: 1rem;">
+                                    <i class="fas fa-chart-pie"></i> 预算分布
+                                </h4>
+                                <div class="budget-distribution" id="budgetDistribution">
+                                    <!-- 预算分布将动态生成 -->
+                                </div>
+                            </div>
+                            
+                            <!-- 详细分类预算 -->
+                            <div class="mt-6">
+                                <h4 class="result-title" style="font-size: 1rem;">
+                                    <i class="fas fa-list-ol"></i> 详细预算
+                                </h4>
+                                <div class="detailed-budget">
+                                    <div class="budget-category-result">
+                                        <div class="budget-category-info">
+                                            <span>交通费用</span>
+                                            <span id="transportPercent">0%</span>
+                                        </div>
+                                        <div class="budget-progress">
+                                            <div class="progress-bar" id="transportBar" style="width: 0%; background: #3b82f6;"></div>
+                                        </div>
+                                        <div class="budget-amount" id="transportAmount">0 元</div>
+                                    </div>
+                                    
+                                    <div class="budget-category-result">
+                                        <div class="budget-category-info">
+                                            <span>住宿费用</span>
+                                            <span id="accommodationPercent">0%</span>
+                                        </div>
+                                        <div class="budget-progress">
+                                            <div class="progress-bar" id="accommodationBar" style="width: 0%; background: #10b981;"></div>
+                                        </div>
+                                        <div class="budget-amount" id="accommodationAmount">0 元</div>
+                                    </div>
+                                    
+                                    <div class="budget-category-result">
+                                        <div class="budget-category-info">
+                                            <span>餐饮费用</span>
+                                            <span id="foodPercent">0%</span>
+                                        </div>
+                                        <div class="budget-progress">
+                                            <div class="progress-bar" id="foodBar" style="width: 0%; background: #f59e0b;"></div>
+                                        </div>
+                                        <div class="budget-amount" id="foodAmount">0 元</div>
+                                    </div>
+                                    
+                                    <div class="budget-category-result">
+                                        <div class="budget-category-info">
+                                            <span>活动费用</span>
+                                            <span id="activitiesPercent">0%</span>
+                                        </div>
+                                        <div class="budget-progress">
+                                            <div class="progress-bar" id="activitiesBar" style="width: 0%; background: #8b5cf6;"></div>
+                                        </div>
+                                        <div class="budget-amount" id="activitiesAmount">0 元</div>
+                                    </div>
+                                    
+                                    <div class="budget-category-result">
+                                        <div class="budget-category-info">
+                                            <span>其他费用</span>
+                                            <span id="otherPercent">0%</span>
+                                        </div>
+                                        <div class="budget-progress">
+                                            <div class="progress-bar" id="otherBar" style="width: 0%; background: #ec4899;"></div>
+                                        </div>
+                                        <div class="budget-amount" id="otherAmount">0 元</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 预算建议 -->
+                            <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                                <h4 class="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                                    <i class="fas fa-lightbulb text-yellow-500 mr-1"></i> 预算优化建议
+                                </h4>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 space-y-1" id="budgetSuggestions">
+                                    <!-- 建议将动态生成 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 预算分配参考 -->
+                    <div class="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-gray-200">
+                            <i class="fas fa-chart-pie text-blue-500 mr-2"></i> 预算分配参考（典型）
+                        </h3>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm">交通费用</span>
+                                    <span class="text-sm font-semibold">25-35%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-blue-500 h-2 rounded-full" style="width: 30%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm">住宿费用</span>
+                                    <span class="text-sm font-semibold">20-30%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 25%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm">餐饮费用</span>
+                                    <span class="text-sm font-semibold">15-25%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 20%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm">活动费用</span>
+                                    <span class="text-sm font-semibold">10-20%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-purple-500 h-2 rounded-full" style="width: 15%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm">其他费用</span>
+                                    <span class="text-sm font-semibold">5-10%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-pink-500 h-2 rounded-full" style="width: 10%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 预算节省技巧 -->
+                    <div class="alert alert-info mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-piggy-bank mr-3"></i>
+                            <div>
+                                <strong>预算节省技巧：</strong> 
+                                <ul class="mt-2 space-y-1 pl-5 list-disc">
+                                    <li>提前预订机票和住宿，通常价格更优惠</li>
+                                    <li>选择淡季出行，避开旅游高峰期</li>
+                                    <li>使用公共交通工具代替出租车</li>
+                                    <li>选择当地特色小吃而不是高档餐厅</li>
+                                    <li>购买景点联票或套票节省费用</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <a href="../../index.html" class="footer-logo">
+                        <i class="fas fa-calculator"></i>
+                        <span>生活计算宝典</span>
+                    </a>
+                    <p class="footer-description">
+                        一站式离线计算工具集合，为您的生活带来便利。
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">旅行工具</h4>
+                    <a href="mileage.html" class="footer-link">里程油耗计算</a>
+                    <a href="travel-time.html" class="footer-link">旅行时间计算</a>
+                    <a href="timezone.html" class="footer-link">时区转换计算</a>
+                    <a href="luggage.html" class="footer-link">行李重量计算</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">快速链接</h4>
+                    <a href="../../pages/travel.html" class="footer-link">返回旅行出行</a>
+                    <a href="../../pages/tools.html" class="footer-link">所有工具</a>
+                    <a href="https://github.com/laddzhao/life-calculators" target="_blank" class="footer-link">GitHub项目</a>
+                    <a href="../../404.html" class="footer-link">404页面</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">其他工具</h4>
+                    <a href="../shopping/discount.html" class="footer-link">折扣计算器</a>
+                    <a href="../finance/currency.html" class="footer-link">汇率换算</a>
+                    <a href="../health/bmi.html" class="footer-link">BMI计算</a>
+                    <a href="../professional/mortgage.html" class="footer-link">房贷计算器</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 生活计算宝典 · 旅行预算规划</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 移动端底部导航 -->
+    <nav class="mobile-bottom-nav">
+        <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">首页</span>
+        </a>
+        <a href="../../pages/travel.html" class="nav-item active">
+            <i class="fas fa-plane nav-icon"></i>
+            <span class="nav-label">旅行</span>
+        </a>
+        <a href="../../pages/finance.html" class="nav-item">
+            <i class="fas fa-chart-line nav-icon"></i>
+            <span class="nav-label">理财</span>
+        </a>
+        <a href="../../pages/tools.html" class="nav-item">
+            <i class="fas fa-th nav-icon"></i>
+            <span class="nav-label">全部</span>
+        </a>
+        <a href="#" class="nav-item" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-h nav-icon"></i>
+            <span class="nav-label">更多</span>
+        </a>
+    </nav>
+
+    <script>
+        // 输入框变化时自动计算
+        const budgetInputs = [
+            'travelDays', 'travelPersons', 'flightTicket', 'localTransport', 'carRental',
+            'hotel', 'otherAccommodation', 'breakfast', 'lunch', 'dinner', 'snacks',
+            'tickets', 'entertainment', 'shopping', 'insurance', 'visa', 'emergency'
+        ];
+        
+        budgetInputs.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener('input', calculateBudget);
+            }
+        });
+        
+        // 计算预算
+        function calculateBudget() {
+            const travelDays = parseInt(document.getElementById('travelDays').value) || 0;
+            const travelPersons = parseInt(document.getElementById('travelPersons').value) || 0;
+            
+            if (travelDays <= 0 || travelPersons <= 0) {
+                showError('请输入有效的天数和人数');
+                return;
+            }
+            
+            // 获取各项输入值
+            const flightTicket = parseFloat(document.getElementById('flightTicket').value) || 0;
+            const localTransport = parseFloat(document.getElementById('localTransport').value) || 0;
+            const carRental = parseFloat(document.getElementById('carRental').value) || 0;
+            
+            const hotel = parseFloat(document.getElementById('hotel').value) || 0;
+            const otherAccommodation = parseFloat(document.getElementById('otherAccommodation').value) || 0;
+            
+            const breakfast = parseFloat(document.getElementById('breakfast').value) || 0;
+            const lunch = parseFloat(document.getElementById('lunch').value) || 0;
+            const dinner = parseFloat(document.getElementById('dinner').value) || 0;
+            const snacks = parseFloat(document.getElementById('snacks').value) || 0;
+            
+            const tickets = parseFloat(document.getElementById('tickets').value) || 0;
+            const entertainment = parseFloat(document.getElementById('entertainment').value) || 0;
+            const shopping = parseFloat(document.getElementById('shopping').value) || 0;
+            
+            const insurance = parseFloat(document.getElementById('insurance').value) || 0;
+            const visa = parseFloat(document.getElementById('visa').value) || 0;
+            const emergency = parseFloat(document.getElementById('emergency').value) || 0;
+            
+            // 计算各项费用（考虑人数和天数）
+            // 交通费用
+            const transportFlight = flightTicket * travelPersons;
+            const transportLocal = localTransport * travelDays * travelPersons;
+            const transportCarRental = carRental * travelDays;
+            const transportTotal = transportFlight + transportLocal + transportCarRental;
+            
+            // 住宿费用
+            const accommodationHotel = hotel * travelDays;
+            const accommodationOther = otherAccommodation;
+            const accommodationTotal = accommodationHotel + accommodationOther;
+            
+            // 餐饮费用
+            const foodBreakfast = breakfast * travelDays * travelPersons;
+            const foodLunch = lunch * travelDays * travelPersons;
+            const foodDinner = dinner * travelDays * travelPersons;
+            const foodSnacks = snacks * travelDays * travelPersons;
+            const foodTotal = foodBreakfast + foodLunch + foodDinner + foodSnacks;
+            
+            // 活动费用
+            const activitiesTickets = tickets * travelDays * travelPersons;
+            const activitiesEntertainment = entertainment * travelDays * travelPersons;
+            const activitiesShopping = shopping * travelPersons;
+            const activitiesTotal = activitiesTickets + activitiesEntertainment + activitiesShopping;
+            
+            // 其他费用
+            const otherInsurance = insurance * travelPersons;
+            const otherVisa = visa * travelPersons;
+            const otherEmergency = emergency;
+            const otherTotal = otherInsurance + otherVisa + otherEmergency;
+            
+            // 总预算
+            const totalBudget = transportTotal + accommodationTotal + foodTotal + activitiesTotal + otherTotal;
+            
+            // 更新分类总计
+            document.getElementById('transportTotal').textContent = transportTotal.toFixed(0) + ' 元';
+            document.getElementById('accommodationTotal').textContent = accommodationTotal.toFixed(0) + ' 元';
+            document.getElementById('foodTotal').textContent = foodTotal.toFixed(0) + ' 元';
+            document.getElementById('activitiesTotal').textContent = activitiesTotal.toFixed(0) + ' 元';
+            document.getElementById('otherTotal').textContent = otherTotal.toFixed(0) + ' 元';
+            
+            // 计算百分比
+            const transportPercent = totalBudget > 0 ? (transportTotal / totalBudget * 100).toFixed(1) : 0;
+            const accommodationPercent = totalBudget > 0 ? (accommodationTotal / totalBudget * 100).toFixed(1) : 0;
+            const foodPercent = totalBudget > 0 ? (foodTotal / totalBudget * 100).toFixed(1) : 0;
+            const activitiesPercent = totalBudget > 0 ? (activitiesTotal / totalBudget * 100).toFixed(1) : 0;
+            const otherPercent = totalBudget > 0 ? (otherTotal / totalBudget * 100).toFixed(1) : 0;
+            
+            // 显示总预算摘要
+            document.getElementById('totalBudget').textContent = totalBudget.toFixed(0) + ' 元';
+            document.getElementById('perPersonBudget').textContent = (totalBudget / travelPersons).toFixed(0) + ' 元';
+            document.getElementById('perDayBudget').textContent = (totalBudget / travelDays).toFixed(0) + ' 元';
+            document.getElementById('perPersonPerDayBudget').textContent = (totalBudget / travelDays / travelPersons).toFixed(0) + ' 元';
+            
+            // 显示详细分类预算
+            document.getElementById('transportPercent').textContent = transportPercent + '%';
+            document.getElementById('transportAmount').textContent = transportTotal.toFixed(0) + ' 元';
+            document.getElementById('transportBar').style.width = transportPercent + '%';
+            
+            document.getElementById('accommodationPercent').textContent = accommodationPercent + '%';
+            document.getElementById('accommodationAmount').textContent = accommodationTotal.toFixed(0) + ' 元';
+            document.getElementById('accommodationBar').style.width = accommodationPercent + '%';
+            
+            document.getElementById('foodPercent').textContent = foodPercent + '%';
+            document.getElementById('foodAmount').textContent = foodTotal.toFixed(0) + ' 元';
+            document.getElementById('foodBar').style.width = foodPercent + '%';
+            
+            document.getElementById('activitiesPercent').textContent = activitiesPercent + '%';
+            document.getElementById('activitiesAmount').textContent = activitiesTotal.toFixed(0) + ' 元';
+            document.getElementById('activitiesBar').style.width = activitiesPercent + '%';
+            
+            document.getElementById('otherPercent').textContent = otherPercent + '%';
+            document.getElementById('otherAmount').textContent = otherTotal.toFixed(0) + ' 元';
+            document.getElementById('otherBar').style.width = otherPercent + '%';
+            
+            // 生成预算分布饼图
+            generateBudgetDistribution(transportPercent, accommodationPercent, foodPercent, activitiesPercent, otherPercent);
+            
+            // 生成预算建议
+            generateBudgetSuggestions(transportPercent, accommodationPercent, foodPercent, activitiesPercent, otherPercent, totalBudget);
+            
+            // 显示结果区域
+            document.getElementById('resultSection').style.display = 'block';
+        }
+        
+        // 生成预算分布饼图
+        function generateBudgetDistribution(transportPercent, accommodationPercent, foodPercent, activitiesPercent, otherPercent) {
+            const distribution = document.getElementById('budgetDistribution');
+            
+            const percentages = [
+                { value: parseFloat(transportPercent), color: '#3b82f6', label: '交通' },
+                { value: parseFloat(accommodationPercent), color: '#10b981', label: '住宿' },
+                { value: parseFloat(foodPercent), color: '#f59e0b', label: '餐饮' },
+                { value: parseFloat(activitiesPercent), color: '#8b5cf6', label: '活动' },
+                { value: parseFloat(otherPercent), color: '#ec4899', label: '其他' }
+            ];
+            
+            // 过滤掉0%的项
+            const filteredPercentages = percentages.filter(item => item.value > 0);
+            
+            if (filteredPercentages.length === 0) {
+                distribution.innerHTML = '<div class="text-center py-4 text-gray-500">暂无预算数据</div>';
+                return;
+            }
+            
+            let html = '<div class="distribution-chart">';
+            
+            if (filteredPercentages.length === 1) {
+                // 如果只有一项，显示一个完整的圆
+                html += `
+                    <div class="single-slice" style="background: ${filteredPercentages[0].color};">
+                        <div class="slice-label">${filteredPercentages[0].label}<br>${filteredPercentages[0].value}%</div>
+                    </div>
+                `;
+            } else {
+                // 计算饼图角度
+                let startAngle = 0;
+                
+                filteredPercentages.forEach(item => {
+                    const angle = (item.value / 100) * 360;
+                    const endAngle = startAngle + angle;
+                    
+                    // 创建饼图切片
+                    html += `
+                        <div class="pie-slice" style="
+                            --start: ${startAngle}deg;
+                            --end: ${endAngle}deg;
+                            --color: ${item.color};
+                        ">
+                            <div class="slice-label">${item.label} ${item.value}%</div>
+                        </div>
+                    `;
+                    
+                    startAngle = endAngle;
+                });
+            }
+            
+            html += '</div>';
+            distribution.innerHTML = html;
+        }
+        
+        // 生成预算建议
+        function generateBudgetSuggestions(transportPercent, accommodationPercent, foodPercent, activitiesPercent, otherPercent, totalBudget) {
+            const suggestions = document.getElementById('budgetSuggestions');
+            suggestions.innerHTML = '';
+            
+            const transportValue = parseFloat(transportPercent);
+            const accommodationValue = parseFloat(accommodationPercent);
+            const foodValue = parseFloat(foodPercent);
+            const activitiesValue = parseFloat(activitiesPercent);
+            const otherValue = parseFloat(otherPercent);
+            
+            let suggestionsList = [];
+            
+            // 分析各项占比是否合理
+            if (transportValue > 35) {
+                suggestionsList.push('<span class="font-medium">交通费用偏高，可考虑提前预订或选择经济交通方式</span>');
+            } else if (transportValue < 25) {
+                suggestionsList.push('交通费用比例合理');
+            }
+            
+            if (accommodationValue > 30) {
+                suggestionsList.push('<span class="font-medium">住宿费用偏高，可考虑民宿或经济型酒店</span>');
+            } else if (accommodationValue < 20) {
+                suggestionsList.push('住宿费用比例较低，注意住宿条件');
+            }
+            
+            if (foodValue > 25) {
+                suggestionsList.push('<span class="font-medium">餐饮费用偏高，可尝试当地小吃减少开支</span>');
+            } else if (foodValue < 15) {
+                suggestionsList.push('餐饮费用比例较低，确保饮食质量');
+            }
+            
+            if (activitiesValue > 20) {
+                suggestionsList.push('<span class="font-medium">活动费用偏高，可精选景点减少门票支出</span>');
+            }
+            
+            if (otherValue > 10) {
+                suggestionsList.push('<span class="font-medium">其他费用偏高，检查是否有不必要的开支</span>');
+            }
+            
+            // 根据总预算给出建议
+            const perPersonPerDay = totalBudget / parseInt(document.getElementById('travelPersons').value) / parseInt(document.getElementById('travelDays').value);
+            
+            if (perPersonPerDay < 200) {
+                suggestionsList.push('预算较为紧张，建议精打细算');
+            } else if (perPersonPerDay < 500) {
+                suggestionsList.push('预算适中，可享受舒适旅行体验');
+            } else if (perPersonPerDay < 1000) {
+                suggestionsList.push('预算充足，可考虑升级体验');
+            } else {
+                suggestionsList.push('预算非常充足，可享受豪华旅行体验');
+            }
+            
+            // 添加到页面
+            if (suggestionsList.length === 0) {
+                suggestionsList.push('预算分配合理，无需特别调整');
+            }
+            
+            suggestionsList.forEach(suggestion => {
+                const div = document.createElement('div');
+                div.className = 'flex items-start';
+                div.innerHTML = `
+                    <i class="fas fa-check text-green-500 mt-0.5 mr-2 text-xs"></i>
+                    <span>${suggestion}</span>
+                `;
+                suggestions.appendChild(div);
+            });
+        }
+        
+        // 显示错误
+        function showError(message) {
+            const suggestions = document.getElementById('budgetSuggestions');
+            if (suggestions) {
+                suggestions.innerHTML = `
+                    <div class="text-red-600 dark:text-red-400 font-medium">
+                        <i class="fas fa-exclamation-circle mr-1"></i> ${message}
+                    </div>
+                `;
+            }
+            document.getElementById('resultSection').style.display = 'block';
+        }
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            
+            // 检查本地存储的主题设置
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+            
+            // 切换主题函数
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // 更新图标
+                if (themeBtn) {
+                    const icon = themeBtn.querySelector('i');
+                    icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                }
+            }
+            
+            // 添加事件监听
+            if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            
+            // 页面加载时自动计算一次
+            calculateBudget();
+            
+            // 移动端菜单
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            if (menuBtn) {
+                menuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('移动端菜单功能需要完整的菜单HTML结构');
+                });
+            }
+        });
+    </script>
+    
+    <style>
+        .budget-categories {
+            margin-bottom: 1.5rem;
+        }
+        
+        .category-section {
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .category-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .category-total {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .category-items {
+            padding: 1rem;
+            background: var(--bg-primary);
+        }
+        
+        .budget-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .budget-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .budget-label {
+            flex: 1;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .budget-input {
+            width: 8rem;
+            padding: 0.5rem;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            text-align: right;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        .budget-unit {
+            width: 4rem;
+            margin-left: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (min-width: 640px) {
+            .summary-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .summary-item {
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+        
+        .summary-item.total {
+            grid-column: span 2;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+        }
+        
+        @media (min-width: 640px) {
+            .summary-item.total {
+                grid-column: span 1;
+            }
+        }
+        
+        .summary-label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .total .summary-label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .summary-value {
+            display: block;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .total .summary-value {
+            color: white;
+        }
+        
+        .budget-distribution {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            margin-top: 1rem;
+        }
+        
+        .distribution-chart {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+        }
+        
+        .single-slice {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .slice-label {
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .pie-slice {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%);
+        }
+        
+        .pie-slice::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                transparent 0deg var(--start),
+                var(--color) var(--start) var(--end),
+                transparent var(--end) 360deg
+            );
+        }
+        
+        .detailed-budget {
+            margin-top: 1rem;
+        }
+        
+        .budget-category-result {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .budget-category-info {
+            width: 8rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .budget-progress {
+            flex: 1;
+            height: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin: 0 1rem;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+        
+        .budget-amount {
+            width: 6rem;
+            text-align: right;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        @media (max-width: 640px) {
+            .budget-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .budget-input {
+                width: 100%;
+            }
+            
+            .budget-unit {
+                margin-left: 0;
+            }
+            
+            .budget-category-result {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .budget-category-info {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+            
+            .budget-progress {
+                width: 100%;
+                margin: 0;
+            }
+            
+            .budget-amount {
+                width: 100%;
+                text-align: left;
+            }
+        }
+    </style>
+</body>
+</html>

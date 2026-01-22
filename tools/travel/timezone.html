@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时区转换计算 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/travel.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">时区转换计算</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/travel.html" class="nav-link active">旅行出行</a>
+                        <a href="../../pages/finance.html" class="nav-link">理财金融</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/travel.html" class="breadcrumb-link">旅行出行</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">时区转换计算</span>
+                </nav>
+                
+                <!-- 计算器容器 -->
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">时区转换计算</h1>
+                            <p class="calculator-description">
+                                精确计算不同时区的时间差，避免时差困扰，规划国际旅行。
+                            </p>
+                        </div>
+                        
+                        <!-- 当前时间 -->
+                        <div class="input-group">
+                            <label class="input-label">当前时间</label>
+                            <div class="flex space-x-2">
+                                <input type="time" id="currentTime" class="input-field flex-1" value="">
+                                <select id="currentTimeType" class="input-field w-32">
+                                    <option value="system">系统时间</option>
+                                    <option value="custom">自定义</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 当前日期 -->
+                        <div class="input-group">
+                            <label class="input-label">当前日期</label>
+                            <input type="date" id="currentDate" class="input-field">
+                        </div>
+                        
+                        <!-- 当前时区 -->
+                        <div class="input-group">
+                            <label class="input-label">当前时区</label>
+                            <select id="fromTimezone" class="input-field">
+                                <!-- 时区选项将通过JS动态生成 -->
+                            </select>
+                        </div>
+                        
+                        <!-- 目标时区 -->
+                        <div class="input-group">
+                            <label class="input-label">目标时区</label>
+                            <select id="toTimezone" class="input-field">
+                                <!-- 时区选项将通过JS动态生成 -->
+                            </select>
+                        </div>
+                        
+                        <!-- 常用时区快速选择 -->
+                        <div class="input-group">
+                            <label class="input-label">常用时区</label>
+                            <div class="quick-timezones" id="quickTimezones">
+                                <!-- 常用时区按钮将动态生成 -->
+                            </div>
+                        </div>
+                        
+                        <!-- 计算按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="calculateBtn">
+                            <i class="fas fa-exchange-alt"></i> 转换时区
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection" style="display: none;">
+                            <h3 class="result-title"><i class="fas fa-globe"></i> 时区转换结果</h3>
+                            
+                            <!-- 时间转换结果 -->
+                            <div class="timezone-result">
+                                <div class="timezone-card from">
+                                    <div class="timezone-header">
+                                        <span class="timezone-label">当前时区</span>
+                                        <span class="timezone-name" id="fromTimezoneName">UTC+8</span>
+                                    </div>
+                                    <div class="timezone-time" id="fromTimezoneTime">--:--</div>
+                                    <div class="timezone-date" id="fromTimezoneDate">----年--月--日</div>
+                                </div>
+                                
+                                <div class="timezone-arrow">
+                                    <i class="fas fa-long-arrow-alt-right"></i>
+                                </div>
+                                
+                                <div class="timezone-card to">
+                                    <div class="timezone-header">
+                                        <span class="timezone-label">目标时区</span>
+                                        <span class="timezone-name" id="toTimezoneName">UTC+0</span>
+                                    </div>
+                                    <div class="timezone-time" id="toTimezoneTime">--:--</div>
+                                    <div class="timezone-date" id="toTimezoneDate">----年--月--日</div>
+                                </div>
+                            </div>
+                            
+                            <!-- 时差信息 -->
+                            <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="text-center">
+                                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">时差</div>
+                                        <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="timeDifference">0 小时</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">方向</div>
+                                        <div class="text-2xl font-bold text-green-600 dark:text-green-400" id="timeDirection">相同</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">日期变化</div>
+                                        <div class="text-2xl font-bold text-purple-600 dark:text-purple-400" id="dateChange">无</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 世界主要城市时间 -->
+                            <div class="mt-6">
+                                <h4 class="result-title" style="font-size: 1rem;">
+                                    <i class="fas fa-city"></i> 世界主要城市时间
+                                </h4>
+                                <div class="world-cities" id="worldCities">
+                                    <!-- 世界主要城市时间将动态生成 -->
+                                </div>
+                            </div>
+                            
+                            <!-- 时差适应建议 -->
+                            <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                                <h4 class="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                                    <i class="fas fa-lightbulb text-yellow-500 mr-1"></i> 时差适应建议
+                                </h4>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 space-y-1" id="jetlagSuggestions">
+                                    <!-- 建议将动态生成 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 时区知识 -->
+                    <div class="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-gray-200">
+                            <i class="fas fa-info-circle text-blue-500 mr-2"></i> 时区知识
+                        </h3>
+                        <div class="space-y-2">
+                            <div class="flex items-start">
+                                <i class="fas fa-clock text-gray-400 mt-1 mr-2 text-sm"></i>
+                                <span class="text-sm">地球分为24个时区，每个时区相差1小时</span>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-sun text-yellow-500 mt-1 mr-2 text-sm"></i>
+                                <span class="text-sm">国际日期变更线位于太平洋180°经线附近</span>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-plane text-blue-500 mt-1 mr-2 text-sm"></i>
+                                <span class="text-sm">向东飞行每跨一个时区加1小时，向西则减1小时</span>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-bed text-purple-500 mt-1 mr-2 text-sm"></i>
+                                <span class="text-sm">时差超过3小时就可能产生时差反应(jet lag)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 主要时区对照表 -->
+                    <div class="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-gray-200">
+                            <i class="fas fa-list text-green-500 mr-2"></i> 主要时区对照表
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-gray-100 dark:bg-gray-700">
+                                        <th class="p-2 text-left">时区</th>
+                                        <th class="p-2 text-left">代表城市</th>
+                                        <th class="p-2 text-left">与UTC时差</th>
+                                        <th class="p-2 text-left">与中国时差</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="p-2">UTC+8</td>
+                                        <td class="p-2 font-medium">北京, 新加坡</td>
+                                        <td class="p-2">+8小时</td>
+                                        <td class="p-2">0小时</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="p-2">UTC+9</td>
+                                        <td class="p-2 font-medium">东京, 首尔</td>
+                                        <td class="p-2">+9小时</td>
+                                        <td class="p-2">+1小时</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="p-2">UTC+1</td>
+                                        <td class="p-2 font-medium">巴黎, 柏林</td>
+                                        <td class="p-2">+1小时</td>
+                                        <td class="p-2">-7小时</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="p-2">UTC+0</td>
+                                        <td class="p-2 font-medium">伦敦, 里斯本</td>
+                                        <td class="p-2">0小时</td>
+                                        <td class="p-2">-8小时</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="p-2">UTC-5</td>
+                                        <td class="p-2 font-medium">纽约, 多伦多</td>
+                                        <td class="p-2">-5小时</td>
+                                        <td class="p-2">-13小时</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2">UTC-8</td>
+                                        <td class="p-2 font-medium">洛杉矶, 温哥华</td>
+                                        <td class="p-2">-8小时</td>
+                                        <td class="p-2">-16小时</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- 时差适应技巧 -->
+                    <div class="alert alert-info mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-heartbeat mr-3"></i>
+                            <div>
+                                <strong>时差适应技巧：</strong> 
+                                <ul class="mt-2 space-y-1 pl-5 list-disc">
+                                    <li>提前调整作息时间，出发前几天开始适应</li>
+                                    <li>飞行中多喝水，避免酒精和咖啡因</li>
+                                    <li>到达后立即按当地时间作息</li>
+                                    <li>白天多晒太阳帮助调节生物钟</li>
+                                    <li>轻微运动有助于适应新时区</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <a href="../../index.html" class="footer-logo">
+                        <i class="fas fa-calculator"></i>
+                        <span>生活计算宝典</span>
+                    </a>
+                    <p class="footer-description">
+                        一站式离线计算工具集合，为您的生活带来便利。
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">旅行工具</h4>
+                    <a href="mileage.html" class="footer-link">里程油耗计算</a>
+                    <a href="travel-time.html" class="footer-link">旅行时间计算</a>
+                    <a href="travel-budget.html" class="footer-link">旅行预算规划</a>
+                    <a href="luggage.html" class="footer-link">行李重量计算</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">快速链接</h4>
+                    <a href="../../pages/travel.html" class="footer-link">返回旅行出行</a>
+                    <a href="../../pages/tools.html" class="footer-link">所有工具</a>
+                    <a href="https://github.com/laddzhao/life-calculators" target="_blank" class="footer-link">GitHub项目</a>
+                    <a href="../../404.html" class="footer-link">404页面</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">其他工具</h4>
+                    <a href="../shopping/discount.html" class="footer-link">折扣计算器</a>
+                    <a href="../finance/currency.html" class="footer-link">汇率换算</a>
+                    <a href="../health/bmi.html" class="footer-link">BMI计算</a>
+                    <a href="../professional/mortgage.html" class="footer-link">房贷计算器</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 生活计算宝典 · 时区转换计算</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 移动端底部导航 -->
+    <nav class="mobile-bottom-nav">
+        <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">首页</span>
+        </a>
+        <a href="../../pages/travel.html" class="nav-item active">
+            <i class="fas fa-plane nav-icon"></i>
+            <span class="nav-label">旅行</span>
+        </a>
+        <a href="../../pages/finance.html" class="nav-item">
+            <i class="fas fa-chart-line nav-icon"></i>
+            <span class="nav-label">理财</span>
+        </a>
+        <a href="../../pages/tools.html" class="nav-item">
+            <i class="fas fa-th nav-icon"></i>
+            <span class="nav-label">全部</span>
+        </a>
+        <a href="#" class="nav-item" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-h nav-icon"></i>
+            <span class="nav-label">更多</span>
+        </a>
+    </nav>
+
+    <script>
+        // 时区数据
+        const timezones = [
+            { id: 'utc-12', name: 'UTC-12', offset: -12, cities: '贝克岛' },
+            { id: 'utc-11', name: 'UTC-11', offset: -11, cities: '纽埃, 美属萨摩亚' },
+            { id: 'utc-10', name: 'UTC-10', offset: -10, cities: '夏威夷' },
+            { id: 'utc-9', name: 'UTC-9', offset: -9, cities: '阿拉斯加' },
+            { id: 'utc-8', name: 'UTC-8', offset: -8, cities: '洛杉矶, 温哥华' },
+            { id: 'utc-7', name: 'UTC-7', offset: -7, cities: '丹佛, 凤凰城' },
+            { id: 'utc-6', name: 'UTC-6', offset: -6, cities: '芝加哥, 墨西哥城' },
+            { id: 'utc-5', name: 'UTC-5', offset: -5, cities: '纽约, 多伦多' },
+            { id: 'utc-4', name: 'UTC-4', offset: -4, cities: '加拉加斯, 圣地亚哥' },
+            { id: 'utc-3', name: 'UTC-3', offset: -3, cities: '布宜诺斯艾利斯, 巴西利亚' },
+            { id: 'utc-2', name: 'UTC-2', offset: -2, cities: '南乔治亚岛' },
+            { id: 'utc-1', name: 'UTC-1', offset: -1, cities: '亚速尔群岛' },
+            { id: 'utc+0', name: 'UTC+0', offset: 0, cities: '伦敦, 里斯本' },
+            { id: 'utc+1', name: 'UTC+1', offset: 1, cities: '巴黎, 柏林' },
+            { id: 'utc+2', name: 'UTC+2', offset: 2, cities: '开罗, 雅典' },
+            { id: 'utc+3', name: 'UTC+3', offset: 3, cities: '莫斯科, 伊斯坦布尔' },
+            { id: 'utc+4', name: 'UTC+4', offset: 4, cities: '迪拜, 巴库' },
+            { id: 'utc+5', name: 'UTC+5', offset: 5, cities: '伊斯兰堡, 叶卡捷琳堡' },
+            { id: 'utc+6', name: 'UTC+6', offset: 6, cities: '达卡, 阿斯塔纳' },
+            { id: 'utc+7', name: 'UTC+7', offset: 7, cities: '曼谷, 雅加达' },
+            { id: 'utc+8', name: 'UTC+8', offset: 8, cities: '北京, 新加坡' },
+            { id: 'utc+9', name: 'UTC+9', offset: 9, cities: '东京, 首尔' },
+            { id: 'utc+10', name: 'UTC+10', offset: 10, cities: '悉尼, 关岛' },
+            { id: 'utc+11', name: 'UTC+11', offset: 11, cities: '努美阿, 所罗门群岛' },
+            { id: 'utc+12', name: 'UTC+12', offset: 12, cities: '奥克兰, 斐济' }
+        ];
+        
+        // 常用时区（快速选择）
+        const quickTimezones = [
+            { id: 'utc+8', name: '北京 (UTC+8)', offset: 8 },
+            { id: 'utc+9', name: '东京 (UTC+9)', offset: 9 },
+            { id: 'utc+1', name: '巴黎 (UTC+1)', offset: 1 },
+            { id: 'utc+0', name: '伦敦 (UTC+0)', offset: 0 },
+            { id: 'utc-5', name: '纽约 (UTC-5)', offset: -5 },
+            { id: 'utc-8', name: '洛杉矶 (UTC-8)', offset: -8 }
+        ];
+        
+        // 世界主要城市
+        const worldCities = [
+            { name: '北京', timezone: 'utc+8' },
+            { name: '东京', timezone: 'utc+9' },
+            { name: '悉尼', timezone: 'utc+10' },
+            { name: '伦敦', timezone: 'utc+0' },
+            { name: '巴黎', timezone: 'utc+1' },
+            { name: '纽约', timezone: 'utc-5' },
+            { name: '洛杉矶', timezone: 'utc-8' },
+            { name: '莫斯科', timezone: 'utc+3' }
+        ];
+        
+        // 初始化时区选择
+        function initTimezones() {
+            const fromSelect = document.getElementById('fromTimezone');
+            const toSelect = document.getElementById('toTimezone');
+            
+            // 清空选项
+            fromSelect.innerHTML = '';
+            toSelect.innerHTML = '';
+            
+            // 添加时区选项
+            timezones.forEach(tz => {
+                const option1 = document.createElement('option');
+                option1.value = tz.id;
+                option1.textContent = `${tz.name} (${tz.cities})`;
+                fromSelect.appendChild(option1);
+                
+                const option2 = document.createElement('option');
+                option2.value = tz.id;
+                option2.textContent = `${tz.name} (${tz.cities})`;
+                toSelect.appendChild(option2);
+            });
+            
+            // 设置默认值（北京时区）
+            fromSelect.value = 'utc+8';
+            toSelect.value = 'utc+0';
+            
+            // 初始化常用时区快速选择
+            initQuickTimezones();
+            
+            // 设置当前日期和时间
+            setCurrentDateTime();
+        }
+        
+        // 初始化常用时区快速选择
+        function initQuickTimezones() {
+            const container = document.getElementById('quickTimezones');
+            container.innerHTML = '';
+            
+            quickTimezones.forEach(tz => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'quick-timezone-btn';
+                button.textContent = tz.name;
+                button.dataset.timezone = tz.id;
+                button.addEventListener('click', () => {
+                    document.getElementById('toTimezone').value = tz.id;
+                    convertTimezone();
+                });
+                container.appendChild(button);
+            });
+        }
+        
+        // 设置当前日期和时间
+        function setCurrentDateTime() {
+            const now = new Date();
+            
+            // 设置当前时间
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('currentTime').value = `${hours}:${minutes}`;
+            
+            // 设置当前日期
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            document.getElementById('currentDate').value = `${year}-${month}-${day}`;
+        }
+        
+        // 当前时间类型切换
+        document.getElementById('currentTimeType').addEventListener('change', function() {
+            const type = this.value;
+            if (type === 'system') {
+                setCurrentDateTime();
+                convertTimezone();
+            }
+        });
+        
+        // 输入框变化时自动计算
+        document.querySelectorAll('#currentTime, #currentDate, #fromTimezone, #toTimezone').forEach(input => {
+            input.addEventListener('change', convertTimezone);
+        });
+        
+        // 转换时区
+        function convertTimezone() {
+            // 获取输入值
+            const currentTimeStr = document.getElementById('currentTime').value;
+            const currentDateStr = document.getElementById('currentDate').value;
+            const fromTimezoneId = document.getElementById('fromTimezone').value;
+            const toTimezoneId = document.getElementById('toTimezone').value;
+            
+            if (!currentTimeStr || !currentDateStr) {
+                showError('请输入日期和时间');
+                return;
+            }
+            
+            // 解析当前时间
+            const [hours, minutes] = currentTimeStr.split(':').map(Number);
+            const [year, month, day] = currentDateStr.split('-').map(Number);
+            
+            // 创建日期对象
+            const currentDate = new Date(year, month - 1, day, hours, minutes, 0);
+            
+            // 获取时区信息
+            const fromTimezone = timezones.find(tz => tz.id === fromTimezoneId);
+            const toTimezone = timezones.find(tz => tz.id === toTimezoneId);
+            
+            if (!fromTimezone || !toTimezone) {
+                showError('时区信息无效');
+                return;
+            }
+            
+            // 计算时差
+            const timeDifference = toTimezone.offset - fromTimezone.offset;
+            
+            // 计算目标时区时间
+            const targetDate = new Date(currentDate.getTime());
+            targetDate.setHours(targetDate.getHours() + timeDifference);
+            
+            // 格式化时间
+            const formatTime = (date) => {
+                const h = date.getHours().toString().padStart(2, '0');
+                const m = date.getMinutes().toString().padStart(2, '0');
+                return `${h}:${m}`;
+            };
+            
+            // 格式化日期
+            const formatDate = (date) => {
+                const y = date.getFullYear();
+                const m = (date.getMonth() + 1).toString().padStart(2, '0');
+                const d = date.getDate().toString().padStart(2, '0');
+                return `${y}年${m}月${d}日`;
+            };
+            
+            // 显示结果
+            document.getElementById('fromTimezoneName').textContent = fromTimezone.name;
+            document.getElementById('fromTimezoneTime').textContent = formatTime(currentDate);
+            document.getElementById('fromTimezoneDate').textContent = formatDate(currentDate);
+            
+            document.getElementById('toTimezoneName').textContent = toTimezone.name;
+            document.getElementById('toTimezoneTime').textContent = formatTime(targetDate);
+            document.getElementById('toTimezoneDate').textContent = formatDate(targetDate);
+            
+            // 显示时差信息
+            const absDifference = Math.abs(timeDifference);
+            document.getElementById('timeDifference').textContent = `${absDifference} 小时`;
+            
+            if (timeDifference > 0) {
+                document.getElementById('timeDirection').textContent = '晚 ' + timeDifference + ' 小时';
+                document.getElementById('timeDirection').style.color = 'var(--danger)';
+            } else if (timeDifference < 0) {
+                document.getElementById('timeDirection').textContent = '早 ' + Math.abs(timeDifference) + ' 小时';
+                document.getElementById('timeDirection').style.color = 'var(--success)';
+            } else {
+                document.getElementById('timeDirection').textContent = '相同';
+                document.getElementById('timeDirection').style.color = 'var(--text-primary)';
+            }
+            
+            // 检查日期变化
+            if (targetDate.getDate() !== currentDate.getDate()) {
+                if (targetDate.getDate() > currentDate.getDate()) {
+                    document.getElementById('dateChange').textContent = '+1天';
+                } else {
+                    document.getElementById('dateChange').textContent = '-1天';
+                }
+            } else {
+                document.getElementById('dateChange').textContent = '无';
+            }
+            
+            // 更新世界主要城市时间
+            updateWorldCities(currentDate, fromTimezone);
+            
+            // 生成时差适应建议
+            generateJetlagSuggestions(absDifference, timeDifference > 0 ? '向东' : '向西');
+            
+            // 显示结果区域
+            document.getElementById('resultSection').style.display = 'block';
+        }
+        
+        // 更新世界主要城市时间
+        function updateWorldCities(baseDate, baseTimezone) {
+            const container = document.getElementById('worldCities');
+            container.innerHTML = '';
+            
+            worldCities.forEach(city => {
+                const cityTimezone = timezones.find(tz => tz.id === city.timezone);
+                if (!cityTimezone) return;
+                
+                // 计算时差
+                const timeDifference = cityTimezone.offset - baseTimezone.offset;
+                
+                // 计算城市时间
+                const cityDate = new Date(baseDate.getTime());
+                cityDate.setHours(cityDate.getHours() + timeDifference);
+                
+                // 格式化时间
+                const hours = cityDate.getHours().toString().padStart(2, '0');
+                const minutes = cityDate.getMinutes().toString().padStart(2, '0');
+                const timeStr = `${hours}:${minutes}`;
+                
+                // 创建城市时间卡片
+                const cityDiv = document.createElement('div');
+                cityDiv.className = 'world-city';
+                cityDiv.innerHTML = `
+                    <div class="city-name">${city.name}</div>
+                    <div class="city-timezone">${cityTimezone.name}</div>
+                    <div class="city-time">${timeStr}</div>
+                `;
+                
+                container.appendChild(cityDiv);
+            });
+        }
+        
+        // 生成时差适应建议
+        function generateJetlagSuggestions(hours, direction) {
+            const suggestions = document.getElementById('jetlagSuggestions');
+            suggestions.innerHTML = '';
+            
+            let suggestionsList = [];
+            
+            if (hours === 0) {
+                suggestionsList.push('无时差，无需特别调整');
+            } else if (hours <= 3) {
+                suggestionsList.push(`时差${hours}小时，轻微影响，1-2天可适应`);
+            } else if (hours <= 6) {
+                suggestionsList.push(`时差${hours}小时，中等影响，建议提前1-2天调整作息`);
+                if (direction === '向东') {
+                    suggestionsList.push('向东飞行，建议提前早睡早起');
+                } else {
+                    suggestionsList.push('向西飞行，建议推迟就寝时间');
+                }
+            } else {
+                suggestionsList.push(`<span class="font-medium">时差${hours}小时，严重影响，需提前3-4天调整</span>`);
+                suggestionsList.push('到达后前两天避免重要活动安排');
+                if (direction === '向东') {
+                    suggestionsList.push('向东飞行时差更难适应，需更多休息');
+                }
+            }
+            
+            // 通用建议
+            suggestionsList.push('飞行中多喝水，避免酒精和咖啡因');
+            suggestionsList.push('到达后立即按当地时间作息');
+            suggestionsList.push('白天多晒太阳帮助调节生物钟');
+            
+            // 添加到页面
+            suggestionsList.forEach(suggestion => {
+                const div = document.createElement('div');
+                div.className = 'flex items-start';
+                div.innerHTML = `
+                    <i class="fas fa-check text-green-500 mt-0.5 mr-2 text-xs"></i>
+                    <span>${suggestion}</span>
+                `;
+                suggestions.appendChild(div);
+            });
+        }
+        
+        // 显示错误
+        function showError(message) {
+            const suggestions = document.getElementById('jetlagSuggestions');
+            if (suggestions) {
+                suggestions.innerHTML = `
+                    <div class="text-red-600 dark:text-red-400 font-medium">
+                        <i class="fas fa-exclamation-circle mr-1"></i> ${message}
+                    </div>
+                `;
+            }
+            document.getElementById('resultSection').style.display = 'block';
+        }
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            
+            // 检查本地存储的主题设置
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+            
+            // 切换主题函数
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // 更新图标
+                if (themeBtn) {
+                    const icon = themeBtn.querySelector('i');
+                    icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                }
+            }
+            
+            // 添加事件监听
+            if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            initTimezones();
+            
+            // 页面加载时自动计算一次
+            convertTimezone();
+            
+            // 移动端菜单
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            if (menuBtn) {
+                menuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('移动端菜单功能需要完整的菜单HTML结构');
+                });
+            }
+        });
+    </script>
+    
+    <style>
+        .quick-timezones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .quick-timezone-btn {
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        
+        .quick-timezone-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--primary);
+        }
+        
+        .timezone-result {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .timezone-card {
+            flex: 1;
+            min-width: 150px;
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            border: 2px solid var(--border-light);
+        }
+        
+        .timezone-card.from {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+        
+        .timezone-card.to {
+            background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+            color: white;
+        }
+        
+        .timezone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .timezone-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .timezone-name {
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+        
+        .timezone-time {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timezone-date {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .timezone-arrow {
+            padding: 0 1.5rem;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        
+        .world-cities {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .world-cities {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .world-city {
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+        
+        .city-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .city-timezone {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .city-time {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        @media (max-width: 640px) {
+            .timezone-result {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .timezone-card {
+                width: 100%;
+            }
+            
+            .timezone-arrow {
+                transform: rotate(90deg);
+                padding: 0;
+            }
+            
+            .world-cities {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-timezones {
+                justify-content: center;
+            }
+        }
+    </style>
+</body>
+</html>

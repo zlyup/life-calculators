@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅行时间计算 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/travel.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">旅行时间计算</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/travel.html" class="nav-link active">旅行出行</a>
+                        <a href="../../pages/finance.html" class="nav-link">理财金融</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/travel.html" class="breadcrumb-link">旅行出行</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">旅行时间计算</span>
+                </nav>
+                
+                <!-- 计算器容器 -->
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">旅行时间计算</h1>
+                            <p class="calculator-description">
+                                精确计算旅行所需时间，考虑行驶速度、休息时间和出发时间。
+                            </p>
+                        </div>
+                        
+                        <!-- 基础信息 -->
+                        <div class="input-group">
+                            <label class="input-label">总行驶距离 (公里)</label>
+                            <input type="number" id="totalDistance" class="input-field" placeholder="例如：500" value="500" step="1" min="1">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">平均行驶速度 (公里/小时)</label>
+                            <input type="number" id="averageSpeed" class="input-field" placeholder="例如：80" value="80" step="1" min="1">
+                            <div class="input-hint">
+                                <i class="fas fa-info-circle"></i> 建议：高速100-120，国道60-80，市区30-50
+                            </div>
+                        </div>
+                        
+                        <!-- 出发时间选择 -->
+                        <div class="input-group">
+                            <label class="input-label">出发时间</label>
+                            <div class="flex space-x-2">
+                                <input type="time" id="departureTime" class="input-field flex-1" value="08:00">
+                                <select id="departureType" class="input-field w-32">
+                                    <option value="now">现在出发</option>
+                                    <option value="custom">自定义</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 休息设置 -->
+                        <div class="accordion">
+                            <div class="accordion-header">
+                                <span>休息设置 (点击展开)</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="input-group">
+                                    <label class="input-label">计划休息次数</label>
+                                    <div class="flex space-x-2">
+                                        <input type="number" id="restCount" class="input-field flex-1" placeholder="例如：3" value="3" step="1" min="0">
+                                        <select id="restInterval" class="input-field w-40">
+                                            <option value="distance">每X公里休息</option>
+                                            <option value="time">每X小时休息</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div id="restByDistance" class="input-group">
+                                    <label class="input-label">每多少公里休息一次</label>
+                                    <input type="number" id="restDistanceInterval" class="input-field" placeholder="例如：150" value="150" step="10" min="10">
+                                </div>
+                                
+                                <div id="restByTime" class="input-group" style="display: none;">
+                                    <label class="input-label">每多少小时休息一次</label>
+                                    <input type="number" id="restTimeInterval" class="input-field" placeholder="例如：2" value="2" step="0.5" min="0.5">
+                                </div>
+                                
+                                <div class="input-group">
+                                    <label class="input-label">每次休息时长 (分钟)</label>
+                                    <input type="number" id="restDuration" class="input-field" placeholder="例如：15" value="15" step="5" min="0">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 计算按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="calculateBtn">
+                            <i class="fas fa-clock"></i> 计算旅行时间
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection" style="display: none;">
+                            <h3 class="result-title"><i class="fas fa-calendar-alt"></i> 旅行时间计算结果</h3>
+                            
+                            <div class="result-grid">
+                                <div class="result-item">
+                                    <span class="result-label">总行驶距离</span>
+                                    <span class="result-value" id="resultTotalDistance">0 公里</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">平均速度</span>
+                                    <span class="result-value" id="resultAverageSpeed">0 公里/小时</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">纯行驶时间</span>
+                                    <span class="result-value" id="resultPureTravelTime">0 小时 0 分钟</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">休息次数</span>
+                                    <span class="result-value" id="resultRestCount">0 次</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">总休息时间</span>
+                                    <span class="result-value" id="resultTotalRestTime">0 分钟</span>
+                                </div>
+                                <div class="result-item highlight">
+                                    <span class="result-label">总旅行时间</span>
+                                    <span class="result-value" id="resultTotalTravelTime">0 小时 0 分钟</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 时间线展示 -->
+                            <div class="mt-6">
+                                <h4 class="result-title" style="font-size: 1rem;">
+                                    <i class="fas fa-road"></i> 行程时间线
+                                </h4>
+                                <div class="timeline" id="travelTimeline">
+                                    <!-- 时间线项目将动态生成 -->
+                                </div>
+                            </div>
+                            
+                            <!-- 出发与到达时间 -->
+                            <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="text-center">
+                                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">出发时间</div>
+                                        <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="departureTimeDisplay">08:00</div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-500" id="departureDateDisplay">今天</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">预计到达时间</div>
+                                        <div class="text-2xl font-bold text-green-600 dark:text-green-400" id="arrivalTimeDisplay">--:--</div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-500" id="arrivalDateDisplay">--</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 旅行建议 -->
+                            <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                                <h4 class="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                                    <i class="fas fa-lightbulb text-yellow-500 mr-1"></i> 专业旅行建议
+                                </h4>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 space-y-1" id="travelSuggestions">
+                                    <!-- 建议将动态生成 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 速度参考表 -->
+                    <div class="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-gray-200">
+                            <i class="fas fa-tachometer-alt text-blue-500 mr-2"></i> 行驶速度参考
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-gray-100 dark:bg-gray-700">
+                                        <th class="p-2 text-left">道路类型</th>
+                                        <th class="p-2 text-left">建议速度</th>
+                                        <th class="p-2 text-left">特点</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="p-2">高速公路</td>
+                                        <td class="p-2 font-semibold">100-120 km/h</td>
+                                        <td class="p-2">长途高效，路况好</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="p-2">国道/省道</td>
+                                        <td class="p-2 font-semibold">60-80 km/h</td>
+                                        <td class="p-2">中等距离，注意路口</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="p-2">市区道路</td>
+                                        <td class="p-2 font-semibold">30-50 km/h</td>
+                                        <td class="p-2">短距离，交通灯多</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="p-2">山区道路</td>
+                                        <td class="p-2 font-semibold">40-60 km/h</td>
+                                        <td class="p-2">弯道多，需谨慎</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2">乡村道路</td>
+                                        <td class="p-2 font-semibold">50-70 km/h</td>
+                                        <td class="p-2">注意行人车辆</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- 疲劳驾驶提醒 -->
+                    <div class="alert alert-warning mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-3"></i>
+                            <div>
+                                <strong>安全提醒：</strong> 
+                                <ul class="mt-1 space-y-1 pl-5 list-disc">
+                                    <li>连续驾驶不超过4小时，应停车休息至少20分钟</li>
+                                    <li>夜间长途驾驶应增加休息频率</li>
+                                    <li>感到疲劳时应立即停车休息</li>
+                                    <li>建议每2小时或每150公里休息一次</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <a href="../../index.html" class="footer-logo">
+                        <i class="fas fa-calculator"></i>
+                        <span>生活计算宝典</span>
+                    </a>
+                    <p class="footer-description">
+                        一站式离线计算工具集合，为您的生活带来便利。
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">旅行工具</h4>
+                    <a href="mileage.html" class="footer-link">里程油耗计算</a>
+                    <a href="travel-budget.html" class="footer-link">旅行预算规划</a>
+                    <a href="timezone.html" class="footer-link">时区转换计算</a>
+                    <a href="luggage.html" class="footer-link">行李重量计算</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">快速链接</h4>
+                    <a href="../../pages/travel.html" class="footer-link">返回旅行出行</a>
+                    <a href="../../pages/tools.html" class="footer-link">所有工具</a>
+                    <a href="https://github.com/laddzhao/life-calculators" target="_blank" class="footer-link">GitHub项目</a>
+                    <a href="../../404.html" class="footer-link">404页面</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">其他工具</h4>
+                    <a href="../shopping/discount.html" class="footer-link">折扣计算器</a>
+                    <a href="../finance/currency.html" class="footer-link">汇率换算</a>
+                    <a href="../health/bmi.html" class="footer-link">BMI计算</a>
+                    <a href="../professional/mortgage.html" class="footer-link">房贷计算器</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 生活计算宝典 · 旅行时间计算</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 移动端底部导航 -->
+    <nav class="mobile-bottom-nav">
+        <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">首页</span>
+        </a>
+        <a href="../../pages/travel.html" class="nav-item active">
+            <i class="fas fa-plane nav-icon"></i>
+            <span class="nav-label">旅行</span>
+        </a>
+        <a href="../../pages/finance.html" class="nav-item">
+            <i class="fas fa-chart-line nav-icon"></i>
+            <span class="nav-label">理财</span>
+        </a>
+        <a href="../../pages/tools.html" class="nav-item">
+            <i class="fas fa-th nav-icon"></i>
+            <span class="nav-label">全部</span>
+        </a>
+        <a href="#" class="nav-item" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-h nav-icon"></i>
+            <span class="nav-label">更多</span>
+        </a>
+    </nav>
+
+    <script>
+        // 休息间隔类型切换
+        document.getElementById('restInterval').addEventListener('change', function() {
+            const type = this.value;
+            document.getElementById('restByDistance').style.display = type === 'distance' ? 'block' : 'none';
+            document.getElementById('restByTime').style.display = type === 'time' ? 'block' : 'none';
+            calculateTravelTime();
+        });
+        
+        // 出发时间类型切换
+        document.getElementById('departureType').addEventListener('change', function() {
+            const type = this.value;
+            if (type === 'now') {
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                document.getElementById('departureTime').value = `${hours}:${minutes}`;
+            }
+            calculateTravelTime();
+        });
+        
+        // 设置现在时间为默认
+        function setCurrentTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('departureTime').value = `${hours}:${minutes}`;
+        }
+        
+        // 手风琴效果
+        document.querySelector('.accordion-header').addEventListener('click', function() {
+            const accordion = this.parentElement;
+            const content = this.nextElementSibling;
+            const icon = this.querySelector('i');
+            
+            accordion.classList.toggle('active');
+            if (accordion.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.className = 'fas fa-chevron-up';
+            } else {
+                content.style.maxHeight = '0';
+                icon.className = 'fas fa-chevron-down';
+            }
+        });
+        
+        // 输入框变化时自动计算
+        const inputs = ['totalDistance', 'averageSpeed', 'restCount', 'restDistanceInterval', 
+                       'restTimeInterval', 'restDuration', 'departureTime'];
+        inputs.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener('input', calculateTravelTime);
+            }
+        });
+        
+        // 计算旅行时间
+        function calculateTravelTime() {
+            const totalDistance = parseFloat(document.getElementById('totalDistance').value) || 0;
+            const averageSpeed = parseFloat(document.getElementById('averageSpeed').value) || 0;
+            const restCount = parseInt(document.getElementById('restCount').value) || 0;
+            const restDuration = parseFloat(document.getElementById('restDuration').value) || 0;
+            const departureTimeStr = document.getElementById('departureTime').value;
+            const restIntervalType = document.getElementById('restInterval').value;
+            
+            if (totalDistance <= 0 || averageSpeed <= 0) {
+                showError('请输入有效的距离和速度');
+                return;
+            }
+            
+            // 计算纯行驶时间（小时）
+            const pureTravelHours = totalDistance / averageSpeed;
+            const pureTravelMinutes = pureTravelHours * 60;
+            
+            // 计算休息时间
+            let actualRestCount = restCount;
+            if (restIntervalType === 'distance') {
+                const restDistanceInterval = parseFloat(document.getElementById('restDistanceInterval').value) || 150;
+                actualRestCount = Math.floor(totalDistance / restDistanceInterval);
+            } else if (restIntervalType === 'time') {
+                const restTimeInterval = parseFloat(document.getElementById('restTimeInterval').value) || 2;
+                actualRestCount = Math.floor(pureTravelHours / restTimeInterval);
+            }
+            
+            // 确保休息次数不为负
+            actualRestCount = Math.max(0, actualRestCount);
+            
+            const totalRestMinutes = actualRestCount * restDuration;
+            const totalRestHours = totalRestMinutes / 60;
+            
+            // 总旅行时间
+            const totalTravelHours = pureTravelHours + totalRestHours;
+            const totalTravelMinutes = totalTravelHours * 60;
+            
+            // 格式化成小时和分钟
+            const formatTime = (hours) => {
+                const totalMinutes = hours * 60;
+                const h = Math.floor(totalMinutes / 60);
+                const m = Math.round(totalMinutes % 60);
+                return `${h} 小时 ${m} 分钟`;
+            };
+            
+            // 显示结果
+            document.getElementById('resultTotalDistance').textContent = totalDistance.toFixed(0) + ' 公里';
+            document.getElementById('resultAverageSpeed').textContent = averageSpeed.toFixed(0) + ' 公里/小时';
+            document.getElementById('resultPureTravelTime').textContent = formatTime(pureTravelHours);
+            document.getElementById('resultRestCount').textContent = actualRestCount + ' 次';
+            document.getElementById('resultTotalRestTime').textContent = totalRestMinutes.toFixed(0) + ' 分钟';
+            document.getElementById('resultTotalTravelTime').textContent = formatTime(totalTravelHours);
+            
+            // 显示出发时间
+            document.getElementById('departureTimeDisplay').textContent = departureTimeStr;
+            
+            // 计算到达时间
+            const departureDate = new Date();
+            const [hours, minutes] = departureTimeStr.split(':').map(Number);
+            departureDate.setHours(hours, minutes, 0, 0);
+            
+            // 添加旅行时间
+            const arrivalDate = new Date(departureDate.getTime() + totalTravelHours * 60 * 60 * 1000);
+            
+            // 格式化到达时间
+            const arrivalHours = arrivalDate.getHours().toString().padStart(2, '0');
+            const arrivalMinutes = arrivalDate.getMinutes().toString().padStart(2, '0');
+            const arrivalTimeStr = `${arrivalHours}:${arrivalMinutes}`;
+            
+            // 判断日期变化
+            let arrivalDateDisplay = '今天';
+            if (arrivalDate.getDate() !== departureDate.getDate()) {
+                arrivalDateDisplay = '明天';
+                if (arrivalDate.getDate() - departureDate.getDate() > 1) {
+                    arrivalDateDisplay = `+${arrivalDate.getDate() - departureDate.getDate()}天`;
+                }
+            }
+            
+            document.getElementById('arrivalTimeDisplay').textContent = arrivalTimeStr;
+            document.getElementById('arrivalDateDisplay').textContent = arrivalDateDisplay;
+            
+            // 生成时间线
+            generateTimeline(departureDate, totalDistance, averageSpeed, actualRestCount, restDuration);
+            
+            // 生成旅行建议
+            generateTravelSuggestions(totalTravelHours, averageSpeed, actualRestCount);
+            
+            // 显示结果区域
+            document.getElementById('resultSection').style.display = 'block';
+        }
+        
+        // 生成时间线
+        function generateTimeline(startTime, totalDistance, averageSpeed, restCount, restDuration) {
+            const timeline = document.getElementById('travelTimeline');
+            timeline.innerHTML = '';
+            
+            const segmentDistance = totalDistance / (restCount + 1);
+            let currentTime = new Date(startTime.getTime());
+            let currentDistance = 0;
+            
+            for (let i = 0; i <= restCount; i++) {
+                // 行驶段
+                const segmentHours = segmentDistance / averageSpeed;
+                const segmentMinutes = segmentHours * 60;
+                
+                const endTime = new Date(currentTime.getTime() + segmentHours * 60 * 60 * 1000);
+                const endHours = endTime.getHours().toString().padStart(2, '0');
+                const endMinutes = endTime.getMinutes().toString().padStart(2, '0');
+                
+                currentDistance += segmentDistance;
+                
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'timeline-item';
+                timelineItem.innerHTML = `
+                    <div class="timeline-marker">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-time">${endHours}:${endMinutes}</div>
+                        <div class="timeline-title">行驶 ${segmentDistance.toFixed(0)} 公里</div>
+                        <div class="timeline-description">
+                            累计: ${currentDistance.toFixed(0)} 公里 | 用时: ${Math.round(segmentMinutes)} 分钟
+                        </div>
+                    </div>
+                `;
+                timeline.appendChild(timelineItem);
+                
+                currentTime = endTime;
+                
+                // 如果不是最后一段，添加休息项
+                if (i < restCount) {
+                    const restEndTime = new Date(currentTime.getTime() + restDuration * 60 * 1000);
+                    const restEndHours = restEndTime.getHours().toString().padStart(2, '0');
+                    const restEndMinutes = restEndTime.getMinutes().toString().padStart(2, '0');
+                    
+                    const restItem = document.createElement('div');
+                    restItem.className = 'timeline-item';
+                    restItem.innerHTML = `
+                        <div class="timeline-marker">
+                            <i class="fas fa-coffee"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-time">${restEndHours}:${restEndMinutes}</div>
+                            <div class="timeline-title">休息 ${restDuration} 分钟</div>
+                            <div class="timeline-description">
+                                第 ${i + 1} 次休息 | 累计休息: ${(i + 1) * restDuration} 分钟
+                            </div>
+                        </div>
+                    `;
+                    timeline.appendChild(restItem);
+                    
+                    currentTime = restEndTime;
+                }
+            }
+        }
+        
+        // 生成旅行建议
+        function generateTravelSuggestions(totalHours, averageSpeed, restCount) {
+            const suggestions = document.getElementById('travelSuggestions');
+            suggestions.innerHTML = '';
+            
+            let suggestionsList = [];
+            
+            if (totalHours > 8) {
+                suggestionsList.push('<span class="font-medium">行程较长，建议分两天完成</span>');
+            } else if (totalHours > 4) {
+                suggestionsList.push('<span class="font-medium">长途驾驶，确保充分休息</span>');
+            }
+            
+            if (averageSpeed > 100) {
+                suggestionsList.push('高速公路行驶，注意保持安全车距');
+            } else if (averageSpeed < 40) {
+                suggestionsList.push('市区或复杂路况，预留更多时间');
+            }
+            
+            if (restCount === 0 && totalHours > 2) {
+                suggestionsList.push('<span class="text-red-600 dark:text-red-400 font-medium">建议至少安排1次休息</span>');
+            } else if (restCount < Math.floor(totalHours / 2)) {
+                suggestionsList.push('考虑增加休息次数，避免疲劳驾驶');
+            } else {
+                suggestionsList.push('休息安排合理，符合安全驾驶要求');
+            }
+            
+            if (totalHours > 3) {
+                suggestionsList.push('准备充足的水和零食');
+            }
+            
+            // 添加到页面
+            suggestionsList.forEach(suggestion => {
+                const div = document.createElement('div');
+                div.className = 'flex items-start';
+                div.innerHTML = `
+                    <i class="fas fa-check text-green-500 mt-0.5 mr-2 text-xs"></i>
+                    <span>${suggestion}</span>
+                `;
+                suggestions.appendChild(div);
+            });
+        }
+        
+        // 显示错误
+        function showError(message) {
+            const suggestions = document.getElementById('travelSuggestions');
+            suggestions.innerHTML = `
+                <div class="text-red-600 dark:text-red-400 font-medium">
+                    <i class="fas fa-exclamation-circle mr-1"></i> ${message}
+                </div>
+            `;
+            document.getElementById('resultSection').style.display = 'block';
+        }
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            
+            // 检查本地存储的主题设置
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+            
+            // 切换主题函数
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // 更新图标
+                if (themeBtn) {
+                    const icon = themeBtn.querySelector('i');
+                    icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                }
+            }
+            
+            // 添加事件监听
+            if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            
+            // 设置当前时间
+            setCurrentTime();
+            
+            // 页面加载时自动计算一次
+            calculateTravelTime();
+            
+            // 初始化手风琴
+            const accordion = document.querySelector('.accordion');
+            const content = accordion.querySelector('.accordion-content');
+            accordion.classList.add('active');
+            content.style.maxHeight = content.scrollHeight + 'px';
+            
+            // 移动端菜单
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            if (menuBtn) {
+                menuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('移动端菜单功能需要完整的菜单HTML结构');
+                });
+            }
+        });
+    </script>
+    
+    <style>
+        .accordion {
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        
+        .accordion-header {
+            padding: 1rem;
+            background: var(--bg-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background var(--transition);
+        }
+        
+        .accordion-header:hover {
+            background: var(--bg-hover);
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 1rem;
+        }
+        
+        .accordion.active .accordion-content {
+            padding: 1rem;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin-top: 1rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-light);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            left: -1.9rem;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+        
+        .timeline-content {
+            background: var(--bg-secondary);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-light);
+        }
+        
+        .timeline-time {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .timeline-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .timeline-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .highlight {
+            background: var(--primary-light);
+            border-radius: var(--radius);
+            padding: 0.5rem;
+        }
+        
+        .input-hint {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        @media (max-width: 640px) {
+            .timeline {
+                padding-left: 1.5rem;
+            }
+            
+            .timeline::before {
+                left: 0.75rem;
+            }
+            
+            .timeline-marker {
+                left: -1.4rem;
+                width: 1.5rem;
+                height: 1.5rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</body>
+</html>

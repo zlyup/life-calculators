@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅行汇率换算 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/travel.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">旅行汇率换算</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/travel.html" class="nav-link active">旅行出行</a>
+                        <a href="../../pages/finance.html" class="nav-link">理财金融</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/travel.html" class="breadcrumb-link">旅行出行</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">旅行汇率换算</span>
+                </nav>
+                
+                <!-- 计算器容器 -->
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">旅行汇率换算</h1>
+                            <p class="calculator-description">
+                                专为旅行设计的汇率换算工具，支持40+种货币，实时计算旅行购物花费。
+                            </p>
+                        </div>
+                        
+                        <!-- 汇率模式选择 -->
+                        <div class="tabs" id="exchangeModeTabs">
+                            <button class="tab active" data-mode="single">单次换算</button>
+                            <button class="tab" data-mode="multiple">多次换算</button>
+                            <button class="tab" data-mode="shopping">购物换算</button>
+                        </div>
+                        
+                        <!-- 基础换算区域 -->
+                        <div class="exchange-container">
+                            <!-- 源货币 -->
+                            <div class="currency-input">
+                                <div class="currency-header">
+                                    <span class="currency-label">从</span>
+                                    <span class="currency-info">您拥有的货币</span>
+                                </div>
+                                <div class="currency-selector">
+                                    <div class="flag-icon" id="fromFlag">
+                                        <i class="fas fa-flag-usa"></i>
+                                    </div>
+                                    <select id="fromCurrency" class="currency-dropdown">
+                                        <!-- 货币选项将通过JS动态生成 -->
+                                    </select>
+                                    <input type="number" id="fromAmount" class="currency-amount" placeholder="0.00" value="100" step="0.01" min="0">
+                                </div>
+                            </div>
+                            
+                            <!-- 交换按钮 -->
+                            <div class="exchange-swap">
+                                <button id="swapCurrencies" class="swap-btn">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- 目标货币 -->
+                            <div class="currency-input">
+                                <div class="currency-header">
+                                    <span class="currency-label">到</span>
+                                    <span class="currency-info">您需要的货币</span>
+                                </div>
+                                <div class="currency-selector">
+                                    <div class="flag-icon" id="toFlag">
+                                        <i class="fas fa-flag"></i>
+                                    </div>
+                                    <select id="toCurrency" class="currency-dropdown">
+                                        <!-- 货币选项将通过JS动态生成 -->
+                                    </select>
+                                    <input type="number" id="toAmount" class="currency-amount" placeholder="0.00" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 汇率信息 -->
+                        <div class="exchange-rate-info">
+                            <div class="rate-display">
+                                <span id="rateValue">1 USD = 0.00 EUR</span>
+                                <button id="updateRate" class="rate-update-btn">
+                                    <i class="fas fa-sync-alt"></i> 更新汇率
+                                </button>
+                            </div>
+                            <div class="rate-date">
+                                <i class="far fa-calendar-alt"></i>
+                                <span id="rateDate">汇率日期: 2026-01-01</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 多次换算模式 -->
+                        <div id="multipleMode" class="mode-content" style="display: none;">
+                            <div class="input-group">
+                                <label class="input-label">旅行预算总金额</label>
+                                <input type="number" id="travelBudget" class="input-field" placeholder="例如：1000" value="1000" step="1" min="0">
+                            </div>
+                            
+                            <div class="budget-currencies" id="budgetCurrencies">
+                                <!-- 预算货币列表将动态生成 -->
+                            </div>
+                            
+                            <button type="button" class="btn btn-outline btn-block mt-2" id="addCurrencyBtn">
+                                <i class="fas fa-plus"></i> 添加货币
+                            </button>
+                        </div>
+                        
+                        <!-- 购物换算模式 -->
+                        <div id="shoppingMode" class="mode-content" style="display: none;">
+                            <div class="shopping-list" id="shoppingList">
+                                <!-- 购物清单将动态生成 -->
+                                <div class="shopping-item" data-index="0">
+                                    <div class="shopping-item-header">
+                                        <span>商品 #1</span>
+                                        <button type="button" class="remove-item" data-index="0">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    <div class="shopping-item-body">
+                                        <div class="input-group">
+                                            <label class="input-label">商品名称</label>
+                                            <input type="text" class="item-name" data-index="0" placeholder="例如：纪念品" value="纪念品">
+                                        </div>
+                                        
+                                        <div class="flex space-x-2">
+                                            <div class="input-group flex-1">
+                                                <label class="input-label">当地价格</label>
+                                                <input type="number" class="local-price" data-index="0" placeholder="0.00" value="50" step="0.01" min="0">
+                                            </div>
+                                            
+                                            <div class="input-group w-32">
+                                                <label class="input-label">货币</label>
+                                                <select class="local-currency" data-index="0">
+                                                    <!-- 货币选项将动态生成 -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="button" class="btn btn-outline btn-block mt-2" id="addItemBtn">
+                                <i class="fas fa-plus"></i> 添加商品
+                            </button>
+                        </div>
+                        
+                        <!-- 计算按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="calculateBtn">
+                            <i class="fas fa-calculator"></i> 计算汇率
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection" style="display: none;">
+                            <h3 class="result-title"><i class="fas fa-chart-line"></i> 汇率换算结果</h3>
+                            
+                            <!-- 单次换算结果 -->
+                            <div id="singleResult">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">原始金额</span>
+                                        <span class="result-value" id="originalAmount">0.00 USD</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">换算金额</span>
+                                        <span class="result-value" id="convertedAmount">0.00 EUR</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">汇率</span>
+                                        <span class="result-value" id="conversionRate">1 USD = 0.00 EUR</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">换算时间</span>
+                                        <span class="result-value" id="conversionTime">--:--:--</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 多次换算结果 -->
+                            <div id="multipleResult" style="display: none;">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">旅行预算</span>
+                                        <span class="result-value" id="budgetTotal">0.00 USD</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">货币种类</span>
+                                        <span class="result-value" id="currencyCount">0 种</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">预算分配</span>
+                                        <span class="result-value" id="budgetAllocation">--</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 预算分配详情 -->
+                                <div style="margin-top: 1.5rem;">
+                                    <h4 class="result-title" style="font-size: 1rem;">
+                                        <i class="fas fa-coins"></i> 预算分配详情
+                                    </h4>
+                                    <div class="budget-results" id="budgetResults">
+                                        <!-- 预算分配结果将动态生成 -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 购物换算结果 -->
+                            <div id="shoppingResult" style="display: none;">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">商品数量</span>
+                                        <span class="result-value" id="itemCount">0 件</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">总当地价格</span>
+                                        <span class="result-value" id="totalLocalPrice">0.00</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">换算后总价</span>
+                                        <span class="result-value" id="totalConvertedPrice">0.00 USD</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 购物清单详情 -->
+                                <div style="margin-top: 1.5rem;">
+                                    <h4 class="result-title" style="font-size: 1rem;">
+                                        <i class="fas fa-shopping-bag"></i> 购物清单详情
+                                    </h4>
+                                    <div class="shopping-results" id="shoppingResults">
+                                        <!-- 购物清单结果将动态生成 -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 汇率提醒 -->
+                            <div class="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                                <div class="flex items-start">
+                                    <i class="fas fa-exclamation-triangle text-yellow-500 mt-0.5 mr-2"></i>
+                                    <div>
+                                        <h4 class="text-sm font-semibold mb-1 text-yellow-800 dark:text-yellow-300">重要提醒</h4>
+                                        <p class="text-sm text-yellow-700 dark:text-yellow-400">
+                                            本工具使用的是固定汇率数据，可能与实时汇率有差异。实际兑换时请以银行或兑换点的实时汇率为准。旅行时建议使用免货币转换费的信用卡或提前兑换适量现金。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 换算建议 -->
+                            <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                                <h4 class="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                                    <i class="fas fa-lightbulb text-yellow-500 mr-1"></i> 汇率换算建议
+                                </h4>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 space-y-1" id="exchangeSuggestions">
+                                    <!-- 建议将动态生成 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 常见货币汇率表 -->
+                    <div class="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-gray-200">
+                            <i class="fas fa-table text-blue-500 mr-2"></i> 常见货币汇率表 (基于1美元)
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-gray-100 dark:bg-gray-700">
+                                        <th class="p-2 text-left">货币</th>
+                                        <th class="p-2 text-left">符号</th>
+                                        <th class="p-2 text-left">汇率</th>
+                                        <th class="p-2 text-left">国家/地区</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="currencyTable">
+                                    <!-- 汇率表数据将通过JS动态生成 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- 汇率换算技巧 -->
+                    <div class="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800 dark:text-gray-200">
+                            <i class="fas fa-graduation-cap text-green-500 mr-2"></i> 旅行汇率换算技巧
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex items-start">
+                                <div class="tip-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800 dark:text-gray-200">提前兑换现金</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">出发前在国内银行兑换部分现金，通常汇率更优</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="tip-icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800 dark:text-gray-200">使用免转换费信用卡</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">选择免货币转换费的信用卡，避免额外费用</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="tip-icon">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800 dark:text-gray-200">比较兑换点汇率</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">不同兑换点的汇率可能相差很大，多比较几家</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="tip-icon">
+                                    <i class="fas fa-calculator"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800 dark:text-gray-200">实时计算价格</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">购物时实时换算价格，避免汇率陷阱</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 使用说明 -->
+                    <div class="alert alert-info mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-lightbulb mr-3"></i>
+                            <div>
+                                <strong>如何使用：</strong> 
+                                <ul class="mt-2 space-y-1 pl-5 list-disc">
+                                    <li><strong>单次换算</strong>：快速计算两种货币之间的兑换金额</li>
+                                    <li><strong>多次换算</strong>：将旅行预算分配到多种货币中</li>
+                                    <li><strong>购物换算</strong>：计算购物清单中不同货币商品的总价</li>
+                                    <li><strong>汇率更新</strong>：点击"更新汇率"可模拟获取最新汇率数据</li>
+                                    <li><strong>货币交换</strong>：点击交换按钮可快速切换源货币和目标货币</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <a href="../../index.html" class="footer-logo">
+                        <i class="fas fa-calculator"></i>
+                        <span>生活计算宝典</span>
+                    </a>
+                    <p class="footer-description">
+                        一站式离线计算工具集合，为您的生活带来便利。
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">旅行工具</h4>
+                    <a href="mileage.html" class="footer-link">里程油耗计算</a>
+                    <a href="travel-time.html" class="footer-link">旅行时间计算</a>
+                    <a href="travel-budget.html" class="footer-link">旅行预算规划</a>
+                    <a href="timezone.html" class="footer-link">时区转换计算</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">快速链接</h4>
+                    <a href="../../pages/travel.html" class="footer-link">返回旅行出行</a>
+                    <a href="../../pages/tools.html" class="footer-link">所有工具</a>
+                    <a href="https://github.com/laddzhao/life-calculators" target="_blank" class="footer-link">GitHub项目</a>
+                    <a href="../../404.html" class="footer-link">404页面</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">金融工具</h4>
+                    <a href="../finance/currency.html" class="footer-link">专业汇率换算</a>
+                    <a href="../finance/compound.html" class="footer-link">复利计算器</a>
+                    <a href="../finance/loan-compare.html" class="footer-link">贷款对比</a>
+                    <a href="../shopping/tax-calc.html" class="footer-link">税费计算</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 生活计算宝典 · 旅行汇率换算</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 移动端底部导航 -->
+    <nav class="mobile-bottom-nav">
+        <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">首页</span>
+        </a>
+        <a href="../../pages/travel.html" class="nav-item active">
+            <i class="fas fa-plane nav-icon"></i>
+            <span class="nav-label">旅行</span>
+        </a>
+        <a href="../../pages/finance.html" class="nav-item">
+            <i class="fas fa-chart-line nav-icon"></i>
+            <span class="nav-label">理财</span>
+        </a>
+        <a href="../../pages/tools.html" class="nav-item">
+            <i class="fas fa-th nav-icon"></i>
+            <span class="nav-label">全部</span>
+        </a>
+        <a href="#" class="nav-item" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-h nav-icon"></i>
+            <span class="nav-label">更多</span>
+        </a>
+    </nav>
+
+    <script>
+        // 货币数据（基于1美元）
+        const currencies = [
+            { code: 'USD', name: '美元', symbol: '$', flag: 'fa-flag-usa', rate: 1.0000, country: '美国' },
+            { code: 'CNY', name: '人民币', symbol: '¥', flag: 'fa-flag', rate: 7.2500, country: '中国' },
+            { code: 'EUR', name: '欧元', symbol: '€', flag: 'fa-flag', rate: 0.9200, country: '欧盟' },
+            { code: 'GBP', name: '英镑', symbol: '£', flag: 'fa-flag', rate: 0.7900, country: '英国' },
+            { code: 'JPY', name: '日元', symbol: '¥', flag: 'fa-flag', rate: 148.0000, country: '日本' },
+            { code: 'KRW', name: '韩元', symbol: '₩', flag: 'fa-flag', rate: 1350.0000, country: '韩国' },
+            { code: 'AUD', name: '澳元', symbol: 'A$', flag: 'fa-flag', rate: 1.5200, country: '澳大利亚' },
+            { code: 'CAD', name: '加元', symbol: 'C$', flag: 'fa-flag', rate: 1.3500, country: '加拿大' },
+            { code: 'HKD', name: '港币', symbol: 'HK$', flag: 'fa-flag', rate: 7.8300, country: '香港' },
+            { code: 'TWD', name: '新台币', symbol: 'NT$', flag: 'fa-flag', rate: 31.5000, country: '台湾' },
+            { code: 'SGD', name: '新加坡元', symbol: 'S$', flag: 'fa-flag', rate: 1.3400, country: '新加坡' },
+            { code: 'THB', name: '泰铢', symbol: '฿', flag: 'fa-flag', rate: 36.0000, country: '泰国' },
+            { code: 'MYR', name: '马来西亚林吉特', symbol: 'RM', flag: 'fa-flag', rate: 4.7500, country: '马来西亚' },
+            { code: 'IDR', name: '印尼盾', symbol: 'Rp', flag: 'fa-flag', rate: 15500.0000, country: '印度尼西亚' },
+            { code: 'VND', name: '越南盾', symbol: '₫', flag: 'fa-flag', rate: 24500.0000, country: '越南' },
+            { code: 'PHP', name: '菲律宾比索', symbol: '₱', flag: 'fa-flag', rate: 56.5000, country: '菲律宾' },
+            { code: 'INR', name: '印度卢比', symbol: '₹', flag: 'fa-flag', rate: 83.0000, country: '印度' },
+            { code: 'RUB', name: '俄罗斯卢布', symbol: '₽', flag: 'fa-flag', rate: 92.0000, country: '俄罗斯' },
+            { code: 'BRL', name: '巴西雷亚尔', symbol: 'R$', flag: 'fa-flag', rate: 4.9500, country: '巴西' },
+            { code: 'MXN', name: '墨西哥比索', symbol: 'Mex$', flag: 'fa-flag', rate: 17.0000, country: '墨西哥' },
+            { code: 'CHF', name: '瑞士法郎', symbol: 'CHF', flag: 'fa-flag', rate: 0.8800, country: '瑞士' },
+            { code: 'NZD', name: '新西兰元', symbol: 'NZ$', flag: 'fa-flag', rate: 1.6300, country: '新西兰' }
+        ];
+        
+        // 常用货币对（快速选择）
+        const popularPairs = [
+            { from: 'USD', to: 'CNY', label: '美元→人民币' },
+            { from: 'CNY', to: 'USD', label: '人民币→美元' },
+            { from: 'USD', to: 'EUR', label: '美元→欧元' },
+            { from: 'USD', to: 'JPY', label: '美元→日元' },
+            { from: 'EUR', to: 'GBP', label: '欧元→英镑' }
+        ];
+        
+        // 初始化货币选择
+        function initCurrencies() {
+            const fromSelect = document.getElementById('fromCurrency');
+            const toSelect = document.getElementById('toCurrency');
+            
+            // 清空选项
+            fromSelect.innerHTML = '';
+            toSelect.innerHTML = '';
+            
+            // 添加货币选项
+            currencies.forEach(currency => {
+                const option1 = document.createElement('option');
+                option1.value = currency.code;
+                option1.textContent = `${currency.code} - ${currency.name}`;
+                fromSelect.appendChild(option1);
+                
+                const option2 = document.createElement('option');
+                option2.value = currency.code;
+                option2.textContent = `${currency.code} - ${currency.name}`;
+                toSelect.appendChild(option2);
+            });
+            
+            // 设置默认值
+            fromSelect.value = 'USD';
+            toSelect.value = 'EUR';
+            
+            // 更新国旗图标
+            updateFlagIcons();
+            
+            // 初始化汇率表
+            initCurrencyTable();
+            
+            // 初始化购物清单货币选择
+            initShoppingCurrencies();
+            
+            // 设置当前日期
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0];
+            document.getElementById('rateDate').textContent = `汇率日期: ${dateStr}`;
+        }
+        
+        // 初始化汇率表
+        function initCurrencyTable() {
+            const table = document.getElementById('currencyTable');
+            table.innerHTML = '';
+            
+            currencies.forEach(currency => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-200 dark:border-gray-700';
+                
+                row.innerHTML = `
+                    <td class="p-2">${currency.name}</td>
+                    <td class="p-2 font-medium">${currency.symbol}</td>
+                    <td class="p-2">${currency.rate.toFixed(4)}</td>
+                    <td class="p-2">${currency.country}</td>
+                `;
+                
+                table.appendChild(row);
+            });
+        }
+        
+        // 初始化购物清单货币选择
+        function initShoppingCurrencies() {
+            const shoppingItem = document.querySelector('.local-currency[data-index="0"]');
+            if (!shoppingItem) return;
+            
+            shoppingItem.innerHTML = '';
+            
+            currencies.forEach(currency => {
+                const option = document.createElement('option');
+                option.value = currency.code;
+                option.textContent = `${currency.code} - ${currency.name}`;
+                shoppingItem.appendChild(option);
+            });
+            
+            // 设置默认值
+            shoppingItem.value = 'USD';
+        }
+        
+        // 更新国旗图标
+        function updateFlagIcons() {
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+            
+            const fromCurrencyData = currencies.find(c => c.code === fromCurrency);
+            const toCurrencyData = currencies.find(c => c.code === toCurrency);
+            
+            if (fromCurrencyData) {
+                document.getElementById('fromFlag').innerHTML = `<i class="fas ${fromCurrencyData.flag}"></i>`;
+            }
+            
+            if (toCurrencyData) {
+                document.getElementById('toFlag').innerHTML = `<i class="fas ${toCurrencyData.flag}"></i>`;
+            }
+        }
+        
+        // 汇率模式切换
+        document.querySelectorAll('#exchangeModeTabs .tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active类
+                document.querySelectorAll('#exchangeModeTabs .tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                document.querySelectorAll('.mode-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                document.querySelectorAll('#singleResult, #multipleResult, #shoppingResult').forEach(result => {
+                    result.style.display = 'none';
+                });
+                
+                // 添加active类到当前标签
+                this.classList.add('active');
+                
+                const mode = this.dataset.mode;
+                
+                // 显示对应的内容区域
+                if (mode === 'multiple') {
+                    document.getElementById('multipleMode').style.display = 'block';
+                    document.getElementById('multipleResult').style.display = 'block';
+                } else if (mode === 'shopping') {
+                    document.getElementById('shoppingMode').style.display = 'block';
+                    document.getElementById('shoppingResult').style.display = 'block';
+                } else {
+                    document.getElementById('singleResult').style.display = 'block';
+                }
+                
+                // 重新计算
+                setTimeout(() => {
+                    calculateExchange();
+                }, 100);
+            });
+        });
+        
+        // 交换货币
+        document.getElementById('swapCurrencies').addEventListener('click', function() {
+            const fromSelect = document.getElementById('fromCurrency');
+            const toSelect = document.getElementById('toCurrency');
+            const fromAmount = document.getElementById('fromAmount');
+            const toAmount = document.getElementById('toAmount');
+            
+            // 交换货币代码
+            const temp = fromSelect.value;
+            fromSelect.value = toSelect.value;
+            toSelect.value = temp;
+            
+            // 交换金额（如果目标金额已计算）
+            if (toAmount.value && toAmount.value !== '0.00') {
+                const tempAmount = fromAmount.value;
+                fromAmount.value = toAmount.value;
+                toAmount.value = tempAmount;
+            }
+            
+            // 更新国旗图标
+            updateFlagIcons();
+            
+            // 重新计算
+            calculateExchange();
+        });
+        
+        // 更新汇率（模拟）
+        document.getElementById('updateRate').addEventListener('click', function() {
+            // 模拟汇率更新（在实际应用中，这里会从API获取最新汇率）
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0];
+            document.getElementById('rateDate').textContent = `汇率日期: ${dateStr}`;
+            
+            // 显示更新成功消息
+            const rateValue = document.getElementById('rateValue');
+            const originalText = rateValue.textContent;
+            rateValue.innerHTML = '<i class="fas fa-check text-green-500"></i> 汇率已更新';
+            
+            setTimeout(() => {
+                rateValue.textContent = originalText;
+            }, 2000);
+            
+            // 重新计算
+            calculateExchange();
+        });
+        
+        // 添加货币（多次换算模式）
+        let currencyCount = 1;
+        document.getElementById('addCurrencyBtn').addEventListener('click', function() {
+            if (currencyCount >= 5) {
+                alert('最多添加5种货币');
+                return;
+            }
+            
+            currencyCount++;
+            
+            const container = document.getElementById('budgetCurrencies');
+            const currencyDiv = document.createElement('div');
+            currencyDiv.className = 'budget-currency';
+            currencyDiv.dataset.index = currencyCount - 1;
+            currencyDiv.innerHTML = `
+                <div class="budget-currency-header">
+                    <span>货币 #${currencyCount}</span>
+                    <button type="button" class="remove-currency" data-index="${currencyCount - 1}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="budget-currency-body">
+                    <div class="input-group">
+                        <label class="input-label">货币</label>
+                        <select class="budget-currency-select" data-index="${currencyCount - 1}">
+                            <!-- 货币选项将通过JS动态生成 -->
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">分配金额 (%)</label>
+                        <input type="number" class="budget-percentage" data-index="${currencyCount - 1}" placeholder="例如：30" value="20" step="1" min="0" max="100">
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(currencyDiv);
+            
+            // 初始化货币选择
+            const select = currencyDiv.querySelector('.budget-currency-select');
+            select.innerHTML = '';
+            currencies.forEach(currency => {
+                const option = document.createElement('option');
+                option.value = currency.code;
+                option.textContent = `${currency.code} - ${currency.name}`;
+                select.appendChild(option);
+            });
+            
+            // 设置默认值（欧元）
+            select.value = 'EUR';
+            
+            // 添加删除按钮事件
+            const removeBtn = currencyDiv.querySelector('.remove-currency');
+            removeBtn.addEventListener('click', function() {
+                const index = this.dataset.index;
+                removeCurrency(index);
+            });
+            
+            // 重新计算
+            calculateExchange();
+        });
+        
+        // 添加商品（购物换算模式）
+        let itemCount = 1;
+        document.getElementById('addItemBtn').addEventListener('click', function() {
+            if (itemCount >= 10) {
+                alert('最多添加10件商品');
+                return;
+            }
+            
+            itemCount++;
+            
+            const container = document.getElementById('shoppingList');
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'shopping-item';
+            itemDiv.dataset.index = itemCount - 1;
+            itemDiv.innerHTML = `
+                <div class="shopping-item-header">
+                    <span>商品 #${itemCount}</span>
+                    <button type="button" class="remove-item" data-index="${itemCount - 1}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="shopping-item-body">
+                    <div class="input-group">
+                        <label class="input-label">商品名称</label>
+                        <input type="text" class="item-name" data-index="${itemCount - 1}" placeholder="例如：纪念品" value="纪念品">
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <div class="input-group flex-1">
+                            <label class="input-label">当地价格</label>
+                            <input type="number" class="local-price" data-index="${itemCount - 1}" placeholder="0.00" value="50" step="0.01" min="0">
+                        </div>
+                        
+                        <div class="input-group w-32">
+                            <label class="input-label">货币</label>
+                            <select class="local-currency" data-index="${itemCount - 1}">
+                                <!-- 货币选项将通过JS动态生成 -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(itemDiv);
+            
+            // 初始化货币选择
+            const select = itemDiv.querySelector('.local-currency');
+            select.innerHTML = '';
+            currencies.forEach(currency => {
+                const option = document.createElement('option');
+                option.value = currency.code;
+                option.textContent = `${currency.code} - ${currency.name}`;
+                select.appendChild(option);
+            });
+            
+            // 设置默认值（欧元）
+            select.value = 'EUR';
+            
+            // 添加删除按钮事件
+            const removeBtn = itemDiv.querySelector('.remove-item');
+            removeBtn.addEventListener('click', function() {
+                const index = this.dataset.index;
+                removeItem(index);
+            });
+            
+            // 重新计算
+            calculateExchange();
+        });
+        
+        // 初始化第一个商品的删除按钮
+        document.querySelector('.remove-item[data-index="0"]').addEventListener('click', function() {
+            const index = this.dataset.index;
+            removeItem(index);
+        });
+        
+        // 删除货币
+        function removeCurrency(index) {
+            const currencyDiv = document.querySelector(`.budget-currency[data-index="${index}"]`);
+            if (currencyDiv) {
+                currencyDiv.remove();
+                
+                // 重新编号剩余的货币
+                const remainingCurrencies = document.querySelectorAll('.budget-currency');
+                remainingCurrencies.forEach((div, i) => {
+                    div.dataset.index = i;
+                    div.querySelector('.budget-currency-header span').textContent = `货币 #${i + 1}`;
+                    div.querySelector('.budget-currency-select').dataset.index = i;
+                    div.querySelector('.budget-percentage').dataset.index = i;
+                    div.querySelector('.remove-currency').dataset.index = i;
+                });
+                
+                currencyCount = remainingCurrencies.length;
+                
+                // 重新计算
+                calculateExchange();
+            }
+        }
+        
+        // 删除商品
+        function removeItem(index) {
+            const itemDiv = document.querySelector(`.shopping-item[data-index="${index}"]`);
+            if (itemDiv) {
+                itemDiv.remove();
+                
+                // 重新编号剩余的商品
+                const remainingItems = document.querySelectorAll('.shopping-item');
+                remainingItems.forEach((div, i) => {
+                    div.dataset.index = i;
+                    div.querySelector('.shopping-item-header span').textContent = `商品 #${i + 1}`;
+                    div.querySelector('.item-name').dataset.index = i;
+                    div.querySelector('.local-price').dataset.index = i;
+                    div.querySelector('.local-currency').dataset.index = i;
+                    div.querySelector('.remove-item').dataset.index = i;
+                });
+                
+                itemCount = remainingItems.length;
+                
+                // 重新计算
+                calculateExchange();
+            }
+        }
+        
+        // 输入框变化时自动计算
+        document.querySelectorAll('#fromAmount, #fromCurrency, #toCurrency, #travelBudget').forEach(input => {
+            input.addEventListener('input', calculateExchange);
+        });
+        
+        // 计算汇率换算
+        function calculateExchange() {
+            const activeMode = document.querySelector('#exchangeModeTabs .tab.active').dataset.mode;
+            
+            if (activeMode === 'single') {
+                calculateSingleExchange();
+            } else if (activeMode === 'multiple') {
+                calculateMultipleExchange();
+            } else if (activeMode === 'shopping') {
+                calculateShoppingExchange();
+            }
+            
+            // 显示结果区域
+            document.getElementById('resultSection').style.display = 'block';
+        }
+        
+        // 计算单次换算
+        function calculateSingleExchange() {
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+            const fromAmount = parseFloat(document.getElementById('fromAmount').value) || 0;
+            
+            // 获取汇率
+            const fromCurrencyData = currencies.find(c => c.code === fromCurrency);
+            const toCurrencyData = currencies.find(c => c.code === toCurrency);
+            
+            if (!fromCurrencyData || !toCurrencyData) {
+                showError('货币信息无效');
+                return;
+            }
+            
+            // 计算：先将源货币转换为美元，再将美元转换为目标货币
+            const amountInUSD = fromAmount / fromCurrencyData.rate;
+            const convertedAmount = amountInUSD * toCurrencyData.rate;
+            
+            // 计算汇率（1源货币 = X目标货币）
+            const exchangeRate = toCurrencyData.rate / fromCurrencyData.rate;
+            
+            // 显示结果
+            document.getElementById('originalAmount').textContent = 
+                `${fromAmount.toFixed(2)} ${fromCurrency}`;
+            document.getElementById('convertedAmount').textContent = 
+                `${convertedAmount.toFixed(2)} ${toCurrency}`;
+            document.getElementById('conversionRate').textContent = 
+                `1 ${fromCurrency} = ${exchangeRate.toFixed(4)} ${toCurrency}`;
+            
+            // 显示当前时间
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0];
+            document.getElementById('conversionTime').textContent = timeStr;
+            
+            // 更新汇率显示
+            document.getElementById('rateValue').textContent = 
+                `1 ${fromCurrency} = ${exchangeRate.toFixed(4)} ${toCurrency}`;
+            
+            // 更新目标金额输入框
+            document.getElementById('toAmount').value = convertedAmount.toFixed(2);
+            
+            // 生成换算建议
+            generateExchangeSuggestions(fromCurrency, toCurrency, exchangeRate, fromAmount);
+        }
+        
+        // 计算多次换算
+        function calculateMultipleExchange() {
+            const travelBudget = parseFloat(document.getElementById('travelBudget').value) || 0;
+            const currencyItems = document.querySelectorAll('.budget-currency');
+            
+            if (travelBudget <= 0) {
+                showError('请输入有效的预算金额');
+                return;
+            }
+            
+            let totalPercentage = 0;
+            const currencyAllocations = [];
+            
+            // 收集货币分配信息
+            currencyItems.forEach(item => {
+                const index = item.dataset.index;
+                const currencyCode = item.querySelector('.budget-currency-select').value;
+                const percentage = parseFloat(item.querySelector('.budget-percentage').value) || 0;
+                
+                totalPercentage += percentage;
+                currencyAllocations.push({
+                    currency: currencyCode,
+                    percentage: percentage,
+                    amount: (travelBudget * percentage / 100)
+                });
+            });
+            
+            // 检查百分比总和
+            if (Math.abs(totalPercentage - 100) > 0.01) {
+                showError(`百分比总和为 ${totalPercentage.toFixed(1)}%，必须等于100%`);
+                return;
+            }
+            
+            // 显示总预算
+            document.getElementById('budgetTotal').textContent = 
+                `${travelBudget.toFixed(2)} USD`;
+            document.getElementById('currencyCount').textContent = 
+                `${currencyAllocations.length} 种`;
+            
+            // 生成预算分配详情
+            const budgetResults = document.getElementById('budgetResults');
+            budgetResults.innerHTML = '';
+            
+            currencyAllocations.forEach(allocation => {
+                const currencyData = currencies.find(c => c.code === allocation.currency);
+                if (!currencyData) return;
+                
+                const div = document.createElement('div');
+                div.className = 'budget-result-item';
+                div.innerHTML = `
+                    <div class="budget-result-header">
+                        <span>${currencyData.name} (${currencyData.code})</span>
+                        <span>${allocation.percentage.toFixed(0)}%</span>
+                    </div>
+                    <div class="budget-result-body">
+                        <div class="budget-amount">${allocation.amount.toFixed(2)} USD</div>
+                        <div class="budget-converted">
+                            约 ${(allocation.amount * currencyData.rate).toFixed(2)} ${currencyData.code}
+                        </div>
+                    </div>
+                `;
+                
+                budgetResults.appendChild(div);
+            });
+            
+            // 生成预算分配描述
+            let allocationDesc = '';
+            if (currencyAllocations.length === 1) {
+                allocationDesc = '全部分配到一种货币';
+            } else {
+                allocationDesc = `分配到 ${currencyAllocations.length} 种货币`;
+            }
+            document.getElementById('budgetAllocation').textContent = allocationDesc;
+        }
+        
+        // 计算购物换算
+        function calculateShoppingExchange() {
+            const shoppingItems = document.querySelectorAll('.shopping-item');
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            
+            if (shoppingItems.length === 0) {
+                showError('请添加至少一件商品');
+                return;
+            }
+            
+            let totalLocalPrice = 0;
+            let totalConvertedPrice = 0;
+            const shoppingResults = [];
+            
+            // 收集商品信息
+            shoppingItems.forEach(item => {
+                const index = item.dataset.index;
+                const itemName = item.querySelector('.item-name').value || '商品';
+                const localPrice = parseFloat(item.querySelector('.local-price').value) || 0;
+                const localCurrency = item.querySelector('.local-currency').value;
+                
+                // 获取汇率
+                const localCurrencyData = currencies.find(c => c.code === localCurrency);
+                const fromCurrencyData = currencies.find(c => c.code === fromCurrency);
+                
+                if (!localCurrencyData || !fromCurrencyData) return;
+                
+                // 计算换算价格
+                const convertedPrice = (localPrice / localCurrencyData.rate) * fromCurrencyData.rate;
+                
+                totalLocalPrice += localPrice;
+                totalConvertedPrice += convertedPrice;
+                
+                shoppingResults.push({
+                    name: itemName,
+                    localPrice: localPrice,
+                    localCurrency: localCurrency,
+                    convertedPrice: convertedPrice,
+                    fromCurrency: fromCurrency
+                });
+            });
+            
+            // 显示总览
+            document.getElementById('itemCount').textContent = `${shoppingItems.length} 件`;
+            
+            // 获取主要货币（出现次数最多的货币）
+            const currencyCounts = {};
+            shoppingResults.forEach(item => {
+                currencyCounts[item.localCurrency] = (currencyCounts[item.localCurrency] || 0) + 1;
+            });
+            
+            let mainCurrency = '';
+            let maxCount = 0;
+            for (const [currency, count] of Object.entries(currencyCounts)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    mainCurrency = currency;
+                }
+            }
+            
+            const mainCurrencyData = currencies.find(c => c.code === mainCurrency);
+            if (mainCurrencyData) {
+                document.getElementById('totalLocalPrice').textContent = 
+                    `${totalLocalPrice.toFixed(2)} ${mainCurrencyData.code}`;
+            }
+            
+            document.getElementById('totalConvertedPrice').textContent = 
+                `${totalConvertedPrice.toFixed(2)} ${fromCurrency}`;
+            
+            // 生成购物清单详情
+            const shoppingResultsContainer = document.getElementById('shoppingResults');
+            shoppingResultsContainer.innerHTML = '';
+            
+            shoppingResults.forEach(result => {
+                const div = document.createElement('div');
+                div.className = 'shopping-result-item';
+                div.innerHTML = `
+                    <div class="shopping-result-header">
+                        <span>${result.name}</span>
+                        <span>${result.localPrice.toFixed(2)} ${result.localCurrency}</span>
+                    </div>
+                    <div class="shopping-result-body">
+                        <div class="shopping-converted">
+                            = ${result.convertedPrice.toFixed(2)} ${result.fromCurrency}
+                        </div>
+                    </div>
+                `;
+                
+                shoppingResultsContainer.appendChild(div);
+            });
+        }
+        
+        // 生成汇率换算建议
+        function generateExchangeSuggestions(fromCurrency, toCurrency, exchangeRate, amount) {
+            const suggestions = document.getElementById('exchangeSuggestions');
+            suggestions.innerHTML = '';
+            
+            const fromCurrencyData = currencies.find(c => c.code === fromCurrency);
+            const toCurrencyData = currencies.find(c => c.code === toCurrency);
+            
+            if (!fromCurrencyData || !toCurrencyData) return;
+            
+            let suggestionsList = [];
+            
+            // 根据汇率趋势给出建议
+            if (exchangeRate > 1) {
+                suggestionsList.push(`<span class="font-medium">汇率有利</span>: 1 ${fromCurrency} 可兑换 ${exchangeRate.toFixed(2)} ${toCurrency}`);
+            } else {
+                suggestionsList.push(`<span class="font-medium">汇率不利</span>: 1 ${fromCurrency} 仅兑换 ${exchangeRate.toFixed(4)} ${toCurrency}`);
+            }
+            
+            // 根据金额给出建议
+            if (amount > 1000) {
+                suggestionsList.push('大额兑换，建议联系银行获取更优汇率');
+            } else if (amount > 100) {
+                suggestionsList.push('中等金额，可在机场或当地银行兑换');
+            } else {
+                suggestionsList.push('小额兑换，可在当地兑换点或使用信用卡');
+            }
+            
+            // 通用建议
+            suggestionsList.push('旅行前兑换少量现金应急');
+            suggestionsList.push('使用免货币转换费的信用卡购物');
+            suggestionsList.push('保留兑换凭证，离境时可能需兑换回原货币');
+            
+            // 添加到页面
+            suggestionsList.forEach(suggestion => {
+                const div = document.createElement('div');
+                div.className = 'flex items-start';
+                div.innerHTML = `
+                    <i class="fas fa-check text-green-500 mt-0.5 mr-2 text-xs"></i>
+                    <span>${suggestion}</span>
+                `;
+                suggestions.appendChild(div);
+            });
+        }
+        
+        // 显示错误
+        function showError(message) {
+            const suggestions = document.getElementById('exchangeSuggestions');
+            if (suggestions) {
+                suggestions.innerHTML = `
+                    <div class="text-red-600 dark:text-red-400 font-medium">
+                        <i class="fas fa-exclamation-circle mr-1"></i> ${message}
+                    </div>
+                `;
+            }
+            document.getElementById('resultSection').style.display = 'block';
+        }
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            
+            // 检查本地存储的主题设置
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+            
+            // 切换主题函数
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // 更新图标
+                if (themeBtn) {
+                    const icon = themeBtn.querySelector('i');
+                    icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                }
+            }
+            
+            // 添加事件监听
+            if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            initCurrencies();
+            
+            // 页面加载时自动计算一次
+            calculateExchange();
+            
+            // 移动端菜单
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            if (menuBtn) {
+                menuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('移动端菜单功能需要完整的菜单HTML结构');
+                });
+            }
+            
+            // 为货币选择和金额输入添加事件
+            document.getElementById('fromCurrency').addEventListener('change', function() {
+                updateFlagIcons();
+                calculateExchange();
+            });
+            
+            document.getElementById('toCurrency').addEventListener('change', function() {
+                updateFlagIcons();
+                calculateExchange();
+            });
+            
+            document.getElementById('fromAmount').addEventListener('input', calculateExchange);
+            
+            // 为预算货币和购物商品添加输入事件
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('budget-percentage') || 
+                    e.target.classList.contains('local-price') ||
+                    e.target.classList.contains('item-name')) {
+                    calculateExchange();
+                }
+            });
+            
+            document.addEventListener('change', function(e) {
+                if (e.target.classList.contains('budget-currency-select') || 
+                    e.target.classList.contains('local-currency')) {
+                    calculateExchange();
+                }
+            });
+        });
+    </script>
+    
+    <style>
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border: none;
+            background: none;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        
+        .tab:hover {
+            color: var(--primary);
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .exchange-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        .currency-input {
+            margin-bottom: 1rem;
+        }
+        
+        .currency-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .currency-label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .currency-info {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .currency-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .flag-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+        
+        .currency-dropdown {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .currency-amount {
+            width: 8rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            text-align: right;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .currency-amount:read-only {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+        }
+        
+        .exchange-swap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .swap-btn {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        
+        .swap-btn:hover {
+            background: var(--primary-dark);
+            transform: rotate(180deg);
+        }
+        
+        .exchange-rate-info {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-light);
+        }
+        
+        .rate-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .rate-display span {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .rate-update-btn {
+            padding: 0.375rem 0.75rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        
+        .rate-update-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .rate-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .budget-currencies, .shopping-list {
+            margin-bottom: 1rem;
+        }
+        
+        .budget-currency, .shopping-item {
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        
+        .budget-currency-header, .shopping-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .budget-currency-header span, .shopping-item-header span {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .remove-currency, .remove-item {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: var(--radius-sm);
+        }
+        
+        .remove-currency:hover, .remove-item:hover {
+            background: var(--danger-light);
+        }
+        
+        .budget-currency-body, .shopping-item-body {
+            padding: 1rem;
+        }
+        
+        .budget-results, .shopping-results {
+            margin-top: 0.5rem;
+        }
+        
+        .budget-result-item, .shopping-result-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-light);
+        }
+        
+        .budget-result-header, .shopping-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .budget-result-body, .shopping-result-body {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .budget-amount {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .budget-converted, .shopping-converted {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .tip-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+        
+        @media (max-width: 640px) {
+            .tabs {
+                font-size: 0.875rem;
+            }
+            
+            .tab {
+                padding: 0.5rem 1rem;
+            }
+            
+            .currency-selector {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .flag-icon {
+                align-self: flex-start;
+            }
+            
+            .currency-dropdown {
+                width: 100%;
+            }
+            
+            .currency-amount {
+                width: 100%;
+            }
+            
+            .tip-icon {
+                margin-right: 0.5rem;
+            }
+        }
+    </style>
+</body>
+</html>
