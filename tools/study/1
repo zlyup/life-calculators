@@ -1,8 +1,4 @@
-    ├── unit-convert.html      (单位换算器)
-        ├── percentage.html        (百分比计算器)
-        ├── average.html           (平均数计算器)
-        ├── fraction.html          (分数计算器)
-        ├── equation.html          (简单方程求解)
+
         ├── geometry.html          (几何图形计算)
         ├── statistics.html        (基础统计计算)
         └── prime.html             (质数判断器)
