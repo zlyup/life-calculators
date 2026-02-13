@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机数生成器 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/fun.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">随机数生成器</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/fun.html" class="nav-link active">趣味工具</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/fun.html" class="breadcrumb-link">趣味工具</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">随机数生成器</span>
+                </nav>
+                
+                <!-- 计算器容器 -->
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">随机数生成器</h1>
+                            <p class="calculator-description">
+                                生成指定范围内的随机整数，包含最小值和最大值，完全随机均匀分布。
+                            </p>
+                        </div>
+                        
+                        <!-- 输入区域 -->
+                        <div class="input-group">
+                            <label class="input-label">最小值</label>
+                            <input type="number" id="minValue" class="input-field" value="1" min="-999999" max="999999">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">最大值</label>
+                            <input type="number" id="maxValue" class="input-field" value="100" min="-999999" max="999999">
+                        </div>
+                        
+                        <!-- 计算按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="generateBtn">
+                            <i class="fas fa-dice"></i> 生成随机数
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection" style="display: none;">
+                            <h3 class="result-title"><i class="fas fa-chart-bar"></i> 生成结果</h3>
+                            
+                            <div style="text-align: center; padding: 2rem 0;">
+                                <div style="font-size: 4rem; font-weight: 700; color: var(--primary); line-height: 1.2;" id="randomResult">
+                                    42
+                                </div>
+                                <div style="color: var(--text-secondary); margin-top: 0.5rem;" id="rangeDisplay">
+                                    范围: 1 - 100
+                                </div>
+                            </div>
+                            
+                            <!-- 验证信息 -->
+                            <div class="alert alert-success" id="successMessage" style="display: none;">
+                                <i class="fas fa-check-circle"></i> 生成的随机数在指定范围内
+                            </div>
+                            
+                            <div class="alert alert-danger" id="errorMessage" style="display: none;">
+                                <i class="fas fa-exclamation-triangle"></i> 最小值不能大于最大值
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 使用说明 -->
+                    <div class="alert alert-info mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-lightbulb mr-3"></i>
+                            <div>
+                                <strong>使用说明：</strong> 
+                                <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                                    <li><strong>包含边界</strong>：生成的随机数包含您设置的最小值和最大值</li>
+                                    <li><strong>均匀分布</strong>：范围内每个数字被选中的概率完全相同</li>
+                                    <li><strong>整数结果</strong>：始终生成整数，不包含小数</li>
+                                    <li><strong>大数支持</strong>：支持正数、负数和零</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 快速预设 -->
+                    <div class="coupon-tips mt-6">
+                        <h3 class="section-title" style="font-size: 1.25rem; text-align: center; margin-bottom: 1rem;">
+                            <i class="fas fa-bolt"></i> 快速预设范围
+                        </h3>
+                        <div class="tips-grid">
+                            <button class="tip-item preset-btn" data-min="1" data-max="6">
+                                <div class="tip-icon">
+                                    <i class="fas fa-dice-one"></i>
+                                </div>
+                                <div class="tip-content">
+                                    <h4>骰子</h4>
+                                    <p>1 - 6</p>
+                                </div>
+                            </button>
+                            <button class="tip-item preset-btn" data-min="1" data-max="100">
+                                <div class="tip-icon">
+                                    <i class="fas fa-percent"></i>
+                                </div>
+                                <div class="tip-content">
+                                    <h4>百分比</h4>
+                                    <p>1 - 100</p>
+                                </div>
+                            </button>
+                            <button class="tip-item preset-btn" data-min="0" data-max="1">
+                                <div class="tip-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="tip-content">
+                                    <h4>抛硬币</h4>
+                                    <p>0 (反面) / 1 (正面)</p>
+                                </div>
+                            </button>
+                            <button class="tip-item preset-btn" data-min="-100" data-max="100">
+                                <div class="tip-icon">
+                                    <i class="fas fa-temperature-low"></i>
+                                </div>
+                                <div class="tip-content">
+                                    <h4>正负范围</h4>
+                                    <p>-100 - 100</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <a href="../../index.html" class="footer-logo">
+                        <i class="fas fa-calculator"></i>
+                        <span>生活计算宝典</span>
+                    </a>
+                    <p class="footer-description">
+                        一站式离线计算工具集合，为您的生活带来便利。
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">趣味工具</h4>
+                    <a href="random.html" class="footer-link">随机数生成器</a>
+                    <a href="date.html" class="footer-link">日期计算器</a>
+                    <a href="age.html" class="footer-link">年龄计算器</a>
+                    <a href="password.html" class="footer-link">密码生成器</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">快速链接</h4>
+                    <a href="../../pages/fun.html" class="footer-link">返回趣味工具</a>
+                    <a href="../../pages/tools.html" class="footer-link">所有工具</a>
+                    <a href="https://github.com/laddzhao/life-calculators" target="_blank" class="footer-link">GitHub项目</a>
+                    <a href="../../404.html" class="footer-link">404页面</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">其他工具</h4>
+                    <a href="../shopping/discount.html" class="footer-link">折扣计算器</a>
+                    <a href="../health/bmi.html" class="footer-link">BMI计算</a>
+                    <a href="../professional/mortgage.html" class="footer-link">房贷计算器</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 生活计算宝典 · 随机数生成器</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 移动端底部导航 -->
+    <nav class="mobile-bottom-nav">
+        <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">首页</span>
+        </a>
+        <a href="../../pages/shopping.html" class="nav-item">
+            <i class="fas fa-shopping-cart nav-icon"></i>
+            <span class="nav-label">购物</span>
+        </a>
+        <a href="../../pages/fun.html" class="nav-item active">
+            <i class="fas fa-gamepad nav-icon"></i>
+            <span class="nav-label">趣味</span>
+        </a>
+        <a href="../../pages/tools.html" class="nav-item">
+            <i class="fas fa-th nav-icon"></i>
+            <span class="nav-label">全部</span>
+        </a>
+        <a href="#" class="nav-item" id="mobileMenuBtn">
+            <i class="fas fa-ellipsis-h nav-icon"></i>
+            <span class="nav-label">更多</span>
+        </a>
+    </nav>
+
+    <style>
+        /* 确保与现有样式一致，只添加必要的新样式 */
+        .preset-btn {
+            cursor: pointer;
+            transition: all var(--transition);
+            border: 1px solid var(--border-light);
+            background: var(--bg-primary);
+            width: 100%;
+            text-align: left;
+        }
+        
+        .preset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+        
+        #randomResult {
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+
+    <script>
+        // 生成随机数函数（专业精准）
+        function generateRandomNumber(min, max) {
+            // 确保输入为整数
+            min = Math.floor(Number(min));
+            max = Math.floor(Number(max));
+            
+            // 如果输入无效，返回0
+            if (isNaN(min) || isNaN(max)) return 0;
+            
+            // 确保最小值不大于最大值
+            if (min > max) {
+                [min, max] = [max, min]; // 交换
+                // 同时更新输入框的值，让用户看到调整
+                document.getElementById('minValue').value = min;
+                document.getElementById('maxValue').value = max;
+            }
+            
+            // 核心算法：包含最小值和最大值的均匀分布
+            // Math.random() 返回 [0, 1)
+            // 乘以 (max - min + 1) 得到 [0, range]
+            // 加上 min 得到 [min, max+1)
+            // 使用 Math.floor 得到 [min, max] 的整数
+            const range = max - min + 1;
+            return Math.floor(Math.random() * range) + min;
+        }
+        
+        // 更新显示
+        function updateDisplay() {
+            const minInput = document.getElementById('minValue');
+            const maxInput = document.getElementById('maxValue');
+            const resultSection = document.getElementById('resultSection');
+            const randomResult = document.getElementById('randomResult');
+            const rangeDisplay = document.getElementById('rangeDisplay');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            let min = parseInt(minInput.value, 10);
+            let max = parseInt(maxInput.value, 10);
+            
+            // 验证输入
+            if (isNaN(min)) min = 1;
+            if (isNaN(max)) max = 100;
+            
+            // 检查范围是否有效
+            if (min > max) {
+                // 显示错误信息
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+                randomResult.textContent = '--';
+                rangeDisplay.textContent = `无效范围: ${min} > ${max}`;
+                return;
+            }
+            
+            // 生成随机数
+            const randomNum = generateRandomNumber(min, max);
+            
+            // 更新显示
+            randomResult.textContent = randomNum;
+            rangeDisplay.textContent = `范围: ${min} - ${max}`;
+            
+            // 显示成功信息
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+            
+            // 添加一点动画效果
+            randomResult.style.animation = 'none';
+            randomResult.offsetHeight; // 触发重绘
+            randomResult.style.animation = 'fadeIn 0.3s ease';
+        }
+        
+        // 设置预设值
+        function setPreset(min, max) {
+            document.getElementById('minValue').value = min;
+            document.getElementById('maxValue').value = max;
+            updateDisplay();
+        }
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (themeBtn) {
+                    const icon = themeBtn.querySelector('i');
+                    icon.className = 'fas fa-sun';
+                }
+            }
+            
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                if (themeBtn) {
+                    const icon = themeBtn.querySelector('i');
+                    icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                }
+            }
+            
+            if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            
+            // 获取元素
+            const generateBtn = document.getElementById('generateBtn');
+            const minInput = document.getElementById('minValue');
+            const maxInput = document.getElementById('maxValue');
+            const resultSection = document.getElementById('resultSection');
+            
+            // 页面加载时显示结果
+            resultSection.style.display = 'block';
+            updateDisplay();
+            
+            // 生成按钮点击事件
+            generateBtn.addEventListener('click', updateDisplay);
+            
+            // 输入框回车事件
+            minInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') updateDisplay();
+            });
+            
+            maxInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') updateDisplay();
+            });
+            
+            // 预设按钮事件
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const min = parseInt(btn.dataset.min, 10);
+                    const max = parseInt(btn.dataset.max, 10);
+                    setPreset(min, max);
+                });
+            });
+            
+            // 移动端菜单（简单处理）
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            if (menuBtn) {
+                menuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('请从顶部导航选择其他工具');
+                });
+            }
+            
+            // 输入验证：确保最小值不超过最大值时自动调整
+            minInput.addEventListener('change', () => {
+                let min = parseInt(minInput.value, 10);
+                let max = parseInt(maxInput.value, 10);
+                
+                if (isNaN(min)) minInput.value = 1;
+                if (isNaN(max)) maxInput.value = 100;
+                
+                // 不自动交换，让用户看到错误提示
+                updateDisplay();
+            });
+            
+            maxInput.addEventListener('change', () => {
+                let min = parseInt(minInput.value, 10);
+                let max = parseInt(maxInput.value, 10);
+                
+                if (isNaN(min)) minInput.value = 1;
+                if (isNaN(max)) maxInput.value = 100;
+                
+                updateDisplay();
+            });
+        });
+    </script>
+</body>
+</html>

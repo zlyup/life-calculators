@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>颜色代码转换 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/fun.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">颜色代码转换</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/fun.html" class="nav-link active">趣味工具</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/fun.html" class="breadcrumb-link">趣味工具</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">颜色代码转换</span>
+                </nav>
+                
+                <!-- 计算器容器 -->
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">颜色代码转换</h1>
+                            <p class="calculator-description">
+                                在 HEX、RGB、HSL 之间进行颜色代码转换，实时预览颜色。
+                            </p>
+                        </div>
+                        
+                        <!-- 颜色预览 -->
+                        <div class="color-preview" id="colorPreview" style="background: #3498db;">
+                            <span id="colorPreviewText">预览区域</span>
+                        </div>
+                        
+                        <!-- 模式切换 -->
+                        <div class="tabs" id="colorTabs">
+                            <button class="tab active" data-mode="hex">HEX</button>
+                            <button class="tab" data-mode="rgb">RGB</button>
+                            <button class="tab" data-mode="hsl">HSL</button>
+                        </div>
+                        
+                        <!-- HEX输入 -->
+                        <div id="hexMode">
+                            <div class="input-group">
+                                <label class="input-label">HEX 颜色代码</label>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <span style="background: var(--bg-secondary); padding: 0.5rem; border-radius: var(--radius) 0 0 var(--radius); border: 1px solid var(--border-light); border-right: none;">#</span>
+                                    <input type="text" id="hexInput" class="input-field" value="3498db" maxlength="6" style="border-radius: 0 var(--radius) var(--radius) 0;" placeholder="RRGGBB">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- RGB输入 -->
+                        <div id="rgbMode" style="display: none;">
+                            <div class="input-group">
+                                <label class="input-label">红色 (R) 0-255</label>
+                                <input type="number" id="redInput" class="input-field" value="52" min="0" max="255">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">绿色 (G) 0-255</label>
+                                <input type="number" id="greenInput" class="input-field" value="152" min="0" max="255">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">蓝色 (B) 0-255</label>
+                                <input type="number" id="blueInput" class="input-field" value="219" min="0" max="255">
+                            </div>
+                        </div>
+                        
+                        <!-- HSL输入 -->
+                        <div id="hslMode" style="display: none;">
+                            <div class="input-group">
+                                <label class="input-label">色相 (H) 0-360°</label>
+                                <input type="number" id="hueInput" class="input-field" value="204" min="0" max="360">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">饱和度 (S) 0-100%</label>
+                                <input type="number" id="saturationInput" class="input-field" value="70" min="0" max="100">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">亮度 (L) 0-100%</label>
+                                <input type="number" id="lightnessInput" class="input-field" value="53" min="0" max="100">
+                            </div>
+                        </div>
+                        
+                        <!-- 转换按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="convertBtn">
+                            <i class="fas fa-sync-alt"></i> 转换颜色
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection">
+                            <h3 class="result-title"><i class="fas fa-chart-bar"></i> 转换结果</h3>
+                            
+                            <div class="result-grid">
+                                <div class="result-item">
+                                    <span class="result-label">HEX</span>
+                                    <span class="result-value" id="resultHex">#3498db</span>
+                                    <button class="copy-btn" onclick="copyText('#3498db')"><i class="fas fa-copy"></i></button>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">RGB</span>
+                                    <span class="result-value" id="resultRgb">rgb(52, 152, 219)</span>
+                                    <button class="copy-btn" onclick="copyText('rgb(52, 152, 219)')"><i class="fas fa-copy"></i></button>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">HSL</span>
+                                    <span class="result-value" id="resultHsl">hsl(204, 70%, 53%)</span>
+                                    <button class="copy-btn" onclick="copyText('hsl(204, 70%, 53%)')"><i class="fas fa-copy"></i></button>
+                                </div>
+                            </div>
+                            
+                            <!-- 错误信息 -->
+                            <div class="alert alert-danger" id="errorMessage" style="display: none; margin-top: 1rem;">
+                                <i class="fas fa-exclamation-triangle"></i> <span id="errorText">无效的颜色代码</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 常用颜色预设 -->
+                    <div class="coupon-tips mt-6">
+                        <h3 class="section-title" style="font-size: 1.25rem; text-align: center; margin-bottom: 1rem;">
+                            <i class="fas fa-palette"></i> 常用颜色
+                        </h3>
+                        <div class="color-presets">
+                            <button class="color-preset" style="background: #e74c3c;" data-hex="e74c3c" title="红色"></button>
+                            <button class="color-preset" style="background: #f39c12;" data-hex="f39c12" title="橙色"></button>
+                            <button class="color-preset" style="background: #f1c40f;" data-hex="f1c40f" title="黄色"></button>
+                            <button class="color-preset" style="background: #2ecc71;" data-hex="2ecc71" title="绿色"></button>
+                            <button class="color-preset" style="background: #3498db;" data-hex="3498db" title="蓝色"></button>
+                            <button class="color-preset" style="background: #9b59b6;" data-hex="9b59b6" title="紫色"></button>
+                            <button class="color-preset" style="background: #1abc9c;" data-hex="1abc9c" title="青色"></button>
+                            <button class="color-preset" style="background: #e67e22;" data-hex="e67e22" title="橙色"></button>
+                            <button class="color-preset" style="background: #e91e63;" data-hex="e91e63" title="粉色"></button>
+                            <button class="color-preset" style="background: #607d8b;" data-hex="607d8b" title="灰色"></button>
+                            <button class="color-preset" style="background: #000000;" data-hex="000000" title="黑色"></button>
+                            <button class="color-preset" style="background: #ffffff; border: 1px solid var(--border-light);" data-hex="ffffff" title="白色"></button>
+                        </div>
+                    </div>
+                    
+                    <!-- 使用说明 -->
+                    <div class="alert alert-info mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-lightbulb mr-3"></i>
+                            <div>
+                                <strong>使用说明：</strong> 
+                                <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                                    <li><strong>HEX</strong>：6位十六进制数，如 3498db（不需加#）</li>
+                                    <li><strong>RGB</strong>：红绿蓝分量，范围 0-255</li>
+                                    <li><strong>HSL</strong>：色相(0-360)、饱和度(0-100)、亮度(0-100)</li>
+                                    <li><strong>实时预览</strong>：顶部色块会实时显示当前颜色</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">...</footer>
+    <nav class="mobile-bottom-nav">...</nav>
+
+    <style>
+        .color-preview {
+            height: 120px;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: background 0.3s ease;
+        }
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .result-item .result-label {
+            min-width: 50px;
+        }
+        .result-item .result-value {
+            flex: 1;
+            font-family: monospace;
+        }
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+        }
+        .copy-btn:hover {
+            background: var(--bg-secondary);
+        }
+        .color-presets {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .color-preset {
+            aspect-ratio: 1;
+            border-radius: var(--radius);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .color-preset:hover {
+            transform: scale(1.1);
+            border-color: var(--primary);
+        }
+        .tabs { display: flex; border-bottom: 1px solid var(--border-light); margin-bottom: 1.5rem; }
+        .tab { padding: 0.75rem 1.5rem; font-weight: 500; color: var(--text-secondary); border: none; background: none; border-bottom: 2px solid transparent; cursor: pointer; }
+        .tab:hover { color: var(--primary); }
+        .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    </style>
+
+    <script>
+        // 将RGB转换为HEX
+        function rgbToHex(r, g, b) {
+            return ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+        
+        // 将HEX转换为RGB
+        function hexToRgb(hex) {
+            const r = parseInt(hex.slice(0, 2), 16);
+            const g = parseInt(hex.slice(2, 4), 16);
+            const b = parseInt(hex.slice(4, 6), 16);
+            return { r, g, b };
+        }
+        
+        // 将RGB转换为HSL
+        function rgbToHsl(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+            
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            
+            if (max === min) {
+                h = s = 0;
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            
+            return {
+                h: Math.round(h * 360),
+                s: Math.round(s * 100),
+                l: Math.round(l * 100)
+            };
+        }
+        
+        // 将HSL转换为RGB
+        function hslToRgb(h, s, l) {
+            h /= 360;
+            s /= 100;
+            l /= 100;
+            
+            let r, g, b;
+            
+            if (s === 0) {
+                r = g = b = l;
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1/6) return p + (q - p) * 6 * t;
+                    if (t < 1/2) return q;
+                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                    return p;
+                };
+                
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                
+                r = hue2rgb(p, q, h + 1/3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1/3);
+            }
+            
+            return {
+                r: Math.round(r * 255),
+                g: Math.round(g * 255),
+                b: Math.round(b * 255)
+            };
+        }
+        
+        // 验证HEX
+        function isValidHex(hex) {
+            return /^[0-9A-Fa-f]{6}$/.test(hex);
+        }
+        
+        // 更新所有显示
+        function updateColor(hex) {
+            if (!isValidHex(hex)) {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('errorText').textContent = '无效的HEX代码，应为6位十六进制数';
+                return;
+            }
+            
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // 转换为RGB
+            const rgb = hexToRgb(hex);
+            
+            // 转换为HSL
+            const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+            
+            // 更新预览
+            document.getElementById('colorPreview').style.background = `#${hex}`;
+            
+            // 智能选择文字颜色（根据亮度）
+            const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+            document.getElementById('colorPreviewText').style.color = brightness > 128 ? '#000000' : '#ffffff';
+            
+            // 更新结果
+            document.getElementById('resultHex').textContent = `#${hex}`;
+            document.getElementById('resultRgb').textContent = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+            document.getElementById('resultHsl').textContent = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+            
+            // 更新输入框
+            document.getElementById('hexInput').value = hex;
+            document.getElementById('redInput').value = rgb.r;
+            document.getElementById('greenInput').value = rgb.g;
+            document.getElementById('blueInput').value = rgb.b;
+            document.getElementById('hueInput').value = hsl.h;
+            document.getElementById('saturationInput').value = hsl.s;
+            document.getElementById('lightnessInput').value = hsl.l;
+        }
+        
+        // 从RGB更新
+        function updateFromRgb() {
+            const r = parseInt(document.getElementById('redInput').value, 10);
+            const g = parseInt(document.getElementById('greenInput').value, 10);
+            const b = parseInt(document.getElementById('blueInput').value, 10);
+            
+            // 验证范围
+            if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('errorText').textContent = 'RGB值必须在0-255之间';
+                return;
+            }
+            
+            const hex = rgbToHex(r, g, b);
+            updateColor(hex);
+        }
+        
+        // 从HSL更新
+        function updateFromHsl() {
+            const h = parseInt(document.getElementById('hueInput').value, 10);
+            const s = parseInt(document.getElementById('saturationInput').value, 10);
+            const l = parseInt(document.getElementById('lightnessInput').value, 10);
+            
+            // 验证范围
+            if (h < 0 || h > 360 || s < 0 || s > 100 || l < 0 || l > 100) {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('errorText').textContent = 'HSL值超出范围';
+                return;
+            }
+            
+            const rgb = hslToRgb(h, s, l);
+            const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+            updateColor(hex);
+        }
+        
+        // 复制文本
+        window.copyText = function(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('已复制到剪贴板');
+        };
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (themeBtn) themeBtn.querySelector('i').className = 'fas fa-sun';
+            }
+            if (themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    const current = document.documentElement.getAttribute('data-theme');
+                    const newTheme = current === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    themeBtn.querySelector('i').className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                });
+            }
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            
+            // 标签切换
+            document.querySelectorAll('#colorTabs .tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('#colorTabs .tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const mode = this.dataset.mode;
+                    document.getElementById('hexMode').style.display = mode === 'hex' ? 'block' : 'none';
+                    document.getElementById('rgbMode').style.display = mode === 'rgb' ? 'block' : 'none';
+                    document.getElementById('hslMode').style.display = mode === 'hsl' ? 'block' : 'none';
+                });
+            });
+            
+            // 转换按钮
+            document.getElementById('convertBtn').addEventListener('click', () => {
+                const activeMode = document.querySelector('#colorTabs .tab.active').dataset.mode;
+                
+                if (activeMode === 'hex') {
+                    const hex = document.getElementById('hexInput').value.trim();
+                    if (isValidHex(hex)) {
+                        updateColor(hex);
+                    } else {
+                        document.getElementById('errorMessage').style.display = 'block';
+                        document.getElementById('errorText').textContent = '请输入6位十六进制数';
+                    }
+                } else if (activeMode === 'rgb') {
+                    updateFromRgb();
+                } else if (activeMode === 'hsl') {
+                    updateFromHsl();
+                }
+            });
+            
+            // 预设颜色
+            document.querySelectorAll('.color-preset').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const hex = btn.dataset.hex;
+                    updateColor(hex);
+                });
+            });
+            
+            // 初始颜色
+            updateColor('3498db');
+        });
+    </script>
+</body>
+</html>

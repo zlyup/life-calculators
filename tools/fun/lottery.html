@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幸运数字生成 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/fun.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">幸运数字生成</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/fun.html" class="nav-link active">趣味工具</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/fun.html" class="breadcrumb-link">趣味工具</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">幸运数字生成</span>
+                </nav>
+                
+                <!-- 计算器容器 -->
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">幸运数字生成</h1>
+                            <p class="calculator-description">
+                                根据您的个人信息，生成专属幸运数字。
+                            </p>
+                        </div>
+                        
+                        <!-- 输入区域 -->
+                        <div class="input-group">
+                            <label class="input-label">您的姓名 (可选)</label>
+                            <input type="text" id="userName" class="input-field" placeholder="例如：张三" value="张三">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">出生日期</label>
+                            <input type="date" id="birthDate" class="input-field" value="1990-01-01">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">幸运颜色 (可选)</label>
+                            <select id="favoriteColor" class="input-field">
+                                <option value="red">红色</option>
+                                <option value="blue" selected>蓝色</option>
+                                <option value="green">绿色</option>
+                                <option value="yellow">黄色</option>
+                                <option value="purple">紫色</option>
+                                <option value="orange">橙色</option>
+                            </select>
+                        </div>
+                        
+                        <!-- 生成按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="generateBtn">
+                            <i class="fas fa-star"></i> 生成幸运数字
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection">
+                            <h3 class="result-title"><i class="fas fa-chart-bar"></i> 您的幸运数字</h3>
+                            
+                            <div class="lucky-numbers">
+                                <div class="lucky-number-card">
+                                    <div class="lucky-number-label">今日幸运数字</div>
+                                    <div class="lucky-number-value" id="luckyNumber1">7</div>
+                                </div>
+                                <div class="lucky-number-card">
+                                    <div class="lucky-number-label">本周幸运数字</div>
+                                    <div class="lucky-number-value" id="luckyNumber2">13</div>
+                                </div>
+                                <div class="lucky-number-card">
+                                    <div class="lucky-number-label">本月幸运数字</div>
+                                    <div class="lucky-number-value" id="luckyNumber3">21</div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 1.5rem;">
+                                <h4 style="margin-bottom: 0.5rem;">幸运分析</h4>
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">生命数字</span>
+                                        <span class="result-value" id="lifeNumber">1</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">姓名数字</span>
+                                        <span class="result-value" id="nameNumber">8</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">颜色数字</span>
+                                        <span class="result-value" id="colorNumber">4</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">日期数字</span>
+                                        <span class="result-value" id="dateNumber">3</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-success" style="margin-top: 1.5rem;" id="luckyMessage">
+                                <i class="fas fa-smile"></i> 今天您的幸运色是蓝色，幸运方位是东方。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 幸运解读 -->
+                    <div class="coupon-tips mt-6">
+                        <h3 class="section-title" style="font-size: 1.25rem; text-align: center; margin-bottom: 1rem;">
+                            <i class="fas fa-book-open"></i> 幸运数字解读
+                        </h3>
+                        <div class="tips-grid">
+                            <div class="tip-item">
+                                <div class="tip-icon" style="background: #e74c3c;">1</div>
+                                <div class="tip-content">
+                                    <h4>数字 1</h4>
+                                    <p>领导力、独立、创新</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon" style="background: #f39c12;">2</div>
+                                <div class="tip-content">
+                                    <h4>数字 2</h4>
+                                    <p>合作、平衡、温和</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon" style="background: #f1c40f;">3</div>
+                                <div class="tip-content">
+                                    <h4>数字 3</h4>
+                                    <p>创意、表达、社交</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon" style="background: #2ecc71;">4</div>
+                                <div class="tip-content">
+                                    <h4>数字 4</h4>
+                                    <p>稳定、务实、秩序</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon" style="background: #3498db;">5</div>
+                                <div class="tip-content">
+                                    <h4>数字 5</h4>
+                                    <p>自由、变化、冒险</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon" style="background: #9b59b6;">6</div>
+                                <div class="tip-content">
+                                    <h4>数字 6</h4>
+                                    <p>责任、关爱、和谐</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon" style="background: #1abc9c;">7</div>
+                                <div class="tip-content">
+                                    <h4>数字 7</h4>
+                                    <p>智慧、内省、灵性</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon" style="background: #e67e22;">8</div>
+                                <div class="tip-content">
+                                    <h4>数字 8</h4>
+                                    <p>财富、权力、成功</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-icon" style="background: #e74c3c;">9</div>
+                                <div class="tip-content">
+                                    <h4>数字 9</h4>
+                                    <p>大爱、奉献、完成</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 使用说明 -->
+                    <div class="alert alert-info mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-lightbulb mr-3"></i>
+                            <div>
+                                <strong>生成原理：</strong> 
+                                <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                                    <li><strong>生命数字</strong>：出生日期所有数字相加，直到个位数</li>
+                                    <li><strong>姓名数字</strong>：根据姓名拼音字母转换为数字</li>
+                                    <li><strong>颜色数字</strong>：根据喜欢的颜色对应数字</li>
+                                    <li><strong>综合计算</strong>：结合以上因素生成专属幸运数字</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">...</footer>
+    <nav class="mobile-bottom-nav">...</nav>
+
+    <style>
+        .lucky-numbers {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .lucky-number-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: var(--radius);
+            padding: 1rem;
+            text-align: center;
+            color: white;
+        }
+        .lucky-number-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+        .lucky-number-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+        .tip-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-light);
+        }
+        .tip-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+        .preset-btn { cursor: pointer; transition: all var(--transition); border: 1px solid var(--border-light); background: var(--bg-primary); width: 100%; text-align: left; }
+        .preset-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--primary); }
+    </style>
+
+    <script>
+        // 颜色对应数字
+        const colorNumbers = {
+            red: 3,
+            blue: 7,
+            green: 5,
+            yellow: 2,
+            purple: 9,
+            orange: 4
+        };
+        
+        // 颜色对应幸运信息
+        const colorLuck = {
+            red: { color: '红色', direction: '南方', element: '火' },
+            blue: { color: '蓝色', direction: '东方', element: '水' },
+            green: { color: '绿色', direction: '东方', element: '木' },
+            yellow: { color: '黄色', direction: '中央', element: '土' },
+            purple: { color: '紫色', direction: '西方', element: '金' },
+            orange: { color: '橙色', direction: '南方', element: '火' }
+        };
+        
+        // 将姓名转换为数字（简单哈希）
+        function nameToNumber(name) {
+            if (!name || name.trim() === '') return Math.floor(Math.random() * 9) + 1;
+            
+            let sum = 0;
+            for (let i = 0; i < name.length; i++) {
+                sum += name.charCodeAt(i);
+            }
+            return reduceToSingleDigit(sum);
+        }
+        
+        // 将数字缩减为个位数
+        function reduceToSingleDigit(num) {
+            while (num > 9) {
+                num = num.toString().split('').reduce((a, b) => a + parseInt(b), 0);
+            }
+            return num;
+        }
+        
+        // 从日期计算生命数字
+        function getLifeNumber(dateStr) {
+            if (!dateStr) return 7;
+            
+            const digits = dateStr.replace(/-/g, '').split('').map(Number);
+            const sum = digits.reduce((a, b) => a + b, 0);
+            return reduceToSingleDigit(sum);
+        }
+        
+        // 从日期计算日期数字（日和月的组合）
+        function getDateNumber(dateStr) {
+            if (!dateStr) return 3;
+            
+            const [year, month, day] = dateStr.split('-').map(Number);
+            const sum = month + day;
+            return reduceToSingleDigit(sum);
+        }
+        
+        // 生成幸运数字
+        function generateLuckyNumbers() {
+            const name = document.getElementById('userName').value;
+            const birthDate = document.getElementById('birthDate').value;
+            const color = document.getElementById('favoriteColor').value;
+            
+            // 计算各个基础数字
+            const lifeNum = getLifeNumber(birthDate);
+            const nameNum = nameToNumber(name);
+            const colorNum = colorNumbers[color] || 7;
+            const dateNum = getDateNumber(birthDate);
+            
+            // 生成三个幸运数字（不同组合）
+            const lucky1 = reduceToSingleDigit(lifeNum + nameNum);
+            const lucky2 = reduceToSingleDigit(lifeNum * colorNum);
+            const lucky3 = reduceToSingleDigit(dateNum * nameNum + colorNum);
+            
+            // 更新显示
+            document.getElementById('luckyNumber1').textContent = lucky1;
+            document.getElementById('luckyNumber2').textContent = lucky2;
+            document.getElementById('luckyNumber3').textContent = lucky3;
+            
+            document.getElementById('lifeNumber').textContent = lifeNum;
+            document.getElementById('nameNumber').textContent = nameNum;
+            document.getElementById('colorNumber').textContent = colorNum;
+            document.getElementById('dateNumber').textContent = dateNum;
+            
+            // 幸运信息
+            const luck = colorLuck[color] || colorLuck.blue;
+            document.getElementById('luckyMessage').innerHTML = `
+                <i class="fas fa-smile"></i> 今天您的幸运色是 ${luck.color}，幸运方位是 ${luck.direction}，五行属 ${luck.element}。
+            `;
+        }
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (themeBtn) themeBtn.querySelector('i').className = 'fas fa-sun';
+            }
+            if (themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    const current = document.documentElement.getAttribute('data-theme');
+                    const newTheme = current === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    themeBtn.querySelector('i').className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                });
+            }
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            
+            // 生成按钮
+            document.getElementById('generateBtn').addEventListener('click', generateLuckyNumbers);
+            
+            // 输入变化时自动生成
+            document.querySelectorAll('input, select').forEach(el => {
+                el.addEventListener('change', generateLuckyNumbers);
+                el.addEventListener('input', generateLuckyNumbers);
+            });
+            
+            // 初始生成
+            generateLuckyNumbers();
+        });
+    </script>
+</body>
+</html>

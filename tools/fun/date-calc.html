@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日期计算器 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/fun.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">日期计算器</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/fun.html" class="nav-link active">趣味工具</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/fun.html" class="breadcrumb-link">趣味工具</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">日期计算器</span>
+                </nav>
+                
+                <!-- 计算器容器 -->
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">日期计算器</h1>
+                            <p class="calculator-description">
+                                计算两个日期之间的天数差，或计算指定天数后的日期。
+                            </p>
+                        </div>
+                        
+                        <!-- 模式切换 -->
+                        <div class="tabs" id="dateTabs">
+                            <button class="tab active" data-mode="diff">日期差计算</button>
+                            <button class="tab" data-mode="add">日期推算</button>
+                        </div>
+                        
+                        <!-- 日期差计算模式 -->
+                        <div id="diffMode">
+                            <div class="input-group">
+                                <label class="input-label">开始日期</label>
+                                <input type="date" id="startDate" class="input-field" value="2026-01-01">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">结束日期</label>
+                                <input type="date" id="endDate" class="input-field" value="2026-12-31">
+                            </div>
+                        </div>
+                        
+                        <!-- 日期推算模式 -->
+                        <div id="addMode" style="display: none;">
+                            <div class="input-group">
+                                <label class="input-label">起始日期</label>
+                                <input type="date" id="baseDate" class="input-field" value="2026-01-01">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">天数</label>
+                                <input type="number" id="daysToAdd" class="input-field" value="30" min="-9999" max="9999">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">方向</label>
+                                <select id="direction" class="input-field">
+                                    <option value="future">未来（增加天数）</option>
+                                    <option value="past">过去（减少天数）</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 计算按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="calculateBtn">
+                            <i class="fas fa-calendar-alt"></i> 计算日期
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection" style="display: block;">
+                            <h3 class="result-title"><i class="fas fa-chart-bar"></i> 计算结果</h3>
+                            
+                            <div id="diffResult">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">开始日期</span>
+                                        <span class="result-value" id="resultStartDate">2026-01-01</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">结束日期</span>
+                                        <span class="result-value" id="resultEndDate">2026-12-31</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">间隔天数</span>
+                                        <span class="result-value" id="resultDaysDiff">364 天</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">间隔周数</span>
+                                        <span class="result-value" id="resultWeeksDiff">52 周</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">间隔月数</span>
+                                        <span class="result-value" id="resultMonthsDiff">11 个月</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">间隔年数</span>
+                                        <span class="result-value" id="resultYearsDiff">0 年</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="addResult" style="display: none;">
+                                <div class="result-grid">
+                                    <div class="result-item">
+                                        <span class="result-label">起始日期</span>
+                                        <span class="result-value" id="resultBaseDate">2026-01-01</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">增减天数</span>
+                                        <span class="result-value" id="resultDaysAdded">+30 天</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">结果日期</span>
+                                        <span class="result-value" id="resultNewDate">2026-01-31</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">星期几</span>
+                                        <span class="result-value" id="resultWeekday">星期六</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 错误信息 -->
+                            <div class="alert alert-danger" id="errorMessage" style="display: none;">
+                                <i class="fas fa-exclamation-triangle"></i> <span id="errorText">无效的日期</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 快速预设 -->
+                    <div class="coupon-tips mt-6">
+                        <h3 class="section-title" style="font-size: 1.25rem; text-align: center; margin-bottom: 1rem;">
+                            <i class="fas fa-bolt"></i> 常用日期计算
+                        </h3>
+                        <div class="tips-grid">
+                            <button class="tip-item preset-btn" data-preset="today">
+                                <div class="tip-icon">
+                                    <i class="fas fa-calendar-day"></i>
+                                </div>
+                                <div class="tip-content">
+                                    <h4>今天</h4>
+                                    <p>设为当前日期</p>
+                                </div>
+                            </button>
+                            <button class="tip-item preset-btn" data-preset="week">
+                                <div class="tip-icon">
+                                    <i class="fas fa-calendar-week"></i>
+                                </div>
+                                <div class="tip-content">
+                                    <h4>一周后</h4>
+                                    <p>当前日期 +7天</p>
+                                </div>
+                            </button>
+                            <button class="tip-item preset-btn" data-preset="month">
+                                <div class="tip-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <div class="tip-content">
+                                    <h4>一个月后</h4>
+                                    <p>当前日期 +30天</p>
+                                </div>
+                            </button>
+                            <button class="tip-item preset-btn" data-preset="year">
+                                <div class="tip-icon">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                                <div class="tip-content">
+                                    <h4>一年后</h4>
+                                    <p>当前日期 +365天</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 使用说明 -->
+                    <div class="alert alert-info mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-lightbulb mr-3"></i>
+                            <div>
+                                <strong>使用说明：</strong> 
+                                <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                                    <li><strong>日期差计算</strong>：计算两个日期之间的天数、周数、月数、年数</li>
+                                    <li><strong>日期推算</strong>：计算指定天数之前或之后的日期</li>
+                                    <li><strong>精准计算</strong>：考虑闰年、每月天数差异</li>
+                                    <li><strong>星期显示</strong>：自动显示结果日期的星期几</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <a href="../../index.html" class="footer-logo">
+                        <i class="fas fa-calculator"></i>
+                        <span>生活计算宝典</span>
+                    </a>
+                    <p class="footer-description">一站式离线计算工具集合，为您的生活带来便利。</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">趣味工具</h4>
+                    <a href="random.html" class="footer-link">随机数生成器</a>
+                    <a href="date.html" class="footer-link">日期计算器</a>
+                    <a href="age.html" class="footer-link">年龄计算器</a>
+                    <a href="password.html" class="footer-link">密码生成器</a>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">快速链接</h4>
+                    <a href="../../pages/fun.html" class="footer-link">返回趣味工具</a>
+                    <a href="../../pages/tools.html" class="footer-link">所有工具</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 生活计算宝典 · 日期计算器</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 移动端底部导航 -->
+    <nav class="mobile-bottom-nav">
+        <a href="../../index.html" class="nav-item"><i class="fas fa-home nav-icon"></i><span class="nav-label">首页</span></a>
+        <a href="../../pages/shopping.html" class="nav-item"><i class="fas fa-shopping-cart nav-icon"></i><span class="nav-label">购物</span></a>
+        <a href="../../pages/fun.html" class="nav-item active"><i class="fas fa-gamepad nav-icon"></i><span class="nav-label">趣味</span></a>
+        <a href="../../pages/tools.html" class="nav-item"><i class="fas fa-th nav-icon"></i><span class="nav-label">全部</span></a>
+        <a href="#" class="nav-item" id="mobileMenuBtn"><i class="fas fa-ellipsis-h nav-icon"></i><span class="nav-label">更多</span></a>
+    </nav>
+
+    <style>
+        .preset-btn { cursor: pointer; transition: all var(--transition); border: 1px solid var(--border-light); background: var(--bg-primary); width: 100%; text-align: left; }
+        .preset-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--primary); }
+        .tabs { display: flex; border-bottom: 1px solid var(--border-light); margin-bottom: 1.5rem; overflow-x: auto; }
+        .tab { padding: 0.75rem 1.5rem; font-weight: 500; color: var(--text-secondary); border: none; background: none; border-bottom: 2px solid transparent; white-space: nowrap; cursor: pointer; }
+        .tab:hover { color: var(--primary); }
+        .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    </style>
+
+    <script>
+        // 星期映射
+        const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+        
+        // 获取当前日期（YYYY-MM-DD格式）
+        function getTodayString() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        // 格式化日期为 YYYY-MM-DD
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        // 解析日期字符串为Date对象（忽略时区问题）
+        function parseDate(dateString) {
+            const [year, month, day] = dateString.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
+        
+        // 计算日期差（天数）
+        function daysBetween(date1, date2) {
+            const d1 = parseDate(date1);
+            const d2 = parseDate(date2);
+            const diffTime = Math.abs(d2 - d1);
+            return Math.round(diffTime / (1000 * 60 * 60 * 24));
+        }
+        
+        // 计算完整年、月、天
+        function getFullDateDiff(startDate, endDate) {
+            const start = parseDate(startDate);
+            const end = parseDate(endDate);
+            
+            // 确保start <= end
+            if (start > end) {
+                [start, end] = [end, start];
+            }
+            
+            let years = end.getFullYear() - start.getFullYear();
+            let months = end.getMonth() - start.getMonth();
+            let days = end.getDate() - start.getDate();
+            
+            if (days < 0) {
+                months--;
+                const lastMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+                days += lastMonth.getDate();
+            }
+            
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+            
+            return { years, months, days };
+        }
+        
+        // 计算
+        function calculate() {
+            const mode = document.querySelector('#dateTabs .tab.active').dataset.mode;
+            const errorMsg = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            errorMsg.style.display = 'none';
+            
+            try {
+                if (mode === 'diff') {
+                    // 日期差计算
+                    const startDate = document.getElementById('startDate').value;
+                    const endDate = document.getElementById('endDate').value;
+                    
+                    if (!startDate || !endDate) {
+                        throw new Error('请选择开始和结束日期');
+                    }
+                    
+                    const days = daysBetween(startDate, endDate);
+                    const weeks = Math.floor(days / 7);
+                    const fullDiff = getFullDateDiff(startDate, endDate);
+                    
+                    // 显示结果
+                    document.getElementById('diffResult').style.display = 'block';
+                    document.getElementById('addResult').style.display = 'none';
+                    
+                    document.getElementById('resultStartDate').textContent = startDate;
+                    document.getElementById('resultEndDate').textContent = endDate;
+                    document.getElementById('resultDaysDiff').textContent = days + ' 天';
+                    document.getElementById('resultWeeksDiff').textContent = weeks + ' 周';
+                    document.getElementById('resultMonthsDiff').textContent = fullDiff.months + ' 个月';
+                    document.getElementById('resultYearsDiff').textContent = fullDiff.years + ' 年';
+                    
+                } else {
+                    // 日期推算
+                    const baseDate = document.getElementById('baseDate').value;
+                    let days = parseInt(document.getElementById('daysToAdd').value, 10);
+                    const direction = document.getElementById('direction').value;
+                    
+                    if (!baseDate) {
+                        throw new Error('请选择起始日期');
+                    }
+                    
+                    if (isNaN(days)) days = 0;
+                    
+                    // 根据方向调整
+                    if (direction === 'past') {
+                        days = -days;
+                    }
+                    
+                    const base = parseDate(baseDate);
+                    const newDate = new Date(base);
+                    newDate.setDate(base.getDate() + days);
+                    
+                    const resultDate = formatDate(newDate);
+                    const weekday = weekdays[newDate.getDay()];
+                    
+                    // 显示结果
+                    document.getElementById('diffResult').style.display = 'none';
+                    document.getElementById('addResult').style.display = 'block';
+                    
+                    document.getElementById('resultBaseDate').textContent = baseDate;
+                    document.getElementById('resultDaysAdded').textContent = (days > 0 ? '+' : '') + days + ' 天';
+                    document.getElementById('resultNewDate').textContent = resultDate;
+                    document.getElementById('resultWeekday').textContent = weekday;
+                }
+            } catch (error) {
+                errorText.textContent = error.message;
+                errorMsg.style.display = 'block';
+            }
+        }
+        
+        // 预设
+        function applyPreset(preset) {
+            const today = getTodayString();
+            
+            if (preset === 'today') {
+                document.getElementById('startDate').value = today;
+                document.getElementById('endDate').value = today;
+                document.getElementById('baseDate').value = today;
+            } else if (preset === 'week') {
+                const base = parseDate(today);
+                const weekLater = new Date(base);
+                weekLater.setDate(base.getDate() + 7);
+                document.getElementById('baseDate').value = today;
+                document.getElementById('daysToAdd').value = 7;
+                document.getElementById('direction').value = 'future';
+                // 切换到add模式
+                document.querySelectorAll('#dateTabs .tab')[1].click();
+            } else if (preset === 'month') {
+                const base = parseDate(today);
+                const monthLater = new Date(base);
+                monthLater.setDate(base.getDate() + 30);
+                document.getElementById('baseDate').value = today;
+                document.getElementById('daysToAdd').value = 30;
+                document.getElementById('direction').value = 'future';
+                document.querySelectorAll('#dateTabs .tab')[1].click();
+            } else if (preset === 'year') {
+                const base = parseDate(today);
+                const yearLater = new Date(base);
+                yearLater.setDate(base.getDate() + 365);
+                document.getElementById('baseDate').value = today;
+                document.getElementById('daysToAdd').value = 365;
+                document.getElementById('direction').value = 'future';
+                document.querySelectorAll('#dateTabs .tab')[1].click();
+            }
+            
+            calculate();
+        }
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (themeBtn) themeBtn.querySelector('i').className = 'fas fa-sun';
+            }
+            if (themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    const current = document.documentElement.getAttribute('data-theme');
+                    const newTheme = current === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    themeBtn.querySelector('i').className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                });
+            }
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            
+            // 设置默认日期
+            const today = getTodayString();
+            document.getElementById('startDate').value = '2026-01-01';
+            document.getElementById('endDate').value = '2026-12-31';
+            document.getElementById('baseDate').value = today;
+            
+            // 标签切换
+            document.querySelectorAll('#dateTabs .tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('#dateTabs .tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const mode = this.dataset.mode;
+                    document.getElementById('diffMode').style.display = mode === 'diff' ? 'block' : 'none';
+                    document.getElementById('addMode').style.display = mode === 'add' ? 'block' : 'none';
+                    
+                    calculate();
+                });
+            });
+            
+            // 计算按钮
+            document.getElementById('calculateBtn').addEventListener('click', calculate);
+            
+            // 输入事件
+            document.querySelectorAll('input, select').forEach(el => {
+                el.addEventListener('change', calculate);
+                el.addEventListener('input', calculate);
+            });
+            
+            // 预设按钮
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    applyPreset(btn.dataset.preset);
+                });
+            });
+            
+            // 初始计算
+            calculate();
+        });
+    </script>
+</body>
+</html>

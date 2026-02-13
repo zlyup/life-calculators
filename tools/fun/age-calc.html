@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>年龄计算器 - 生活计算宝典</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../layout.css">
+    <link rel="stylesheet" href="../../components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body class="app">
+    <header class="app-header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-mobile">
+                    <a href="../../pages/fun.html" class="navbar-back">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div class="navbar-title">年龄计算器</div>
+                    <div></div>
+                </div>
+                
+                <div class="navbar-desktop">
+                    <a href="../../index.html" class="logo">
+                        <i class="fas fa-calculator"></i>
+                        <span class="logo-text">生活计算宝典</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="../../index.html" class="nav-link">首页</a>
+                        <a href="../../pages/fun.html" class="nav-link active">趣味工具</a>
+                        <a href="../../pages/tools.html" class="nav-link">所有工具</a>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn" aria-label="切换主题">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <section class="section">
+            <div class="container">
+                <!-- 面包屑导航 -->
+                <nav class="breadcrumb">
+                    <a href="../../index.html" class="breadcrumb-link">首页</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <a href="../../pages/fun.html" class="breadcrumb-link">趣味工具</a>
+                    <span class="breadcrumb-divider"><i class="fas fa-chevron-right"></i></span>
+                    <span class="breadcrumb-current">年龄计算器</span>
+                </nav>
+                
+                <!-- 计算器容器 -->
+                <div class="calculator-container">
+                    <div class="calculator-card">
+                        <div class="calculator-header">
+                            <h1 class="calculator-title">年龄计算器</h1>
+                            <p class="calculator-description">
+                                精确计算从出生日期到今天的年龄，显示年、月、日。
+                            </p>
+                        </div>
+                        
+                        <!-- 输入区域 -->
+                        <div class="input-group">
+                            <label class="input-label">出生日期</label>
+                            <input type="date" id="birthDate" class="input-field" value="1990-01-01">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">计算日期</label>
+                            <select id="calcDateType" class="input-field">
+                                <option value="today">今天</option>
+                                <option value="custom">自定义日期</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group" id="customDateGroup" style="display: none;">
+                            <label class="input-label">选择日期</label>
+                            <input type="date" id="customDate" class="input-field" value="2026-12-31">
+                        </div>
+                        
+                        <!-- 计算按钮 -->
+                        <button class="btn btn-primary btn-block calc-btn" id="calculateBtn">
+                            <i class="fas fa-birthday-cake"></i> 计算年龄
+                        </button>
+                        
+                        <!-- 结果展示 -->
+                        <div class="result-display" id="resultSection">
+                            <h3 class="result-title"><i class="fas fa-chart-bar"></i> 年龄结果</h3>
+                            
+                            <div style="text-align: center; padding: 1rem 0;">
+                                <div style="font-size: 3rem; font-weight: 700; color: var(--primary); line-height: 1.2;" id="ageDisplay">
+                                    36 岁
+                                </div>
+                            </div>
+                            
+                            <div class="result-grid">
+                                <div class="result-item">
+                                    <span class="result-label">出生日期</span>
+                                    <span class="result-value" id="resultBirthDate">1990-01-01</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">计算日期</span>
+                                    <span class="result-value" id="resultTargetDate">2026-02-13</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">年龄</span>
+                                    <span class="result-value" id="resultAge">36 岁</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">精确年龄</span>
+                                    <span class="result-value" id="resultExactAge">36岁 1个月 12天</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">总天数</span>
+                                    <span class="result-value" id="resultTotalDays">13215 天</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">总周数</span>
+                                    <span class="result-value" id="resultTotalWeeks">1888 周</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">总月数</span>
+                                    <span class="result-value" id="resultTotalMonths">433 个月</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">下次生日</span>
+                                    <span class="result-value" id="resultNextBirthday">2027-01-01</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">距离生日</span>
+                                    <span class="result-value" id="resultDaysToBirthday">322 天</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 生肖星座 -->
+                            <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                                <div class="badge" id="zodiacSign">♑ 摩羯座</div>
+                                <div class="badge" id="chineseZodiac">🐎 马</div>
+                            </div>
+                            
+                            <!-- 错误信息 -->
+                            <div class="alert alert-danger" id="errorMessage" style="display: none;">
+                                <i class="fas fa-exclamation-triangle"></i> <span id="errorText">出生日期不能晚于今天</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 快速预设 -->
+                    <div class="coupon-tips mt-6">
+                        <h3 class="section-title" style="font-size: 1.25rem; text-align: center; margin-bottom: 1rem;">
+                            <i class="fas fa-bolt"></i> 常用年龄
+                        </h3>
+                        <div class="tips-grid">
+                            <button class="tip-item preset-btn" data-year="1990" data-month="1" data-day="1">
+                                <div class="tip-icon"><i class="fas fa-user"></i></div>
+                                <div class="tip-content"><h4>90后</h4><p>1990-01-01</p></div>
+                            </button>
+                            <button class="tip-item preset-btn" data-year="2000" data-month="1" data-day="1">
+                                <div class="tip-icon"><i class="fas fa-user-graduate"></i></div>
+                                <div class="tip-content"><h4>00后</h4><p>2000-01-01</p></div>
+                            </button>
+                            <button class="tip-item preset-btn" data-year="2010" data-month="1" data-day="1">
+                                <div class="tip-icon"><i class="fas fa-child"></i></div>
+                                <div class="tip-content"><h4>10后</h4><p>2010-01-01</p></div>
+                            </button>
+                            <button class="tip-item preset-btn" data-year="2020" data-month="1" data-day="1">
+                                <div class="tip-icon"><i class="fas fa-baby"></i></div>
+                                <div class="tip-content"><h4>20后</h4><p>2020-01-01</p></div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 使用说明 -->
+                    <div class="alert alert-info mt-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-lightbulb mr-3"></i>
+                            <div>
+                                <strong>使用说明：</strong> 
+                                <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                                    <li><strong>精确计算</strong>：显示年、月、天，考虑闰年和月份差异</li>
+                                    <li><strong>多种单位</strong>：同时显示总天数、总周数、总月数</li>
+                                    <li><strong>生日提醒</strong>：显示下次生日日期和剩余天数</li>
+                                    <li><strong>生肖星座</strong>：自动显示对应的星座和生肖</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">...</footer>
+    <nav class="mobile-bottom-nav">...</nav>
+
+    <style>
+        .badge {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .preset-btn { cursor: pointer; transition: all var(--transition); border: 1px solid var(--border-light); background: var(--bg-primary); width: 100%; text-align: left; }
+        .preset-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--primary); }
+    </style>
+
+    <script>
+        // 星座数据
+        const zodiacSigns = [
+            { name: '♑ 摩羯座', start: [12, 22], end: [1, 19] },
+            { name: '♒ 水瓶座', start: [1, 20], end: [2, 18] },
+            { name: '♓ 双鱼座', start: [2, 19], end: [3, 20] },
+            { name: '♈ 白羊座', start: [3, 21], end: [4, 19] },
+            { name: '♉ 金牛座', start: [4, 20], end: [5, 20] },
+            { name: '♊ 双子座', start: [5, 21], end: [6, 20] },
+            { name: '♋ 巨蟹座', start: [6, 21], end: [7, 22] },
+            { name: '♌ 狮子座', start: [7, 23], end: [8, 22] },
+            { name: '♍ 处女座', start: [8, 23], end: [9, 22] },
+            { name: '♎ 天秤座', start: [9, 23], end: [10, 22] },
+            { name: '♏ 天蝎座', start: [10, 23], end: [11, 21] },
+            { name: '♐ 射手座', start: [11, 22], end: [12, 21] }
+        ];
+        
+        // 生肖数据
+        const chineseZodiac = ['🐭 鼠', '🐮 牛', '🐯 虎', '🐰 兔', '🐲 龙', '🐍 蛇', '🐴 马', '🐑 羊', '🐵 猴', '🐔 鸡', '🐶 狗', '🐷 猪'];
+        
+        // 获取今天日期字符串
+        function getTodayString() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        // 解析日期
+        function parseDate(dateString) {
+            const [year, month, day] = dateString.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
+        
+        // 格式化日期
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        // 计算年龄
+        function calculateAge(birthStr, targetStr) {
+            const birth = parseDate(birthStr);
+            const target = parseDate(targetStr);
+            
+            if (birth > target) {
+                throw new Error('出生日期不能晚于计算日期');
+            }
+            
+            let years = target.getFullYear() - birth.getFullYear();
+            let months = target.getMonth() - birth.getMonth();
+            let days = target.getDate() - birth.getDate();
+            
+            if (days < 0) {
+                months--;
+                const lastMonth = new Date(target.getFullYear(), target.getMonth(), 0);
+                days += lastMonth.getDate();
+            }
+            
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+            
+            // 总天数
+            const diffTime = target - birth;
+            const totalDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const totalWeeks = Math.floor(totalDays / 7);
+            const totalMonths = years * 12 + months;
+            
+            return { years, months, days, totalDays, totalWeeks, totalMonths };
+        }
+        
+        // 获取星座
+        function getZodiacSign(month, day) {
+            for (const sign of zodiacSigns) {
+                if ((month === sign.start[0] && day >= sign.start[1]) || 
+                    (month === sign.end[0] && day <= sign.end[1]) ||
+                    (sign.start[0] > sign.end[0] && (month > sign.start[0] || month < sign.end[0]))) {
+                    return sign.name;
+                }
+            }
+            return '♑ 摩羯座';
+        }
+        
+        // 获取生肖
+        function getChineseZodiac(year) {
+            return chineseZodiac[(year - 4) % 12];
+        }
+        
+        // 计算下次生日
+        function getNextBirthday(birthStr, targetStr) {
+            const birth = parseDate(birthStr);
+            const target = parseDate(targetStr);
+            
+            const nextBirthday = new Date(target.getFullYear(), birth.getMonth(), birth.getDate());
+            
+            if (nextBirthday < target) {
+                nextBirthday.setFullYear(target.getFullYear() + 1);
+            }
+            
+            const daysToBirthday = Math.ceil((nextBirthday - target) / (1000 * 60 * 60 * 24));
+            
+            return {
+                date: formatDate(nextBirthday),
+                days: daysToBirthday
+            };
+        }
+        
+        // 计算
+        function calculate() {
+            const birthDate = document.getElementById('birthDate').value;
+            const calcType = document.getElementById('calcDateType').value;
+            const errorMsg = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            errorMsg.style.display = 'none';
+            
+            try {
+                if (!birthDate) {
+                    throw new Error('请选择出生日期');
+                }
+                
+                let targetDate;
+                if (calcType === 'today') {
+                    targetDate = getTodayString();
+                } else {
+                    targetDate = document.getElementById('customDate').value;
+                    if (!targetDate) {
+                        throw new Error('请选择计算日期');
+                    }
+                }
+                
+                const age = calculateAge(birthDate, targetDate);
+                const nextBirthday = getNextBirthday(birthDate, targetDate);
+                
+                // 解析出生日期
+                const [birthYear, birthMonth, birthDay] = birthDate.split('-').map(Number);
+                
+                // 显示结果
+                document.getElementById('resultBirthDate').textContent = birthDate;
+                document.getElementById('resultTargetDate').textContent = targetDate;
+                document.getElementById('resultAge').textContent = `${age.years} 岁`;
+                document.getElementById('resultExactAge').textContent = `${age.years}岁 ${age.months}个月 ${age.days}天`;
+                document.getElementById('resultTotalDays').textContent = age.totalDays.toLocaleString() + ' 天';
+                document.getElementById('resultTotalWeeks').textContent = age.totalWeeks.toLocaleString() + ' 周';
+                document.getElementById('resultTotalMonths').textContent = age.totalMonths + ' 个月';
+                document.getElementById('resultNextBirthday').textContent = nextBirthday.date;
+                document.getElementById('resultDaysToBirthday').textContent = nextBirthday.days + ' 天';
+                
+                // 大号年龄显示
+                document.getElementById('ageDisplay').textContent = `${age.years} 岁`;
+                
+                // 星座生肖
+                document.getElementById('zodiacSign').textContent = getZodiacSign(birthMonth, birthDay);
+                document.getElementById('chineseZodiac').textContent = getChineseZodiac(birthYear);
+                
+            } catch (error) {
+                errorText.textContent = error.message;
+                errorMsg.style.display = 'block';
+            }
+        }
+        
+        // 预设
+        function applyPreset(year, month, day) {
+            const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            document.getElementById('birthDate').value = dateStr;
+            calculate();
+        }
+        
+        // 主题切换
+        function initTheme() {
+            const themeBtn = document.querySelector('.theme-btn');
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (themeBtn) themeBtn.querySelector('i').className = 'fas fa-sun';
+            }
+            if (themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    const current = document.documentElement.getAttribute('data-theme');
+                    const newTheme = current === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    themeBtn.querySelector('i').className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                });
+            }
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            
+            // 设置默认值
+            document.getElementById('birthDate').value = '1990-01-01';
+            document.getElementById('customDate').value = getTodayString();
+            
+            // 计算类型切换
+            document.getElementById('calcDateType').addEventListener('change', function() {
+                const showCustom = this.value === 'custom';
+                document.getElementById('customDateGroup').style.display = showCustom ? 'block' : 'none';
+                calculate();
+            });
+            
+            // 计算按钮
+            document.getElementById('calculateBtn').addEventListener('click', calculate);
+            
+            // 输入事件
+            document.querySelectorAll('input, select').forEach(el => {
+                el.addEventListener('change', calculate);
+            });
+            
+            // 预设按钮
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const year = btn.dataset.year;
+                    const month = btn.dataset.month;
+                    const day = btn.dataset.day;
+                    applyPreset(year, month, day);
+                });
+            });
+            
+            // 初始计算
+            calculate();
+        });
+    </script>
+</body>
+</html>
